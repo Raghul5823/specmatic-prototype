@@ -1,0 +1,105 @@
+﻿Specmatic Version: v2.55.0(299682d5)
+
+Usage: specmatic mock [-hV] [--debug] [--jsonConsoleLog] [--lenient]
+                      [--match-branch] [--noConsoleLog] [--strict]
+                      [--delay-in-ms=<delayInMilliseconds>] [--filter=<filter>]
+                      [--graceful-restart-timeout-in-ms=<gracefulRestartTimeoutI
+                      nMs>] [--host=<host>] [--hot-reload=<hotReload>]
+                      [--httpsKeyAlias=<keyStoreAlias>]
+                      [--httpsKeyStore=<keyStoreFile>]
+                      [--httpsKeyStoreDir=<keyStoreDir>]
+                      [--httpsKeyStorePassword=<keyStorePassword>]
+                      [--httpsPassword=<keyPassword>] [--jsonLog=<jsonLogDir>]
+                      [--logPrefix=<logPrefix>]
+                      [--passThroughTargetBase=<passThroughTargetBase>]
+                      [--port=<port>] [--textLog=<textLogDir>]
+                      [--data=<exampleDirs>]... [[--ci] [--repo-id=<repoId>]
+                      [--repo-name=<repoName>] [--repo-url=<repoUrl>]
+                      [--branch-name=<branchName>] [--token=<token>]
+                      [--build-id=<buildId>] [--run-attempt=<runAttempt>]
+                      [--metadata=<String=String>]... [--config=<configPath>]]
+                      [<contractPaths>...]
+Start a mock server with contract
+      [<contractPaths>...]   Contract file paths
+                             Spec file paths
+      --data, --examples=<exampleDirs>
+                             Directories containing JSON examples
+      --debug                Debug logs
+      --delay-in-ms=<delayInMilliseconds>
+                             Mock response delay in milliseconds
+      --filter=<filter>      Filter tests matching the specified filtering
+                               criteria
+
+                             You can filter tests based on the following keys:
+                             - `METHOD`: HTTP methods (e.g., GET, POST)
+                             - `PATH`: Request paths (e.g., /users, /product)
+                             - `STATUS`: HTTP response status codes (e.g., 200,
+                               400)
+
+                             You can find all available filters and their usage
+                               at:
+                             https://docs.specmatic.
+                               io/documentation/contract_tests.
+                               html#supported-filters--operators
+      --graceful-restart-timeout-in-ms=<gracefulRestartTimeoutInMs>
+                             Time to wait for the server to stop before
+                               starting it again
+  -h, --help                 Show this help message and exit.
+      --host=<host>          Host for the HTTP mock server
+      --hot-reload=<hotReload>
+                             Restart the mock server when the example files are
+                               updated (enabled by default)
+      --httpsKeyAlias=<keyStoreAlias>
+                             Run the proxy on https using a key by this name
+      --httpsKeyStore=<keyStoreFile>
+                             Run the proxy on https using a key in this store
+      --httpsKeyStoreDir=<keyStoreDir>
+                             Run the proxy on https, create a store named
+                               specmatic.jks in this directory
+      --httpsKeyStorePassword=<keyStorePassword>
+                             Run the proxy on https, password for pre-existing
+                               key store
+      --httpsPassword=<keyPassword>
+                             Key password if any
+      --jsonConsoleLog       Console log should be in JSON format
+      --jsonLog=<jsonLogDir> Directory in which to write a JSON log
+      --lenient              Parse the OpenAPI Specification with leniency
+      --logPrefix=<logPrefix>
+                             Prefix of log file
+      --match-branch         Use the current branch name for contract source
+                               branch when not on default branch
+      --noConsoleLog         Don't log to console
+      --passThroughTargetBase=<passThroughTargetBase>
+                             All requests that did not match a url in any
+                               contract will be forwarded to this service
+      --port=<port>          Port for the HTTP mock server
+      --strict               Start HTTP mock server in strict mode
+      --textLog=<textLogDir> Directory in which to write a text log
+  -V, --version              Print version information and exit.
+
+Insights reporting options:
+      --branch-name=<branchName>
+                             Branch name for the Insights build (inferred from
+                               CI or Git: null; override with -Dspecmatic.
+                               branch.name or SPECMATIC_BRANCH_NAME)
+      --build-id=<buildId>   CI build identifier (inferred from CI; override
+                               with -Dspecmatic.build.id or SPECMATIC_BUILD_ID)
+      --ci                   Publish reports as a CI build
+      --config=<configPath>  Path to Specmatic config
+      --metadata=<String=String>
+                             Additional metadata for the build report in
+                               key=value format. Can be specified multiple
+                               times.
+      --repo-id=<repoId>     Repository ID for the Insights build (inferred
+                               from CI; override with -Dspecmatic.repo.id or
+                               SPECMATIC_REPO_ID)
+      --repo-name=<repoName> Repository name for the Insights build (inferred
+                               from CI or Git: null; override with -Dspecmatic.
+                               repo.name or SPECMATIC_REPO_NAME)
+      --repo-url=<repoUrl>   Repository URL for the Insights build (inferred
+                               from CI or Git: null; override with -Dspecmatic.
+                               repo.url or SPECMATIC_REPO_URL)
+      --run-attempt=<runAttempt>
+                             CI run attempt (inferred from CI; override with
+                               -Dspecmatic.run.attempt or SPECMATIC_RUN_ATTEMPT)
+      --token=<token>        Insights build submission token

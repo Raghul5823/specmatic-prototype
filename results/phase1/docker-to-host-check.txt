@@ -1,0 +1,9 @@
+﻿Command: docker run --rm --entrypoint curl specmatic/specmatic:2.55.0 -s -i -H "Authorization: Bearer test-token-123" http://host.docker.internal:5101/wells/W-001
+
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Mon, 28 Sep 2026 08:31:40 GMT
+Server: Kestrel
+Transfer-Encoding: chunked
+
+{"id":"W-001","name":"Eagle-1","field":"Eagle Ford","status":"ACTIVE","latitude":28.5,"longitude":-98.3,"spudDate":"2019-04-12","dailyCapacityBbl":1200}

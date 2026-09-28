@@ -1,0 +1,59 @@
+﻿Specmatic Version: v2.55.0(299682d5)
+
+Usage: specmatic backward-compatibility-check [-hV] [--debug] [--strict]
+       [--base-branch=<baseBranch>] [--repo-dir=<repoDir>]
+       [--target-path=<targetPath>] [[--ci] [--repo-id=<repoId>]
+       [--repo-name=<repoName>] [--repo-url=<repoUrl>]
+       [--branch-name=<branchName>] [--token=<token>] [--build-id=<buildId>]
+       [--run-attempt=<runAttempt>] [--metadata=<String=String>]...]
+Checks backward compatibility of OpenAPI specifications
+      --base-branch=<baseBranch>
+                             Base branch to compare the changes against
+                             Default value is the local origin HEAD of the
+                               current branch
+      --debug                Write verbose logs to console for debugging
+  -h, --help                 Show this help message and exit.
+      --repo-dir=<repoDir>   The directory of the repository in which to run
+                               the backward compatibility check.
+                             If not provided, the check will run in the current
+                               working directory.
+      --strict               In strict mode, irrespective of the API's usage,
+                               if a change to an API breaks backward
+                               compatibility then it would result in a failure.
+                             When this flag is not specified, backward breaking
+                               changes to APIs that have no usages will only
+                               generate warnings and won't cause the check to
+                               fail.
+                             This flag is only applicable when using Specmatic
+                               Insights.
+      --target-path=<targetPath>
+                             Specify the file or directory to limit the
+                               backward compatibility check scope. If omitted,
+                               all changed files will be checked.
+  -V, --version              Print version information and exit.
+
+Insights reporting options:
+      --branch-name=<branchName>
+                             Branch name for the Insights build (inferred from
+                               CI or Git: null; override with -Dspecmatic.
+                               branch.name or SPECMATIC_BRANCH_NAME)
+      --build-id=<buildId>   CI build identifier (inferred from CI; override
+                               with -Dspecmatic.build.id or SPECMATIC_BUILD_ID)
+      --ci                   Publish reports as a CI build
+      --metadata=<String=String>
+                             Additional metadata for the build report in
+                               key=value format. Can be specified multiple
+                               times.
+      --repo-id=<repoId>     Repository ID for the Insights build (inferred
+                               from CI; override with -Dspecmatic.repo.id or
+                               SPECMATIC_REPO_ID)
+      --repo-name=<repoName> Repository name for the Insights build (inferred
+                               from CI or Git: null; override with -Dspecmatic.
+                               repo.name or SPECMATIC_REPO_NAME)
+      --repo-url=<repoUrl>   Repository URL for the Insights build (inferred
+                               from CI or Git: null; override with -Dspecmatic.
+                               repo.url or SPECMATIC_REPO_URL)
+      --run-attempt=<runAttempt>
+                             CI run attempt (inferred from CI; override with
+                               -Dspecmatic.run.attempt or SPECMATIC_RUN_ATTEMPT)
+      --token=<token>        Insights build submission token

@@ -1,0 +1,15 @@
+﻿Specmatic Version: v2.55.0(299682d5)
+
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+2026-09-28T06:35:02.856277236Z [INFO] io.specmatic.license.core.LicenseResolver - Using license provider: class io.specmatic.license.core.providers.a.d - classpath resource 'default-oss-license.txt' at jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+License details:
+-----------------------------------------------------
+Licensed to: Specmatic OSS <oss@specmatic.io>
+Start date: December 14, 2025 at 6:30:00 PM UTC
+Expiry date: December 14, 2027 at 6:30:00 PM UTC
+License type: OSS
+Rate limit: Unlimited
+Organisation ID: fc171320-f5d7-4978-a4db-c79086e11b33
+Insights server: https://insights.specmatic.io
+License ID: b8953b40-cfa9-4456-8602-313b727e5cab
+-----------------------------------------------------

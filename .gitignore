@@ -1,0 +1,12 @@
+# Build output
+bin/
+obj/
+.vs/
+node_modules/
+
+# Logs and runtime state
+*.log
+results/service-pids.json
+
+# Separate git repository (central contract repo)
+contracts/

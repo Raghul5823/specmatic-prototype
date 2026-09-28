@@ -1,0 +1,83 @@
+﻿Specmatic Version: v2.55.0(299682d5)
+
+Usage: specmatic test [-hV] [--debug] [--https] [--lenient] [--match-branch]
+                      [--strict] [--filter=<filter>] [--host=<host>]
+                      [--junitReportDir=<junitReportDirName>]
+                      [--overlay-file=<overlayFilePath>] [--port=<port>]
+                      [--testBaseURL=<testBaseURL>] [--timeout=<timeout>]
+                      [--timeout-in-ms=<timeoutInMs>]
+                      [--examples=<exampleDirs>]... [[--ci]
+                      [--repo-id=<repoId>] [--repo-name=<repoName>]
+                      [--repo-url=<repoUrl>] [--branch-name=<branchName>]
+                      [--token=<token>] [--build-id=<buildId>]
+                      [--run-attempt=<runAttempt>]
+                      [--metadata=<String=String>]... [--config=<configPath>]]
+                      [<contractPaths>...]
+Run contract tests
+      [<contractPaths>...]   Contract file paths
+      --debug                Debug logs
+      --examples=<exampleDirs>
+                             Directories containing JSON examples
+      --filter=<filter>      Filter tests matching the specified filtering
+                               criteria
+
+                             You can filter tests based on the following keys:
+                             - `METHOD`: HTTP methods (e.g., GET, POST)
+                             - `PATH`: Request paths (e.g., /users, /product)
+                             - `STATUS`: HTTP response status codes (e.g., 200,
+                               400)
+
+                             You can find all available filters and their usage
+                               at:
+                             https://docs.specmatic.
+                               io/documentation/contract_tests.
+                               html#supported-filters--operators
+  -h, --help                 Show this help message and exit.
+      --host=<host>          The host to bind to, e.g. localhost or some
+                               locally bound IP
+      --https                Use https instead of the default http
+      --junitReportDir=<junitReportDirName>
+                             Create junit xml reports in this directory
+      --lenient              Parse the OpenAPI Specification with leniency
+      --match-branch         Use the current branch name for contract source
+                               branch when not on default branch
+      --overlay-file=<overlayFilePath>
+                             Overlay file for the specification
+      --port=<port>          The port to bind to
+      --strict               If true, positive and negative tests will not be
+                               generated for endpoints without examples
+      --testBaseURL=<testBaseURL>
+                             The base URL, use this instead of host and port
+      --timeout=<timeout>    Specify a timeout in seconds for the test
+                               requests. Default value is 6
+      --timeout-in-ms=<timeoutInMs>
+                             Specify a timeout in milliseconds for the test
+                               requests, Defaults to 6000
+  -V, --version              Print version information and exit.
+
+Insights reporting options:
+      --branch-name=<branchName>
+                             Branch name for the Insights build (inferred from
+                               CI or Git: null; override with -Dspecmatic.
+                               branch.name or SPECMATIC_BRANCH_NAME)
+      --build-id=<buildId>   CI build identifier (inferred from CI; override
+                               with -Dspecmatic.build.id or SPECMATIC_BUILD_ID)
+      --ci                   Publish reports as a CI build
+      --config=<configPath>  Path to Specmatic config
+      --metadata=<String=String>
+                             Additional metadata for the build report in
+                               key=value format. Can be specified multiple
+                               times.
+      --repo-id=<repoId>     Repository ID for the Insights build (inferred
+                               from CI; override with -Dspecmatic.repo.id or
+                               SPECMATIC_REPO_ID)
+      --repo-name=<repoName> Repository name for the Insights build (inferred
+                               from CI or Git: null; override with -Dspecmatic.
+                               repo.name or SPECMATIC_REPO_NAME)
+      --repo-url=<repoUrl>   Repository URL for the Insights build (inferred
+                               from CI or Git: null; override with -Dspecmatic.
+                               repo.url or SPECMATIC_REPO_URL)
+      --run-attempt=<runAttempt>
+                             CI run attempt (inferred from CI; override with
+                               -Dspecmatic.run.attempt or SPECMATIC_RUN_ATTEMPT)
+      --token=<token>        Insights build submission token

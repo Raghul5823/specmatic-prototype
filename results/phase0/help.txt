@@ -1,0 +1,40 @@
+﻿Specmatic Version: v2.55.0(299682d5)
+
+Usage: specmatic [-hV] [COMMAND]
+  -h, --help      Show this help message and exit.
+  -V, --version   Print version information and exit.
+
+Specmatic core commands:
+  backward-compatibility-check  Checks backward compatibility of OpenAPI
+                                  specifications
+  compare
+                                Checks if two contracts are equivalent.
+                                DEPRECATED: This command will be removed in the
+                                  next major release. Use
+                                  'backward-compatibility-check' command
+                                  instead.
+
+  proxy                         Proxies requests to the specified target and
+                                  converts the result into contracts and stubs
+  examples                      Validate inline and externalised examples
+  mock, virtualize, stub        Start a mock server with contract
+  test                          Run contract tests
+  config                        Manage and configure Specmatic Configuration.
+
+Contract conversion commands:
+  import  Converts a Specmatic example file into an OpenAPI spec file, or a
+            Postman file into an OpenAPI spec file with examples if present
+
+MCP capabilities commands:
+  mcp  Execute Specmatic MCP capabilities
+
+Build Reporting commands:
+  send-report           Send Specmatic build report to Specmatic Insights Server
+  spec-metadata-report  Generate the Spec Metadata Report
+
+Commands:
+  generate-completion  Generate bash/zsh completion script for specmatic.
+
+License management commands:
+  get-license   Fetch a license from a Specmatic Insights Server
+  show-license  Display the current Specmatic license
