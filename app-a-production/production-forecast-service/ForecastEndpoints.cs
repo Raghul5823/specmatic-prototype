@@ -1,4 +1,4 @@
-using Prototype.ServiceDefaults;
+﻿using Prototype.ServiceDefaults;
 
 namespace ProductionForecastService;
 
@@ -6,7 +6,7 @@ public static class ForecastEndpoints
 {
     public static void MapForecastEndpoints(this IEndpointRouteBuilder app)
     {
-        var forecasts = app.MapGroup("/forecasts");
+        var forecasts = app.MapGroup("/v2/forecasts");
 
         // Makes downstream calls (well-registry, change-request).
         forecasts.MapPost("/", async (CreateForecastRequest request, ForecastService service, CancellationToken ct) =>
@@ -16,7 +16,7 @@ public static class ForecastEndpoints
                 var result = await service.CreateAsync(request, ct);
                 return result.Errors is not null
                     ? Results.ValidationProblem(result.Errors)
-                    : Results.Created($"/forecasts/{result.Forecast!.Id}", result.Forecast);
+                    : Results.Created($"/v2/forecasts/{result.Forecast!.Id}", result.Forecast);
             }
             catch (DownstreamException ex)
             {

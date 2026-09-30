@@ -1,0 +1,8 @@
+﻿Specmatic Version: v2.55.0(299682d5)
+
+Usage: specmatic examples [-hV] [COMMAND]
+Validate inline and externalised examples
+  -h, --help      Show this help message and exit.
+  -V, --version   Print version information and exit.
+Commands:
+  validate  Validate the examples

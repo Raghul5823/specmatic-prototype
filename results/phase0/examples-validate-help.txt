@@ -1,0 +1,45 @@
+﻿Specmatic Version: v2.55.0(299682d5)
+
+Usage: specmatic examples validate [-hV] [--debug] [--lenient]
+                                   [--example-file=<exampleFile>]
+                                   [--examples-base-dir=<examplesBaseDir>]
+                                   [--examples-dir=<examplesDir>]
+                                   [--examples-to-validate=<examplesToValidate>]
+                                    [--filter=<filter>]
+                                   [--spec-file=<contractFile>]
+                                   [--specs-dir=<specsDir>]
+Validate the examples
+      --debug             Debug logs
+      --example-file=<exampleFile>
+                          Example file path
+      --examples-base-dir=<examplesBaseDir>
+                          Base directory which contains multiple external
+                            examples directories each named as per the
+                            Specmatic naming convention to associate them with
+                            the corresponding API specification
+      --examples-dir=<examplesDir>
+                          External examples directory path for a single API
+                            specification (If you are not following the default
+                            naming convention for external examples directory)
+      --examples-to-validate=<examplesToValidate>
+                          Whether to validate inline, external, or both
+                            examples. Options: INLINE, EXTERNAL, BOTH
+      --filter=<filter>   Filter tests matching the specified filtering criteria
+
+                          You can filter tests based on the following keys:
+                          - `METHOD`: HTTP methods (e.g., GET, POST)
+                          - `PATH`: Request paths (e.g., /users, /product)
+                          - `STATUS`: HTTP response status codes (e.g., 200,
+                            400)
+
+                          You can find all available filters and their usage at:
+                          https://docs.specmatic.
+                            io/documentation/contract_tests.
+                            html#supported-filters--operators
+  -h, --help              Show this help message and exit.
+      --lenient           Parse the OpenAPI Specification with leniency
+      --spec-file, --contract-file=<contractFile>
+                          Contract file path
+      --specs-dir=<specsDir>
+                          Directory with the API specification files
+  -V, --version           Print version information and exit.

@@ -1,10 +1,10 @@
-namespace WellRegistryService;
+﻿namespace WellRegistryService;
 
 public static class WellEndpoints
 {
     public static void MapWellEndpoints(this IEndpointRouteBuilder app)
     {
-        var wells = app.MapGroup("/wells");
+        var wells = app.MapGroup("/v2/wells");
 
         // status is bound as a string and parsed strictly (Enum.TryParse would accept "1" or "active").
         wells.MapGet("/", (string? status, WellService service) =>
@@ -36,7 +36,7 @@ public static class WellEndpoints
             if (errors.Count > 0)
                 return Results.ValidationProblem(errors);
             var well = service.Create(request);
-            return Results.Created($"/wells/{well.Id}", well);
+            return Results.Created($"/v2/wells/{well.Id}", well);
         });
     }
 }

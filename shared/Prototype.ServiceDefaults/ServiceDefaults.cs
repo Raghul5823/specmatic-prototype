@@ -11,7 +11,7 @@ namespace Prototype.ServiceDefaults;
 
 /// <summary>
 /// Plumbing shared by all four services: strict JSON, ProblemDetails errors,
-/// a fixed test bearer token, and a /health endpoint for the scripts.
+/// a fixed test bearer token, and Kubernetes-style /liveness and /readiness probes.
 /// </summary>
 public static class ServiceDefaultsExtensions
 {
@@ -30,11 +30,17 @@ public static class ServiceDefaultsExtensions
         // Empty-body 4xx/5xx (e.g. unknown route, malformed JSON body) -> ProblemDetails.
         app.UseStatusCodePages();
         app.UseMiddleware<TestBearerTokenMiddleware>();
-        app.MapGet("/health", () => Results.Ok(new { status = "UP" }));
+        // Probes for the orchestrator, not part of the API contract (no auth, not under /v2).
+        app.MapGet("/liveness", () => Results.Ok(new { status = "UP" }));
+        app.MapGet("/readiness", () => Results.Ok(new { status = "READY" }));
         return app;
     }
 
-    /// <summary>Registers a typed HttpClient for a downstream provider, sending the test token.</summary>
+    /// <summary>
+    /// Registers a typed HttpClient for a downstream provider, sending the test token.
+    /// The base URL includes the provider's base path (e.g. http://localhost:5101/v2/) and clients
+    /// use relative paths ("wells/W-001"), so pointing at a stub is a config change only.
+    /// </summary>
     public static IHttpClientBuilder AddDownstreamClient<TClient, TImplementation>(
         this WebApplicationBuilder builder, string baseUrlKey)
         where TClient : class
@@ -45,7 +51,7 @@ public static class ServiceDefaultsExtensions
         var token = builder.Configuration["Downstream:Token"];
         return builder.Services.AddHttpClient<TClient, TImplementation>(client =>
         {
-            client.BaseAddress = new Uri(baseUrl);
+            client.BaseAddress = new Uri(baseUrl.EndsWith('/') ? baseUrl : baseUrl + "/");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             client.Timeout = TimeSpan.FromSeconds(5);
         });
@@ -75,7 +81,7 @@ public static class Json
 }
 
 /// <summary>
-/// Stand-in for OAuth2: every endpoint except /health needs "Authorization: Bearer &lt;Auth:Token&gt;".
+/// Stand-in for OAuth2: every endpoint except the probes needs "Authorization: Bearer &lt;Auth:Token&gt;".
 /// </summary>
 public sealed class TestBearerTokenMiddleware(RequestDelegate next, IConfiguration configuration)
 {
@@ -84,7 +90,8 @@ public sealed class TestBearerTokenMiddleware(RequestDelegate next, IConfigurati
 
     public async Task InvokeAsync(HttpContext context)
     {
-        if (context.Request.Path.StartsWithSegments("/health")
+        if (context.Request.Path.StartsWithSegments("/liveness")
+            || context.Request.Path.StartsWithSegments("/readiness")
             || context.Request.Headers.Authorization.ToString() == _expected)
         {
             await next(context);

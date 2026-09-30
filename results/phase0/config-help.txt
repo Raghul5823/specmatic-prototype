@@ -1,0 +1,10 @@
+﻿Specmatic Version: v2.55.0(299682d5)
+
+Usage: specmatic config [-hV] [COMMAND]
+Manage and configure Specmatic Configuration.
+  -h, --help      Show this help message and exit.
+  -V, --version   Print version information and exit.
+Commands:
+  upgrade   Upgrade Specmatic Configuration to the latest version.
+  validate  Validate Specmatic Configuration against its schema and semantic
+              rules.

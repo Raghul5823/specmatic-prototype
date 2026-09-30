@@ -1,0 +1,53 @@
+﻿[PASS] well-registry: list ACTIVE wells  (expected 200, got 200, application/json; charset=utf-8)
+       GET http://localhost:5101/v2/wells?status=ACTIVE
+       [{"id":"W-001","name":"Eagle-1","field":"Eagle Ford","status":"ACTIVE","latitude":28.5,"longitude":-98.3,"spudDate":"2019-04-12","dailyCapacityBbl":1200},{"id":"W-002","name":"Eagle-2","field":"Eagle Ford","status":"ACTIVE","latitude":28.6,"longitude":-98.2,"spudDate":"2020-08-01","dailyCapacityBbl":800}]
+[PASS] well-registry: get W-001  (expected 200, got 200, application/json; charset=utf-8)
+       GET http://localhost:5101/v2/wells/W-001
+       {"id":"W-001","name":"Eagle-1","field":"Eagle Ford","status":"ACTIVE","latitude":28.5,"longitude":-98.3,"spudDate":"2019-04-12","dailyCapacityBbl":1200}
+[PASS] well-registry: unknown well -> 404  (expected 404, got 404, application/problem+json)
+       GET http://localhost:5101/v2/wells/W-999
+       {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.5","title":"Not Found","status":404,"detail":"Well W-999 does not exist.","traceId":"00-b694f0723f1f3a4817bfb0a42fe05ff3-fb7697a850484932-00"}
+[PASS] well-registry: no token -> 401  (expected 401, got 401, application/problem+json)
+       GET http://localhost:5101/v2/wells
+       {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.2","title":"Unauthorized","status":401,"detail":"Missing or invalid bearer token.","traceId":"00-4eb4cc709de4a0e2638a28e9c6c0583d-7e2e5f3047db7120-00"}
+[PASS] well-registry: bad body -> 400  (expected 400, got 400, application/problem+json)
+       POST http://localhost:5101/v2/wells
+       {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"One or more validation errors occurred.","status":400,"errors":{"field":["field is required (1-100 characters)."],"status":["status is required."],"latitude":["latitude is required (-90 to 90)."],"longitude":["longitude is required (-180 to 180)."],"spudDate":["spudDate is required (yyyy-MM-dd)."],"dailyCapacityBbl":["dailyCapacityBbl is required (>= 0)."]},"traceId":"00-49741b378acc59c0f36a90788fd30430-9c146d7cae0144eb-00"}
+[PASS] well-registry: string for number -> 400  (expected 400, got 400, application/problem+json)
+       POST http://localhost:5101/v2/wells
+       {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"Bad Request","status":400,"traceId":"00-9e41b6c3bdc5aad31e3a2dd82bb296e5-340abf7f845c4710-00"}
+[PASS] well-registry: create well -> 201  (expected 201, got 201, application/json; charset=utf-8)
+       POST http://localhost:5101/v2/wells
+       {"id":"W-004","name":"Eagle-9","field":"Eagle Ford","status":"ACTIVE","latitude":28.7,"longitude":-98.1,"spudDate":"2024-05-01","dailyCapacityBbl":650}
+[PASS] approval: small change -> 201 APPROVED  (expected 201, got 201, application/json; charset=utf-8)
+       POST http://localhost:5202/v2/approvals
+       {"id":"A-7003","changeRequestId":"CR-9999","decision":"APPROVED","reason":"Within delegated authority (<= 500 bbl/d).","decidedAt":"2026-09-28T09:24:54.0815909+00:00"}
+[PASS] change-request: list APPROVED for W-001  (expected 200, got 200, application/json; charset=utf-8)
+       GET http://localhost:5201/v2/change-requests?wellId=W-001&status=APPROVED
+       [{"id":"CR-1001","title":"Open choke on Eagle-1","wellId":"W-001","type":"CHOKE_CHANGE","capacityDeltaBbl":150,"requestedBy":"j.doe","status":"APPROVED","approvalId":"A-7001","decisionReason":"Within delegated authority (<= 500 bbl/d).","createdAt":"2026-09-01T08:00:00+00:00"}]
+[PASS] CHAIN A->A, A->B: create forecast W-001  (expected 201, got 201, application/json; charset=utf-8)
+       POST http://localhost:5102/v2/forecasts
+       {"id":"F-5002","wellId":"W-001","wellName":"Eagle-1","horizonMonths":3,"declineRatePct":5,"baseDailyCapacityBbl":1200,"effectiveDailyCapacityBbl":1350,"appliedChangeRequestIds":["CR-1001"],"monthlyVolumesBbl":[40500,38475,36551.3],"totalVolumeBbl":115526.3,"createdAt":"2026-09-28T09:24:54.6744688+00:00"}
+[PASS] forecast: shut-in well -> 400  (expected 400, got 400, application/problem+json)
+       POST http://localhost:5102/v2/forecasts
+       {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"One or more validation errors occurred.","status":400,"errors":{"wellId":["Well W-003 is SHUT_IN; only ACTIVE wells can be forecast."]},"traceId":"00-6d3f845812fb6b7ed0ff4b42212259c8-387e7501186a14dd-00"}
+[PASS] CHAIN B->A, B->B: create CR linked to F-5001  (expected 201, got 201, application/json; charset=utf-8)
+       POST http://localhost:5201/v2/change-requests
+       {"id":"CR-1003","title":"Choke tweak","wellId":"W-001","forecastId":"F-5001","type":"CHOKE_CHANGE","capacityDeltaBbl":50,"requestedBy":"qa.user","status":"APPROVED","approvalId":"A-7004","decisionReason":"Within delegated authority (<= 500 bbl/d).","createdAt":"2026-09-28T09:24:54.8438807+00:00"}
+[PASS] change-request: unknown forecast -> 400  (expected 400, got 400, application/problem+json)
+       POST http://localhost:5201/v2/change-requests
+       {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"One or more validation errors occurred.","status":400,"errors":{"forecastId":["Forecast F-9999 does not exist."]},"traceId":"00-ce062dbda7d7ecd9e898d52dca9bcaad-7fc619ac5ee75eeb-00"}
+[PASS] unknown route -> 404 ProblemDetails  (expected 404, got 404, application/problem+json)
+       GET http://localhost:5202/nope
+       {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.5","title":"Not Found","status":404,"traceId":"00-0dcdb40cb9c6b6459b1a205427c7ae47-4a44732f5bd342c2-00"}
+[PASS] old path without /v2 -> 404  (expected 404, got 404, application/problem+json)
+       GET http://localhost:5101/wells
+       {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.5","title":"Not Found","status":404,"traceId":"00-66d1c612d79b2572481f9edd14ef7c2d-e2d4feaa6d9519ca-00"}
+[PASS] probe: /liveness, no token -> 200  (expected 200, got 200, application/json; charset=utf-8)
+       GET http://localhost:5101/liveness
+       {"status":"UP"}
+[PASS] probe: /readiness, no token -> 200  (expected 200, got 200, application/json; charset=utf-8)
+       GET http://localhost:5202/readiness
+       {"status":"READY"}
+
+17/17 passed

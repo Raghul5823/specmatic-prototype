@@ -1,10 +1,10 @@
-namespace ApprovalService;
+﻿namespace ApprovalService;
 
 public static class ApprovalEndpoints
 {
     public static void MapApprovalEndpoints(this IEndpointRouteBuilder app)
     {
-        var approvals = app.MapGroup("/approvals");
+        var approvals = app.MapGroup("/v2/approvals");
 
         approvals.MapPost("/", (CreateApprovalRequest request, ApprovalPolicy policy) =>
         {
@@ -12,7 +12,7 @@ public static class ApprovalEndpoints
             if (errors.Count > 0)
                 return Results.ValidationProblem(errors);
             var approval = policy.Decide(request);
-            return Results.Created($"/approvals/{approval.Id}", approval);
+            return Results.Created($"/v2/approvals/{approval.Id}", approval);
         });
 
         approvals.MapGet("/{approvalId}", (string approvalId, ApprovalPolicy policy) =>

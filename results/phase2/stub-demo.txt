@@ -1,0 +1,247 @@
+Specmatic 2.55.0 stub of specs/app-a-production/well-registry-service.yaml on localhost:9101 (curl.exe -i)
+
+### GET /wells/W-003   (NO Authorization header)
+HTTP/1.1 200 OK
+Vary: Origin
+X-Specmatic-Result: success
+Content-Length: 205
+Content-Type: application/json
+
+{
+    "id": "W-003",
+    "name": "Permian-7",
+    "field": "Permian Basin",
+    "status": "SHUT_IN",
+    "latitude": 31.9,
+    "longitude": -102.1,
+    "spudDate": "2015-02-20",
+    "dailyCapacityBbl": 0
+}
+
+### GET /wells/W-999   (NO Authorization header)
+HTTP/1.1 404 Not Found
+Vary: Origin
+X-Specmatic-Result: success
+Content-Length: 157
+Content-Type: application/problem+json
+
+{
+    "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+    "title": "Not Found",
+    "status": 404,
+    "detail": "Well W-999 does not exist."
+}
+
+### GET /wells/W-555   (NO Authorization header)
+HTTP/1.1 400 Bad Request
+Vary: Origin
+X-Specmatic-Result: failure
+Content-Length: 2138
+Content-Type: text/plain
+
+Error from contract specs/app-a-production/well-registry-service.yaml
+
+  In scenario "Get one well by id.. Response: The well."
+  API: GET /wells/(wellId:WellId) -> 200
+  
+    >> REQUEST.PARAMETERS.HEADER.Authorization
+  
+        R2001: Missing required property
+        Documentation: https://docs.specmatic.io/rules#r2001
+        Summary: A required property defined in the specification is missing
+  
+        Specification expected mandatory header "Authorization" to be present but was missing from the request
+
+Error from contract specs/app-a-production/well-registry-service.yaml
+
+  In scenario "Get one well by id.. Response: Validation failed or the request was malformed."
+  API: GET /wells/(wellId:WellId) -> 400
+  
+    >> REQUEST.PARAMETERS.HEADER.Authorization
+  
+        R2001: Missing required property
+        Documentation: https://docs.specmatic.io/rules#r2001
+        Summary: A required property defined in the specification is missing
+  
+        Specification expected mandatory header "Authorization" to be present but was missing from the request
+
+Error from contract specs/app-a-production/well-registry-service.yaml
+
+  In scenario "Get one well by id.. Response: Missing or invalid bearer token."
+  API: GET /wells/(wellId:WellId) -> 401
+  
+    >> REQUEST.PARAMETERS.HEADER.Authorization
+  
+        R2001: Missing required property
+        Documentation: https://docs.specmatic.io/rules#r2001
+        Summary: A required property defined in the specification is missing
+  
+        Specification expected mandatory header "Authorization" to be present but was missing from the request
+
+Error from contract specs/app-a-production/well-registry-service.yaml
+
+  In scenario "Get one well by id.. Response: The well does not exist."
+  API: GET /wells/(wellId:WellId) -> 404
+  
+    >> REQUEST.PARAMETERS.HEADER.Authorization
+  
+        R2001: Missing required property
+        Documentation: https://docs.specmatic.io/rules#r2001
+        Summary: A required property defined in the specification is missing
+  
+        Specification expected mandatory header "Authorization" to be present but was missing from the request
+
+### GET /wells/W-555   (with Authorization: Bearer anything)
+HTTP/1.1 200 OK
+Vary: Origin
+X-Specmatic-Result: success
+X-Specmatic-Type: random
+Content-Length: 237
+Content-Type: application/json
+
+{
+    "id": "W-307",
+    "name": "JITJW",
+    "field": "LXTKG",
+    "status": "ACTIVE",
+    "latitude": 5.117155768941117,
+    "longitude": 60.84860570688039,
+    "spudDate": "2026-09-30",
+    "dailyCapacityBbl": 1.3264447972559158E308
+}
+
+### GET /wells/WELL-1   (with Authorization: Bearer anything)
+HTTP/1.1 400 Bad Request
+Vary: Origin
+X-Specmatic-Result: failure
+Content-Length: 2182
+Content-Type: text/plain
+
+Error from contract specs/app-a-production/well-registry-service.yaml
+
+  In scenario "Get one well by id.. Response: The well."
+  API: GET /wells/(wellId:WellId) -> 200
+  
+    >> REQUEST.PARAMETERS.PATH.wellId
+  
+        R1003: Constraint violation
+        Documentation: https://docs.specmatic.io/rules#r1003
+        Summary: The value does not satisfy the constraints defined in the specification
+  
+        Specification expected type string that matches regex ^W-\d{3}$ but request contained value "WELL-1" of type string
+
+Error from contract specs/app-a-production/well-registry-service.yaml
+
+  In scenario "Get one well by id.. Response: Validation failed or the request was malformed."
+  API: GET /wells/(wellId:WellId) -> 400
+  
+    >> REQUEST.PARAMETERS.PATH.wellId
+  
+        R1003: Constraint violation
+        Documentation: https://docs.specmatic.io/rules#r1003
+        Summary: The value does not satisfy the constraints defined in the specification
+  
+        Specification expected type string that matches regex ^W-\d{3}$ but request contained value "WELL-1" of type string
+
+Error from contract specs/app-a-production/well-registry-service.yaml
+
+  In scenario "Get one well by id.. Response: Missing or invalid bearer token."
+  API: GET /wells/(wellId:WellId) -> 401
+  
+    >> REQUEST.PARAMETERS.PATH.wellId
+  
+        R1003: Constraint violation
+        Documentation: https://docs.specmatic.io/rules#r1003
+        Summary: The value does not satisfy the constraints defined in the specification
+  
+        Specification expected type string that matches regex ^W-\d{3}$ but request contained value "WELL-1" of type string
+
+Error from contract specs/app-a-production/well-registry-service.yaml
+
+  In scenario "Get one well by id.. Response: The well does not exist."
+  API: GET /wells/(wellId:WellId) -> 404
+  
+    >> REQUEST.PARAMETERS.PATH.wellId
+  
+        R1003: Constraint violation
+        Documentation: https://docs.specmatic.io/rules#r1003
+        Summary: The value does not satisfy the constraints defined in the specification
+  
+        Specification expected type string that matches regex ^W-\d{3}$ but request contained value "WELL-1" of type string
+
+### GET /wells?status=PUMPING   (with Authorization: Bearer anything)
+HTTP/1.1 400 Bad Request
+Vary: Origin
+X-Specmatic-Result: failure
+Content-Length: 1615
+Content-Type: text/plain
+
+Error from contract specs/app-a-production/well-registry-service.yaml
+
+  In scenario "List wells, optionally filtered by status.. Response: Wells matching the filter (may be empty)."
+  API: GET /wells -> 200
+  
+    >> REQUEST.PARAMETERS.QUERY.status
+  
+        R1002: Value mismatch
+        Documentation: https://docs.specmatic.io/rules#r1002
+        Summary: The value does not match the expected value defined in the specification
+  
+        Specification expected ("ACTIVE" or "SHUT_IN" or "ABANDONED") but request contained "PUMPING"
+
+Error from contract specs/app-a-production/well-registry-service.yaml
+
+  In scenario "List wells, optionally filtered by status.. Response: Validation failed or the request was malformed."
+  API: GET /wells -> 400
+  
+    >> REQUEST.PARAMETERS.QUERY.status
+  
+        R1002: Value mismatch
+        Documentation: https://docs.specmatic.io/rules#r1002
+        Summary: The value does not match the expected value defined in the specification
+  
+        Specification expected ("ACTIVE" or "SHUT_IN" or "ABANDONED") but request contained "PUMPING"
+
+Error from contract specs/app-a-production/well-registry-service.yaml
+
+  In scenario "List wells, optionally filtered by status.. Response: Missing or invalid bearer token."
+  API: GET /wells -> 401
+  
+    >> REQUEST.PARAMETERS.QUERY.status
+  
+        R1002: Value mismatch
+        Documentation: https://docs.specmatic.io/rules#r1002
+        Summary: The value does not match the expected value defined in the specification
+  
+        Specification expected ("ACTIVE" or "SHUT_IN" or "ABANDONED") but request contained "PUMPING"
+
+### GET /wells?status=ACTIVE   (NO Authorization header)
+HTTP/1.1 200 OK
+Vary: Origin
+X-Specmatic-Result: success
+Content-Length: 487
+Content-Type: application/json
+
+[
+    {
+        "id": "W-001",
+        "name": "Eagle-1",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.5,
+        "longitude": -98.3,
+        "spudDate": "2019-04-12",
+        "dailyCapacityBbl": 1200
+    },
+    {
+        "id": "W-002",
+        "name": "Eagle-2",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.6,
+        "longitude": -98.2,
+        "spudDate": "2020-08-01",
+        "dailyCapacityBbl": 800
+    }
+]
+

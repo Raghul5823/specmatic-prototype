@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
 using Prototype.ServiceDefaults;
 
@@ -16,7 +16,7 @@ public sealed class ApprovalClient(HttpClient http) : IApprovalClient
     public async Task<ApprovalDecision> RequestApprovalAsync(ApprovalRequest request, CancellationToken ct)
     {
         using var response = await Downstream.SendAsync(Provider,
-            () => http.PostAsJsonAsync("/approvals", request, Json.Options, ct));
+            () => http.PostAsJsonAsync("approvals", request, Json.Options, ct));
         if (response.StatusCode != HttpStatusCode.Created)
             throw new DownstreamException(Provider, $"unexpected status {(int)response.StatusCode}");
         return await Downstream.ReadAsync<ApprovalDecision>(Provider, response, ct);
@@ -37,7 +37,7 @@ public sealed class ProductionForecastClient(HttpClient http) : IProductionForec
     public async Task<ForecastSummary?> GetForecastAsync(string forecastId, CancellationToken ct)
     {
         using var response = await Downstream.SendAsync(Provider,
-            () => http.GetAsync($"/forecasts/{Uri.EscapeDataString(forecastId)}", ct));
+            () => http.GetAsync($"forecasts/{Uri.EscapeDataString(forecastId)}", ct));
         if (response.StatusCode == HttpStatusCode.NotFound)
             return null;
         if (!response.IsSuccessStatusCode)

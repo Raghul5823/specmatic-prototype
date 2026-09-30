@@ -1,13 +1,26 @@
 # Specmatic Prototype — Contract Testing Evaluation
 
-> Status: **Phase 1 complete** (structure, services and design). Later sections are placeholders until their phase runs.
+> Status: **Phase 2 complete** (contracts `v1`). Later sections are placeholders until their phase runs.
 
 ## 1. Purpose and scope
 Evaluate whether **Specmatic (open-source edition)** fits contract testing for an enterprise stack: Angular MFEs, .NET 10 microservices, Azure DevOps pipelines and OAuth2.
-The prototype uses two small "applications" with four services: App A Production (oil & gas) and App B Change Management. Calls go both within an app and across apps.
+The prototype uses two small "applications" with four services: App A Production (oil & gas) and App B Change Management. Calls go both within an app and across apps. A minimal Angular app acts as an MFE consumer.
 The output is evidence for a **Go / Conditional Go / No-Go** decision.
 
-Out of scope: production-grade code, real OAuth2 identity provider, Angular front-ends (noted as a limitation).
+Out of scope: production-grade code, a real OAuth2 identity provider, and a full MFE shell (Module Federation). Phase 6 uses one plain Angular CLI app as the MFE stand-in.
+
+### Phase plan
+| Phase | Title | Status |
+|---|---|---|
+| 0 | Environment check | ✅ done |
+| 1 | Project structure and design | ✅ done |
+| 2 | Contracts (specs, examples, `consumers.yaml`, tag `v1`); services moved under `/v2` with `/liveness` and `/readiness` | ✅ done |
+| 3 | Case 1: a service's own API (provider tests, reports, xUnit for the internal layer, break experiments) | next |
+| 4 | Case 2: service-to-service within an app, both directions (provider tests + consumer tests against stubs) | |
+| 5 | Case 3: cross-application, both directions, specs from the central `contracts/` repo; backward-compatibility check against `v1`; drift | |
+| 6 | **Minimal Angular MFE consumer**: generated TypeScript client from the spec, contract break as a compile error, Playwright against a Specmatic stub via the dev-server proxy | |
+| 7 | Pipeline simulation: `run-all.ps1` + sample `azure-pipelines.yml` (**BuildService** stage with unit tests, xUnit `ContractTests` projects and the Angular steps; the deploy stage depends on it) | |
+| 8 | Evaluation: coverage, control points, scorecard (incl. "Angular MFE consumer support"), limitations, recommendation | |
 
 ## 2. Environment and versions
 Checked on 2026-09-28 (Windows 11 Pro 10.0.26200).
@@ -38,6 +51,8 @@ Early observations from the help text (to verify in later phases):
 - `test` has `--junitReportDir`, `--filter` (METHOD/PATH/STATUS), `--examples`, `--strict` (no generated tests for endpoints without examples), `--testBaseURL`, `--overlay-file`.
 - `backward-compatibility-check` is **git-based**: it compares changed files against `--base-branch` in `--repo-dir`. It does not take two file paths. The older two-file `compare` command is deprecated. Comparing against a **tag** (v1) needs to be tested in Phase 5.
 - The `--strict` flag on `backward-compatibility-check` is **"only applicable when using Specmatic Insights"** (paid/hosted). Without it, breaking changes to APIs "that have no usages" produce warnings only. This matters for Phase 5.
+- Configuration: the current docs use **`specmatic.yaml` version 3** (`systemUnderTest`, `dependencies`, `components.sources/services/runOptions`). Version 2 (`contracts`, `provides`, `consumes`) is still documented. We add a config file only when a phase needs one.
+- Docs marked **commercial-only** (not usable by us): the interactive examples GUI, template values in examples (e.g. `${API_TOKEN:...}`), just-in-time auth tokens via fixtures, detection of competing examples, gRPC and GraphQL mocks. The docs source was read from the public `specmatic/docs.specmatic.io` repo, because the site renders client-side.
 
 ### Repositories
 The prototype uses **two independent git repositories**. Both use the `main` branch and are MIT licensed.
@@ -64,12 +79,12 @@ flowchart LR
     CR["change-request-service<br/>:5201"]
     AP["approval-service<br/>:5202"]
   end
-  PF -- "C1 · GET /wells/{wellId}<br/>intra-app" --> WR
-  CR -- "C2 · POST /approvals<br/>intra-app" --> AP
-  CR -- "C3 · GET /forecasts/{forecastId}<br/>CROSS-APP B→A" --> PF
-  PF -- "C4 · GET /change-requests?wellId&status=APPROVED<br/>CROSS-APP A→B" --> CR
+  PF -- "C1 · GET /v2/wells/{wellId}<br/>intra-app" --> WR
+  CR -- "C2 · POST /v2/approvals<br/>intra-app" --> AP
+  CR -- "C3 · GET /v2/forecasts/{forecastId}<br/>CROSS-APP B→A" --> PF
+  PF -- "C4 · GET /v2/change-requests?wellId&status=APPROVED<br/>CROSS-APP A→B" --> CR
 ```
-Arrows point from **consumer → provider**.
+Arrows point from **consumer → provider**. All business endpoints are under the **`/v2` base path**, matching the ingress route in our real Helm setup. Each service also exposes **`/liveness`** and **`/readiness`** at the root, with no auth; these are not in the contracts (see §4).
 
 ### Ports
 | Service | App | Port | Planned Specmatic stub port (Phases 4–5) |
@@ -94,7 +109,8 @@ Arrows point from **consumer → provider**.
 The endpoints that fan out (the two POSTs) are never called by another service.
 
 ### Endpoint inventory
-Every endpoint except `/health` requires `Authorization: Bearer test-token-123`.
+Every business endpoint requires `Authorization: Bearer test-token-123`. The probes don't.
+Paths below are relative to the `/v2` base path (e.g. `GET /wells` is `GET /v2/wells`), the same way the specs write them.
 
 | Service | Endpoint | Success | Errors |
 |---|---|---|---|
@@ -108,6 +124,7 @@ Every endpoint except `/health` requires `Authorization: Bearer test-token-123`.
 | | `GET /change-requests/{changeRequestId}` (pattern `CR-0000`) | 200 | 400, 401, 404 |
 | approval | `POST /approvals` (rule: `abs(capacityDeltaBbl) <= 500` → APPROVED, otherwise REJECTED) | 201 + `Location` | 400, 401 |
 | | `GET /approvals/{approvalId}` (pattern `A-0000`) | 200 | 400, 401, 404 |
+| all four | `GET /liveness`, `GET /readiness` (root, **not** under `/v2`, no auth, **not in the contracts**) | 200 | – |
 
 **Seed data** (fixed, so that Phase 2 examples can match it):
 - Wells: `W-001` Eagle-1 (ACTIVE, 1200 bbl/d), `W-002` Eagle-2 (ACTIVE, 800), `W-003` Permian-7 (SHUT_IN, 0).
@@ -120,9 +137,11 @@ Every endpoint except `/health` requires `Authorization: Bearer test-token-123`.
 Specmatic Prototype/
 ├─ README.md                      <- this file (main deliverable)
 ├─ SpecmaticPrototype.sln         <- builds all projects
-├─ contracts/                     <- SEPARATE git repo (central contract repo); specs from Phase 2
-│   ├─ specs/app-a-production/ , specs/app-b-change-mgmt/ , common/
-│   └─ consumers.yaml             <- (Phase 2) who uses which endpoint
+├─ contracts/                     <- SEPARATE git repo (central contract repo), tagged v1
+│   ├─ common/common.yaml         <- shared ProblemDetails + 400/401/404/502 responses
+│   ├─ specs/app-a-production/    <- well-registry-service.yaml, production-forecast-service.yaml (+ *_examples/)
+│   ├─ specs/app-b-change-mgmt/   <- change-request-service.yaml, approval-service.yaml (+ *_examples/)
+│   └─ consumers.yaml             <- who uses which endpoint and fields (our governance file)
 ├─ shared/Prototype.ServiceDefaults/   <- JSON rules, bearer check, ProblemDetails, HttpClient helper
 ├─ app-a-production/
 │   ├─ well-registry-service/          Program.cs, WellEndpoints.cs -> WellService.cs -> WellRepository.cs
@@ -130,7 +149,7 @@ Specmatic Prototype/
 ├─ app-b-change-mgmt/
 │   ├─ change-request-service/         ChangeRequestEndpoints.cs -> ChangeRequestManager.cs -> Clients.cs / Repository
 │   └─ approval-service/               ApprovalEndpoints.cs -> ApprovalPolicy.cs -> ApprovalRepository.cs
-├─ scripts/                       <- common.ps1, start-services.ps1, stop-services.ps1, smoke-test.ps1 (run-all.ps1 in Phase 6)
+├─ scripts/                       <- common.ps1, start-services.ps1, stop-services.ps1, smoke-test.ps1 (run-all.ps1 in Phase 7)
 └─ results/                       <- evidence per phase (phase0/, phase1/, case1/ ...), logs/
 ```
 
@@ -143,11 +162,71 @@ Specmatic Prototype/
 | Every error is **RFC 9457 ProblemDetails** (`application/problem+json`), including 401 and unknown routes | One error schema that can be put in the spec and checked. |
 | **Fixed test token** in `Auth:Token` (middleware); outbound calls send `Downstream:Token` | Stand-in for OAuth2, so we can see how Specmatic supplies the token in test and stub mode. |
 | **Consumer DTOs hold only the fields they use** (e.g. `WellSummary` has 4 of the provider's 8 fields); a missing field fails deserialisation and gives a 502 | This mirrors what consumer examples and `consumers.yaml` should record. A provider change to an unused field shouldn't break the consumer. |
-| Downstream base URLs come from config, overridable by env var (e.g. `Downstream__WellRegistryBaseUrl=http://localhost:9101`) | Phases 4–5 point a consumer at a Specmatic stub without changing code. |
+| Downstream base URLs come from config and **include the provider's base path** (`http://localhost:5101/v2/`); clients use relative paths (`wells/W-001`). The URL can be overridden by env var (e.g. `Downstream__WellRegistryBaseUrl=http://localhost:9101/`) | Phases 4–5 point a consumer at a Specmatic stub without changing code. A Specmatic stub serves at the root by default (see §4), so for a stub the URL has no `/v2`. |
+| Business endpoints under **`/v2`**, probes `/liveness` and `/readiness` at the root without auth | Mirrors our real Helm and ingress setup. |
 | Unavailable or unexpected downstream → **502 ProblemDetails** | A consumer's reaction to a provider breaking the contract is visible and testable. |
 
 ## 4. How Specmatic works
-_Phase 2 (spec → test, spec → stub, compatibility check)._
+One OpenAPI spec is used in three ways. Nothing is generated into code: Specmatic reads the spec at runtime.
+
+```mermaid
+flowchart LR
+  SPEC["OpenAPI spec<br/>+ examples<br/>(contracts/ repo, tag v1)"]
+  SPEC -- "specmatic test" --> T["Contract tests<br/>HTTP requests sent to the<br/>REAL provider; responses<br/>checked against the spec"]
+  SPEC -- "specmatic stub" --> S["Stub (mock) server<br/>that the CONSUMER calls<br/>instead of the real provider"]
+  SPEC -- "backward-compatibility-check" --> B["Old vs new spec<br/>(git-based): is the change<br/>safe for existing consumers?"]
+  T --> P["Provider side:<br/>'does my service do what<br/>the contract says?'"]
+  S --> C["Consumer side:<br/>'does my code call the provider<br/>correctly and handle its answers?'"]
+```
+
+### 4.1 Spec → test (provider side)
+- Specmatic turns each **operation + response** in the spec into test scenarios. It sends real HTTP requests to the running provider and checks the status code, headers and body against the spec.
+- **Examples drive the test data.** A parameter or request-body example and a response example with the **same name** (e.g. `GET_W001`) form one test: "send wellId=W-001, expect 200 shaped like `Well`". Consumer-contributed external examples (`*_examples/*.json`) also become provider tests. This is how a consumer's expectation is checked against the real provider.
+- Operations without examples still get tests, with values generated from the schema. Negative and generative tests are checked in Phase 3.
+- **Observed in 2.55.0 (probe, Phase 2):**
+  - **The `servers` URL is ignored.** The base path must go in `--testBaseURL http://host.docker.internal:5101/v2`. Without it, Specmatic called `/wells/W-001` and missed the service.
+  - **Auth:** for a `bearer` security scheme, Specmatic sends a **random** token (`Authorization: Bearer LOVWO`) unless one is supplied. That gave 401 and a failed test. Supplying it as an env var named after the scheme (`-e bearerAuth=test-token-123`) worked. `specmatic.yaml` `securitySchemes` is the documented alternative.
+  - **Response schemas are treated as closed:** extra response fields fail with `R2003 Unknown property`, even without `additionalProperties: false`. So adding a response field needs a spec change first.
+
+### 4.2 Spec → stub (consumer side)
+- `specmatic stub <spec>` starts an HTTP server on port 9000 inside the container (we map it to 9101, etc.). The consumer's base URL is pointed at it.
+- **Observed in 2.55.0** (`results/phase2/stub-demo.txt`, well-registry stub):
+
+| Request to the stub | Result | Why |
+|---|---|---|
+| `GET /wells/W-003` (no token) | 200, the exact `SHUT_IN` well from the consumer example | request matched an external example |
+| `GET /wells/W-999` (no token) | 404 ProblemDetails from the consumer example | example-driven error response |
+| `GET /wells?status=ACTIVE` (no token) | 200, the two wells from the inline example `LIST_ACTIVE` | inline examples are also stub data |
+| `GET /wells/W-555` (no token) | **400**, `Specification expected mandatory header "Authorization"` | no example matched, so the full request was validated |
+| `GET /wells/W-555` + `Authorization: Bearer anything` | 200, **random** well (`X-Specmatic-Type: random`, `id: W-307`, `dailyCapacityBbl: 1.3E308`) | generated from the schema; values don't echo the request, and there is no `maximum` |
+| `GET /wells/WELL-1` + token | **400**, `R1003 ... matches regex ^W-\d{3}$` | contract violation (path pattern) |
+| `GET /wells?status=PUMPING` + token | **400**, `R1002 ... expected ("ACTIVE" or "SHUT_IN" or "ABANDONED")` | contract violation (enum) |
+
+- **What to notice:**
+  - **The stub validates the consumer's request.** A wrong parameter or missing header is rejected with a readable reason, so a consumer that calls the provider wrongly fails its own tests.
+  - **The stub checks that a token is present, not its value.** Any bearer value is accepted, and requests that match an example are served even **without** a token. Stubs therefore don't prove that the consumer sends the right token.
+  - **Stub rejections use `text/plain`, not ProblemDetails.** A consumer test sees "400 with a non-contract body", which is fine for spotting a broken call.
+  - **Random data can be extreme** (1.3E308). Consumers relying on realistic values need examples, or `maximum` in the schema.
+  - **The stub serves at the root (`/wells`), not `/v2/wells`.** `servers` is ignored here too. Either point the consumer at `http://localhost:9101/` or configure a mock `basePath`; Phase 4 tries the latter.
+
+### 4.3 Backward-compatibility check
+`backward-compatibility-check` compares the changed spec files in a **git** repo (`--repo-dir`) against a base branch (`--base-branch`). It reports whether existing consumers would break, e.g. a removed field, a new required request field or a narrowed enum. Phase 5 runs it against tag `v1`. Tracked item T1 checks whether it **fails** or only **warns** without Insights.
+
+### 4.4 Examples: two kinds, one validator
+| | Inline named examples | External examples (`<spec>_examples/*.json`) |
+|---|---|---|
+| Where | inside the spec (`examples:` with matching names) | separate JSON files: `{"http-request": …, "http-response": …}` |
+| Who writes them | provider team | **consumer teams** (file name starts with the consumer, e.g. `production-forecast__…`) |
+| Used as | provider tests + stub responses | provider tests + stub responses |
+| Validated by | `specmatic examples validate --spec-file <spec> --examples-to-validate BOTH` | same |
+
+`examples validate` found all 26 examples valid (17 inline + 9 external). A deliberately broken example (enum `PUMPING`, missing `dailyCapacityBbl`) was rejected with exit code 1 (`results/phase2/examples-validate-broken-example.txt`). By default it checks **only external** examples; add `--examples-to-validate INLINE|BOTH`. It also requires values for **required response headers** in examples (e.g. `Location`).
+
+### 4.5 Why `/liveness` and `/readiness` are left out of the contracts
+- **Different audience:** probes are for the orchestrator (the Kubernetes kubelet), not for API consumers. No service or MFE calls them, so there's no consumer to protect.
+- **Different lifecycle:** probes stay at the root (no `/v2`), have no auth and change with platform conventions, not API versions. In a `/v2` spec they would be wrong, or would need exceptions.
+- **Noise in testing and coverage:** in a spec, Specmatic would generate tests and count coverage for them. Stubs would also serve fake "UP" answers that mean nothing.
+- **Where they're checked instead:** by deployment and smoke tests (`scripts/smoke-test.ps1` checks both return 200 without a token) and by the Helm chart's probe config. If an app framework exposes such routes, Specmatic's `filter` (e.g. `PATH!='/liveness,/readiness'`) keeps them out of test runs.
 
 ## 5. Phase-by-phase log
 
@@ -155,8 +234,10 @@ _Phase 2 (spec → test, spec → stub, compatibility check)._
 | # | Item | Where it will be checked |
 |---|---|---|
 | T1 | Does `backward-compatibility-check` **fail** (non-zero exit code) or only **warn** on a breaking change without Insights? If it only warns, record that and test **oasdiff** (free) as an alternative compatibility gate. | Phase 5 |
-| T2 | The bundled OSS licence expires **14 Dec 2027**. Record it as a maintenance risk. | Phase 7 scorecard |
-| T3 | **Never commit to the outer git repo** in the home folder. Only `contracts/` is committed. | All phases |
+| T2 | The bundled OSS licence expires **14 Dec 2027**. Record it as a maintenance risk. | Phase 8 scorecard |
+| T3 | **Never commit to the git repo in the parent folder.** Only the prototype repo and `contracts/` are committed, each to its own GitHub repo, and pushes happen only after approval. | All phases |
+| T4 | Stub base path: try a mock `basePath`/`baseUrl` so stubs serve under `/v2`, like the real services. | Phase 4 |
+| T5 | Stub auth is weak: a token must be present but any value passes, and example matches skip the check. Decide how consumer tests should prove that the right token is sent. | Phase 4 |
 
 ### Phase 0 — Environment check
 - **Done:** read-only checks of the tools, network and proxy, and published Specmatic versions (Docker Hub, Maven Central and GitHub all show 2.55.0 as latest, released 2026-09-24).
@@ -195,6 +276,47 @@ _Phase 2 (spec → test, spec → stub, compatibility check)._
   - The two cross-app directions use different endpoints (C3 vs C4), so they cannot loop.
   - A malformed body (wrong JSON type) returns a generic 400 ProblemDetails with no `errors` map. A well-formed body with missing or invalid fields returns 400 with an `errors` map. Both are ProblemDetails, so the spec's 400 schema must make `errors` optional.
 
+### Git and GitHub setup (between Phases 1 and 2)
+- Initialised the root repo; `.gitignore` excludes `bin/ obj/ .vs/ node_modules/ *.log contracts/`. Added an MIT `LICENSE` to both repos.
+- Set a repo-local identity and `origin` remote in both repos. GitHub sign-in is done by the user through the Git Credential Manager browser prompt; no tokens are stored.
+- Before each push: a scan for secrets, personal details, machine paths and organisation names, then the list of files, then user approval. The first commit (Phase 0–1) was pushed with approval.
+
+### Phase 2 — Contracts
+- **Service changes first** (to match our real Helm setup):
+  - All business endpoints moved under **`/v2`**. Consumer clients now use relative paths, with base URLs such as `http://localhost:5101/v2/`.
+  - Added **`/liveness`** and **`/readiness`** (no auth) to every service.
+  - `start-services.ps1` now waits on `/readiness`.
+  - Smoke test rerun: **17/17 passed**, including "old path without `/v2` → 404" and both probes without a token (`results/phase2/smoke-test.txt`).
+- **Contracts written** in `contracts/`:
+  - `common/common.yaml`: the ProblemDetails schema (`type`, `title`, `status` required; **`errors` optional**; `traceId` listed because response schemas are treated as closed) and shared 400/401/404/502 responses. It is referenced from every spec with an external `$ref`, which Specmatic resolved without problems.
+  - 4 OpenAPI 3.0.3 specs with:
+    - `servers: /v2` and a global `bearerAuth` security scheme;
+    - strict schemas: required fields, `pattern` for ids, `enum` for statuses, min/max ranges, `format: date` / `date-time`;
+    - 400/401/404 (and 502 for the two POSTs that call other services), and a required `Location` on every 201;
+    - 17 named inline examples that match the seed data.
+  - 9 consumer-contributed external examples (file names start with the consumer), covering happy paths, 404s, an empty list, a `SHUT_IN` well, and approve/reject.
+  - `consumers.yaml`: interactions C1–C4 with the operations, responses and fields each consumer uses and the examples it owns. Specmatic doesn't read this file.
+- **Commands run:**
+  ```powershell
+  # validate every spec + all examples (runs inside the contracts/ repo)
+  docker run --rm -v "${PWD}\contracts:/usr/src/app" -w /usr/src/app specmatic/specmatic:2.55.0 `
+    examples validate --spec-file specs/app-a-production/well-registry-service.yaml --examples-to-validate BOTH   # x4
+  # stub demo
+  docker run -d --name demo-stub -p 9101:9000 -v "${PWD}\contracts:/usr/src/app" -w /usr/src/app `
+    specmatic/specmatic:2.55.0 stub specs/app-a-production/well-registry-service.yaml
+  git -C contracts commit ... ; git -C contracts tag -a v1 -m "Contracts v1"
+  ```
+- **Produced** (`results/phase2/`):
+  - `smoke-test.txt`
+  - `examples-validate.txt`: 4/4 specs valid, 26/26 examples.
+  - `examples-validate-broken-example.txt`: a broken example caught, exit 1.
+  - `stub-demo.txt`: example-driven responses, a generated response, and the stub rejecting contract-breaking requests.
+- **What to notice:**
+  1. **`servers: /v2` is only documentation for Specmatic**, in both test and stub mode (§4.1, §4.2).
+  2. **The first real contract bug was caught by the validator, not by a test:** a required `Location` header without an example value.
+  3. **Consumer examples do two jobs:** they are stub data for the consumer *and* contract tests for the provider (Phases 3–5). This is what brings Specmatic close to consumer-driven testing.
+  4. **Weak stub auth (T5):** the stub proves a token is *present*, not that it is *correct*.
+
 ## 6. Break-experiment results
 _Phases 3–5._
 
@@ -202,25 +324,37 @@ _Phases 3–5._
 |---|---|---|---|
 
 ## 7. Coverage
-_Phase 7._
+_Phase 8._
 
 ## 8. Control points
-_Phase 7._
+_Phase 8._
 
 ## 9. Scorecard
-_Phase 7._ Pre-recorded risk: **T2**, the bundled OSS licence expires 14 Dec 2027.
+_Phase 8._ Rows will include **"Angular MFE consumer support"** (Phase 6). Pre-recorded risk: **T2**, the bundled OSS licence expires 14 Dec 2027.
 
 ## 10. Limitations and recommendation
-_Phase 7._
+_Phase 8_ (will include the Angular MFE findings from Phase 6).
 
 ## 11. How to rerun everything from scratch
 1. Prerequisites: .NET SDK 10.0.101, Docker Desktop (engine running), git.
 2. `docker pull specmatic/specmatic:2.55.0`
-3. From the prototype root:
+3. Get both repos:
+   ```powershell
+   git clone https://github.com/Raghul5823/specmatic-prototype.git "Specmatic Prototype"
+   cd "Specmatic Prototype"
+   git clone https://github.com/Raghul5823/specmatic-prototype-contracts.git contracts
+   git -C contracts checkout v1
+   ```
+4. Build, run and smoke-test:
    ```powershell
    dotnet build SpecmaticPrototype.sln
    .\scripts\start-services.ps1 -NoBuild      # starts all 4 on 5101/5102/5201/5202, logs in results\logs
-   .\scripts\smoke-test.ps1                   # expects 14/14
+   .\scripts\smoke-test.ps1                   # expects 17/17
    .\scripts\stop-services.ps1
    ```
-4. _Further steps added as phases complete (`scripts/run-all.ps1` in Phase 6)._
+5. Validate the contracts (from the prototype root):
+   ```powershell
+   docker run --rm -v "${PWD}\contracts:/usr/src/app" -w /usr/src/app specmatic/specmatic:2.55.0 `
+     examples validate --spec-file specs/app-a-production/well-registry-service.yaml --examples-to-validate BOTH
+   ```
+6. _Further steps added as phases complete (`scripts/run-all.ps1` in Phase 7)._

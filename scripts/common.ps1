@@ -25,7 +25,7 @@ function Wait-Healthy([int]$Port, [int]$TimeoutSeconds = 30) {
     $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
     while ((Get-Date) -lt $deadline) {
         try {
-            $r = Invoke-WebRequest "http://localhost:$Port/health" -UseBasicParsing -TimeoutSec 2
+            $r = Invoke-WebRequest "http://localhost:$Port/readiness" -UseBasicParsing -TimeoutSec 2
             if ($r.StatusCode -eq 200) { return $true }
         } catch { Start-Sleep -Milliseconds 500 }
     }

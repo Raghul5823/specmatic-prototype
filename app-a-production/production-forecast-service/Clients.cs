@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using Prototype.ServiceDefaults;
 
 namespace ProductionForecastService;
@@ -16,7 +16,7 @@ public sealed class WellRegistryClient(HttpClient http) : IWellRegistryClient
     public async Task<WellSummary?> GetWellAsync(string wellId, CancellationToken ct)
     {
         using var response = await Downstream.SendAsync(Provider,
-            () => http.GetAsync($"/wells/{Uri.EscapeDataString(wellId)}", ct));
+            () => http.GetAsync($"wells/{Uri.EscapeDataString(wellId)}", ct));
         if (response.StatusCode == HttpStatusCode.NotFound)
             return null;
         if (!response.IsSuccessStatusCode)
@@ -38,7 +38,7 @@ public sealed class ChangeRequestClient(HttpClient http) : IChangeRequestClient
     public async Task<IReadOnlyList<ApprovedChange>> ListApprovedAsync(string wellId, CancellationToken ct)
     {
         using var response = await Downstream.SendAsync(Provider,
-            () => http.GetAsync($"/change-requests?wellId={Uri.EscapeDataString(wellId)}&status=APPROVED", ct));
+            () => http.GetAsync($"change-requests?wellId={Uri.EscapeDataString(wellId)}&status=APPROVED", ct));
         if (!response.IsSuccessStatusCode)
             throw new DownstreamException(Provider, $"unexpected status {(int)response.StatusCode}");
         return await Downstream.ReadAsync<List<ApprovedChange>>(Provider, response, ct);

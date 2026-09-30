@@ -1,9 +1,11 @@
 ﻿<#
 .SYNOPSIS
-  Phase 1 sanity check: the four services run, enforce the token, return ProblemDetails,
-  and the intra-app and cross-app call chains work. Not a contract test.
-  Assumes start-services.ps1 has been run. Output -> results\phase1\smoke-test.txt
+  Sanity check: the four services run under /v2, enforce the token, return ProblemDetails,
+  expose /liveness and /readiness without auth, and the intra-app and cross-app call chains work.
+  Not a contract test. Assumes start-services.ps1 has been run.
+  Output -> results\<OutFolder>\smoke-test.txt
 #>
+param([string]$OutFolder = 'phase2')
 $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot\common.ps1"
 
@@ -25,23 +27,26 @@ function Invoke-Api([string]$Method, [string]$Url, [object]$Body, [switch]$NoTok
 
 $checks = @(
     # name, method, url, body, noToken, expected status  (leading comma keeps each row an array)
-    ,@('well-registry: list ACTIVE wells',           'GET',  'http://localhost:5101/wells?status=ACTIVE', $null, $false, 200)
-    ,@('well-registry: get W-001',                   'GET',  'http://localhost:5101/wells/W-001', $null, $false, 200)
-    ,@('well-registry: unknown well -> 404',         'GET',  'http://localhost:5101/wells/W-999', $null, $false, 404)
-    ,@('well-registry: no token -> 401',             'GET',  'http://localhost:5101/wells', $null, $true, 401)
-    ,@('well-registry: bad body -> 400',             'POST', 'http://localhost:5101/wells', @{ name = 'X' }, $false, 400)
-    ,@('well-registry: string for number -> 400',    'POST', 'http://localhost:5101/wells', @{ name='N'; field='F'; status='ACTIVE'; latitude='1'; longitude=2; spudDate='2024-01-01'; dailyCapacityBbl=10 }, $false, 400)
-    ,@('well-registry: create well -> 201',          'POST', 'http://localhost:5101/wells', @{ name='Eagle-9'; field='Eagle Ford'; status='ACTIVE'; latitude=28.7; longitude=-98.1; spudDate='2024-05-01'; dailyCapacityBbl=650 }, $false, 201)
-    ,@('approval: small change -> 201 APPROVED',     'POST', 'http://localhost:5202/approvals', @{ changeRequestId='CR-9999'; type='CHOKE_CHANGE'; capacityDeltaBbl=100 }, $false, 201)
-    ,@('change-request: list APPROVED for W-001',    'GET',  'http://localhost:5201/change-requests?wellId=W-001&status=APPROVED', $null, $false, 200)
-    ,@('CHAIN A->A, A->B: create forecast W-001',    'POST', 'http://localhost:5102/forecasts', @{ wellId='W-001'; horizonMonths=3; declineRatePct=5 }, $false, 201)
-    ,@('forecast: shut-in well -> 400',              'POST', 'http://localhost:5102/forecasts', @{ wellId='W-003'; horizonMonths=3; declineRatePct=5 }, $false, 400)
-    ,@('CHAIN B->A, B->B: create CR linked to F-5001','POST', 'http://localhost:5201/change-requests', @{ title='Choke tweak'; wellId='W-001'; forecastId='F-5001'; type='CHOKE_CHANGE'; capacityDeltaBbl=50; requestedBy='qa.user' }, $false, 201)
-    ,@('change-request: unknown forecast -> 400',    'POST', 'http://localhost:5201/change-requests', @{ title='X'; wellId='W-001'; forecastId='F-9999'; type='WORKOVER'; capacityDeltaBbl=10; requestedBy='qa.user' }, $false, 400)
+    ,@('well-registry: list ACTIVE wells',           'GET',  'http://localhost:5101/v2/wells?status=ACTIVE', $null, $false, 200)
+    ,@('well-registry: get W-001',                   'GET',  'http://localhost:5101/v2/wells/W-001', $null, $false, 200)
+    ,@('well-registry: unknown well -> 404',         'GET',  'http://localhost:5101/v2/wells/W-999', $null, $false, 404)
+    ,@('well-registry: no token -> 401',             'GET',  'http://localhost:5101/v2/wells', $null, $true, 401)
+    ,@('well-registry: bad body -> 400',             'POST', 'http://localhost:5101/v2/wells', @{ name = 'X' }, $false, 400)
+    ,@('well-registry: string for number -> 400',    'POST', 'http://localhost:5101/v2/wells', @{ name='N'; field='F'; status='ACTIVE'; latitude='1'; longitude=2; spudDate='2024-01-01'; dailyCapacityBbl=10 }, $false, 400)
+    ,@('well-registry: create well -> 201',          'POST', 'http://localhost:5101/v2/wells', @{ name='Eagle-9'; field='Eagle Ford'; status='ACTIVE'; latitude=28.7; longitude=-98.1; spudDate='2024-05-01'; dailyCapacityBbl=650 }, $false, 201)
+    ,@('approval: small change -> 201 APPROVED',     'POST', 'http://localhost:5202/v2/approvals', @{ changeRequestId='CR-9999'; type='CHOKE_CHANGE'; capacityDeltaBbl=100 }, $false, 201)
+    ,@('change-request: list APPROVED for W-001',    'GET',  'http://localhost:5201/v2/change-requests?wellId=W-001&status=APPROVED', $null, $false, 200)
+    ,@('CHAIN A->A, A->B: create forecast W-001',    'POST', 'http://localhost:5102/v2/forecasts', @{ wellId='W-001'; horizonMonths=3; declineRatePct=5 }, $false, 201)
+    ,@('forecast: shut-in well -> 400',              'POST', 'http://localhost:5102/v2/forecasts', @{ wellId='W-003'; horizonMonths=3; declineRatePct=5 }, $false, 400)
+    ,@('CHAIN B->A, B->B: create CR linked to F-5001','POST', 'http://localhost:5201/v2/change-requests', @{ title='Choke tweak'; wellId='W-001'; forecastId='F-5001'; type='CHOKE_CHANGE'; capacityDeltaBbl=50; requestedBy='qa.user' }, $false, 201)
+    ,@('change-request: unknown forecast -> 400',    'POST', 'http://localhost:5201/v2/change-requests', @{ title='X'; wellId='W-001'; forecastId='F-9999'; type='WORKOVER'; capacityDeltaBbl=10; requestedBy='qa.user' }, $false, 400)
     ,@('unknown route -> 404 ProblemDetails',        'GET',  'http://localhost:5202/nope', $null, $false, 404)
+    ,@('old path without /v2 -> 404',                'GET',  'http://localhost:5101/wells', $null, $false, 404)
+    ,@('probe: /liveness, no token -> 200',          'GET',  'http://localhost:5101/liveness', $null, $true, 200)
+    ,@('probe: /readiness, no token -> 200',         'GET',  'http://localhost:5202/readiness', $null, $true, 200)
 )
 
-$outDir = Join-Path $ResultsDir 'phase1'
+$outDir = Join-Path $ResultsDir $OutFolder
 New-Item -ItemType Directory -Force $outDir | Out-Null
 $lines = @(); $failed = 0
 foreach ($c in $checks) {

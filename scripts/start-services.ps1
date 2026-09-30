@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-  Starts services in the background (built DLLs), waits for /health, records PIDs.
+  Starts services in the background (built DLLs), waits for /readiness, records PIDs.
 .EXAMPLE
   .\scripts\start-services.ps1                                  # all four
   .\scripts\start-services.ps1 -Only well-registry-service

@@ -1,0 +1,18 @@
+﻿Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+>> RESPONSE.BODY.dailyCapacityBbl
+
+    R2001: Missing required property
+    Documentation: https://docs.specmatic.io/rules#r2001
+    Summary: A required property defined in the specification is missing
+
+    Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the example
+
+>> RESPONSE.BODY.status
+
+    R1002: Value mismatch
+    Documentation: https://docs.specmatic.io/rules#r1002
+    Summary: The value does not match the expected value defined in the specification
+
+    Specification expected ("ACTIVE" or "SHUT_IN" or "ABANDONED") but example contained "PUMPING"
+exit=1

@@ -1,4 +1,4 @@
-using Prototype.ServiceDefaults;
+﻿using Prototype.ServiceDefaults;
 
 namespace ChangeRequestService;
 
@@ -6,7 +6,7 @@ public static class ChangeRequestEndpoints
 {
     public static void MapChangeRequestEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/change-requests");
+        var group = app.MapGroup("/v2/change-requests");
 
         // Makes downstream calls (production-forecast, approval).
         group.MapPost("/", async (CreateChangeRequestRequest request, ChangeRequestManager manager, CancellationToken ct) =>
@@ -16,7 +16,7 @@ public static class ChangeRequestEndpoints
                 var result = await manager.CreateAsync(request, ct);
                 return result.Errors is not null
                     ? Results.ValidationProblem(result.Errors)
-                    : Results.Created($"/change-requests/{result.ChangeRequest!.Id}", result.ChangeRequest);
+                    : Results.Created($"/v2/change-requests/{result.ChangeRequest!.Id}", result.ChangeRequest);
             }
             catch (DownstreamException ex)
             {
