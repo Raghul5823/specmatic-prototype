@@ -7,12 +7,12 @@ $PidFile        = Join-Path $ResultsDir 'service-pids.json'
 $SpecmaticImage = 'specmatic/specmatic:2.55.0'
 $TestToken      = 'test-token-123'
 
-# One entry per service: name, folder, assembly name, port.
+# One entry per service: name, folder, assembly name, port, spec (relative to contracts/).
 $Services = @(
-    [pscustomobject]@{ Name = 'well-registry-service';       Dir = 'app-a-production\well-registry-service';       Dll = 'WellRegistryService';       Port = 5101 }
-    [pscustomobject]@{ Name = 'production-forecast-service'; Dir = 'app-a-production\production-forecast-service'; Dll = 'ProductionForecastService'; Port = 5102 }
-    [pscustomobject]@{ Name = 'change-request-service';      Dir = 'app-b-change-mgmt\change-request-service';      Dll = 'ChangeRequestService';      Port = 5201 }
-    [pscustomobject]@{ Name = 'approval-service';            Dir = 'app-b-change-mgmt\approval-service';            Dll = 'ApprovalService';           Port = 5202 }
+    [pscustomobject]@{ Name = 'well-registry-service';       Dir = 'app-a-production\well-registry-service';       Dll = 'WellRegistryService';       Port = 5101; Spec = 'specs/app-a-production/well-registry-service.yaml' }
+    [pscustomobject]@{ Name = 'production-forecast-service'; Dir = 'app-a-production\production-forecast-service'; Dll = 'ProductionForecastService'; Port = 5102; Spec = 'specs/app-a-production/production-forecast-service.yaml' }
+    [pscustomobject]@{ Name = 'change-request-service';      Dir = 'app-b-change-mgmt\change-request-service';      Dll = 'ChangeRequestService';      Port = 5201; Spec = 'specs/app-b-change-mgmt/change-request-service.yaml' }
+    [pscustomobject]@{ Name = 'approval-service';            Dir = 'app-b-change-mgmt\approval-service';            Dll = 'ApprovalService';           Port = 5202; Spec = 'specs/app-b-change-mgmt/approval-service.yaml' }
 )
 
 function Get-ProtoService([string]$Name) {

@@ -1,0 +1,11 @@
+﻿{
+    "service":  "well-registry-service",
+    "run":  "case1\\break\\05-non-problemdetails-error\\specmatic",
+    "exitCode":  1,
+    "testsRun":  15,
+    "successes":  13,
+    "failures":  2,
+    "errors":  0,
+    "apiCoveragePct":  90,
+    "coverageOperations":  10
+}

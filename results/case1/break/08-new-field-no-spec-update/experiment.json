@@ -1,0 +1,11 @@
+﻿{
+    "name":  "Provider adds NEW response field \"region\" without a spec update",
+    "expected":  "caught (closed schema)",
+    "compiled":  true,
+    "xunitFailed":  false,
+    "specmaticFailures":  6,
+    "specmaticExit":  1,
+    "specmaticTests":  15,
+    "specmaticCaught":  true,
+    "changes":  "app-a-production\\well-registry-service\\Models.cs: \u0027    double DailyCapacityBbl);\u0027 -\u003e \u0027    double DailyCapacityBbl)\n{\n    public string Region =\u003e \"Americas\";\n}\u0027"
+}

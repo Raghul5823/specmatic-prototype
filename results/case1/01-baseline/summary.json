@@ -1,0 +1,11 @@
+﻿{
+    "service":  "well-registry-service",
+    "run":  "case1\\01-baseline",
+    "exitCode":  0,
+    "testsRun":  8,
+    "successes":  8,
+    "failures":  0,
+    "errors":  0,
+    "apiCoveragePct":  40,
+    "coverageOperations":  10
+}

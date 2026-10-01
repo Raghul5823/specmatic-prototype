@@ -1,0 +1,11 @@
+﻿{
+    "name":  "Remove required response field spudDate",
+    "expected":  "caught",
+    "compiled":  true,
+    "xunitFailed":  false,
+    "specmaticFailures":  6,
+    "specmaticExit":  1,
+    "specmaticTests":  15,
+    "specmaticCaught":  true,
+    "changes":  "app-a-production\\well-registry-service\\Models.cs: \u0027    DateOnly SpudDate,\u0027 -\u003e \u0027    [property: System.Text.Json.Serialization.JsonIgnore] DateOnly SpudDate,\u0027"
+}

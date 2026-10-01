@@ -10,3 +10,7 @@ results/service-pids.json
 
 # Separate git repository (central contract repo)
 contracts/
+
+# Very large raw output of the uncapped resiliency run (an excerpt is committed instead)
+results/case1/04-resiliency/console.txt
+results/case1/04-resiliency/junit/

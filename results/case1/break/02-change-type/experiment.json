@@ -1,0 +1,11 @@
+﻿{
+    "name":  "Change field type: latitude number -\u003e string (\"28.5\")",
+    "expected":  "caught",
+    "compiled":  true,
+    "xunitFailed":  false,
+    "specmaticFailures":  6,
+    "specmaticExit":  1,
+    "specmaticTests":  15,
+    "specmaticCaught":  true,
+    "changes":  "app-a-production\\well-registry-service\\Models.cs: \u0027    double Latitude,\u0027 -\u003e \u0027    [property: System.Text.Json.Serialization.JsonNumberHandling(System.Text.Json.Serialization.JsonNumberHandling.WriteAsString)] double Latitude,\u0027"
+}

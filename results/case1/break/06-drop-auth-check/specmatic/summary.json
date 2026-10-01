@@ -1,0 +1,11 @@
+﻿{
+    "service":  "well-registry-service",
+    "run":  "case1\\break\\06-drop-auth-check\\specmatic",
+    "exitCode":  1,
+    "testsRun":  15,
+    "successes":  11,
+    "failures":  4,
+    "errors":  0,
+    "apiCoveragePct":  70,
+    "coverageOperations":  10
+}

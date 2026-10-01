@@ -1,0 +1,5 @@
+﻿6E8A054144F0CCDA  app-a-production\well-registry-service\Models.cs
+7BCC01C5FFA2783F  app-a-production\well-registry-service\WellEndpoints.cs
+9716E16BC1870E8A  app-a-production\well-registry-service\WellRepository.cs
+DFA7CCBE1036AD52  shared\Prototype.ServiceDefaults\ServiceDefaults.cs
+2E27382A82D917AC  contracts\specs\app-a-production\well-registry-service.yaml

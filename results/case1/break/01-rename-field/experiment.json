@@ -1,0 +1,11 @@
+﻿{
+    "name":  "Rename response field dailyCapacityBbl -\u003e dailyCapacity",
+    "expected":  "caught",
+    "compiled":  true,
+    "xunitFailed":  false,
+    "specmaticFailures":  6,
+    "specmaticExit":  1,
+    "specmaticTests":  15,
+    "specmaticCaught":  true,
+    "changes":  "app-a-production\\well-registry-service\\Models.cs: \u0027    double DailyCapacityBbl);\u0027 -\u003e \u0027    double DailyCapacity);\u0027"
+}

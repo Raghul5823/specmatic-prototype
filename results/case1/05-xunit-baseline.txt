@@ -1,0 +1,83 @@
+﻿  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Prototype.ServiceDefaults -> .\shared\Prototype.ServiceDefaults\bin\Debug\net10.0\Prototype.ServiceDefaults.dll
+  WellRegistryService -> .\app-a-production\well-registry-service\bin\Debug\net10.0\WellRegistryService.dll
+  WellRegistryService.Tests -> .\app-a-production\well-registry-service.Tests\bin\Debug\net10.0\WellRegistryService.Tests.dll
+Test run for .\app-a-production\well-registry-service.Tests\bin\Debug\net10.0\WellRegistryService.Tests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.1)
+[xUnit.net 00:00:00.68]   Discovering: WellRegistryService.Tests
+[xUnit.net 00:00:00.91]   Discovered:  WellRegistryService.Tests
+[xUnit.net 00:00:01.71]   Starting:    WellRegistryService.Tests
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://127.0.0.1:59079
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: .\app-a-production\well-registry-service.Tests\bin\Debug\net10.0
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+  Passed WellRegistryService.Tests.WellRepositoryTests.List_filters_by_status [55 ms]
+  Passed WellRegistryService.Tests.WellServiceTests.Validate_rejects_coordinates_out_of_range(latitude: 91, longitude: -98.099999999999994) [52 ms]
+  Passed WellRegistryService.Tests.WellRepositoryTests.NextId_is_sequential_and_zero_padded [< 1 ms]
+  Passed WellRegistryService.Tests.WellServiceTests.Validate_rejects_coordinates_out_of_range(latitude: 28.699999999999999, longitude: -181) [< 1 ms]
+  Passed WellRegistryService.Tests.WellRepositoryTests.Seed_contains_three_wells [20 ms]
+  Passed WellRegistryService.Tests.WellServiceTests.List_passes_the_status_filter_to_the_repository [19 ms]
+  Passed WellRegistryService.Tests.WellServiceTests.Validate_reports_every_missing_field_at_once [< 1 ms]
+  Passed WellRegistryService.Tests.WellServiceTests.Create_asks_for_an_id_first_then_adds_the_well_once [2 ms]
+  Passed WellRegistryService.Tests.WellEndpointTests.Get_by_id_reads_the_repository_exactly_once [1 s]
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://127.0.0.1:59081
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: .\app-a-production\well-registry-service.Tests\bin\Debug\net10.0
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://127.0.0.1:59083
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: .\app-a-production\well-registry-service.Tests\bin\Debug\net10.0
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://127.0.0.1:59085
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: .\app-a-production\well-registry-service.Tests\bin\Debug\net10.0
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://127.0.0.1:59087
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: .\app-a-production\well-registry-service.Tests\bin\Debug\net10.0
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+[xUnit.net 00:00:03.58]   Finished:    WellRegistryService.Tests
+  Passed WellRegistryService.Tests.WellEndpointTests.Invalid_id_is_rejected_before_reaching_the_repository [261 ms]
+  Passed WellRegistryService.Tests.WellEndpointTests.Status_filter_reaches_the_repository_and_only_matching_wells_are_returned [239 ms]
+  Passed WellRegistryService.Tests.WellEndpointTests.Invalid_body_never_writes_to_the_repository [131 ms]
+  Passed WellRegistryService.Tests.WellEndpointTests.Request_without_token_is_rejected_and_touches_nothing [87 ms]
+
+Test Run Successful.
+Total tests: 13
+     Passed: 13
+ Total time: 7.0201 Seconds

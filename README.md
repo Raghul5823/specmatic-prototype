@@ -1,6 +1,73 @@
 # Specmatic Prototype — Contract Testing Evaluation
 
-> Status: **Phase 2 complete** (contracts `v1`). Later sections are placeholders until their phase runs.
+> Status: **Phase 3 complete** (Case 1, contracts `v1.1`). Later sections are placeholders until their phase runs.
+
+## 0. Master checklist
+Ticked items link to their evidence. Updated at the end of every phase.
+
+**Phase 0–2 (done)**
+- [x] Environment checked, Specmatic 2.55.0 pinned, help outputs saved: [results/phase0/](results/phase0/)
+- [x] Git/GitHub setup: 2 independent repos (prototype + contracts), MIT licence, repo-local identity, first pushes after scan + approval ([§2 Repositories](#repositories))
+- [x] 4 services, fixed ports, call map C1–C4, no loops, `/v2` paths, health endpoints ([§3](#3-architecture-diagram-ports-and-call-map))
+- [x] Smoke test 17/17: [results/phase2/smoke-test.txt](results/phase2/smoke-test.txt)
+- [x] 4 OpenAPI specs, common ProblemDetails, 17 inline + 9 consumer examples, `consumers.yaml`, examples validate passes, contracts tag `v1` pushed: [results/phase2/examples-validate.txt](results/phase2/examples-validate.txt)
+- [ ] OPEN: Docker Desktop licence confirmed with IT (plan shows Personal); otherwise switch to the JAR route before Phase 7
+
+**Phase 3: Case 1 (well-registry)**
+- [x] First examples-only run: 8 passed, 6 skipped, 40% API coverage: [results/demo/specmatic-test-console.txt](results/demo/specmatic-test-console.txt)
+- [x] Copy all reports (console, JUnit, HTML, coverage) to `results/case1/`; `contracts/` now mounted read-only: [results/case1/03-all-examples/](results/case1/03-all-examples/) (`console.txt`, `coverage.txt`, `junit/`, `build/.../html/index.html`, `summary.json`)
+- [x] 400 and 401 examples: a missing header gets the token injected (test fails), an INVALID token works, an EMPTY header works as "no token"; coverage 40% → 100%: [02-error-examples](results/case1/02-error-examples/), [02b-empty-auth-header](results/case1/02b-empty-auth-header/), [03-all-examples](results/case1/03-all-examples/)
+- [x] Resiliency run: uncapped 7,346 tests (collapsed on the Docker DNS timeout); capped 36 tests (19 negative), all passing, 100%: [04-resiliency](results/case1/04-resiliency/), [04b-resiliency-capped](results/case1/04b-resiliency-capped/)
+- [x] xUnit project (13 tests) for endpoint → service → repository; what Specmatic cannot see explained in §5 Phase 3b: [results/case1/05-xunit-baseline.txt](results/case1/05-xunit-baseline.txt), [nuget-restore.txt](results/case1/nuget-restore.txt)
+- [x] Break experiments 01–07, one at a time, rerun, recorded, reverted (checksums identical): [results/case1/break/summary.md](results/case1/break/summary.md)
+- [x] Extra experiments 08 (new field, closed schema → caught) and 09 (`additionalProperties: true` → not caught)
+- [x] Results table in README §6
+- [ ] Commit Phase 3 (including `results/demo` and `contracts/.gitignore`); contracts tagged `v1.1` (examples added, backward compatible)
+
+**Phase 4: Case 2 (intra-app, C1 and C2)**
+- [ ] Provider tests for well-registry and approval
+- [ ] Stubs on 9101 / 9202; consumer xUnit tests against the stubs
+- [ ] Stub rejects contract-violating consumer requests
+- [ ] Example-driven stub responses: happy path, 404, empty list
+- [ ] T4: stubs served under `/v2` (basePath/baseUrl), or document the workaround
+- [ ] T5: a reliable way to prove the consumer sends the correct token
+- [ ] Mitigation for random stub data (an example for every consumer scenario)
+- [ ] Break experiments on both consumer and provider sides
+- [ ] Pact comparison: what is covered, what isn't, how examples + `consumers.yaml` close the gap
+
+**Phase 5: Case 3 (cross-app, C3 and C4)**
+- [ ] Provider and consumer tests for C3 and C4, specs taken from the contracts git repo
+- [ ] Backward-compatibility check: one safe change passes, one breaking change fails
+- [ ] T1: record the exit code (fail vs warn); if it only warns, test oasdiff as the gate
+- [ ] Compare against tag `v1` as well as the base branch
+- [ ] Drift scenario: the provider changes but the contract repo does not
+
+**Phase 6: Angular MFE consumer**
+- [ ] Minimal Angular CLI app (ask before npm install)
+- [ ] TypeScript client generated from the well-registry spec
+- [ ] Contract break shows up as a compile error
+- [ ] Playwright against a Specmatic stub via the dev-server proxy: example-driven response plus one rejected request
+- [ ] Why HttpTestingController bypasses the stub; recommended MFE test approach
+- [ ] CORS/proxy findings and effort per MFE
+
+**Phase 7: Pipeline simulation**
+- [ ] xUnit "ContractTests" project per provider, runnable with `dotnet test`
+- [ ] `run-all.ps1`: build → unit → compatibility → provider → consumer → Angular, stopping with a non-zero exit at the first failure
+- [ ] Demonstrate one deliberate failure blocking the run
+- [ ] Sample `azure-pipelines.yml`: one BuildService stage, JUnit published, deploy depends on it
+- [ ] Note how the same steps run with the JAR instead of Docker (JAR sources to check, after approval: docs download page, GitHub releases, `specmatic` npm package)
+
+**Phase 8: Evaluation**
+- [ ] Coverage section (API coverage is not code coverage)
+- [ ] Control points, each with a team owner (QA / developers / DevOps)
+- [ ] Scorecard, including: Angular MFE support, OSS licence expiry (T2), Docker licence, cost (zero paid licences), security scan of the image (only with IT approval)
+- [ ] Limitations: SignalR/SSE, in-process calls, weak stub auth, `/v2` handling, closed schemas, commercial-only features
+- [ ] Recommendation: Go / Conditional Go / No-Go, with reasons
+- [ ] "Rerun from scratch" section complete; final commit and push
+
+**Always**
+- [ ] T3: never commit to the parent home-folder repo (checked at every commit)
+- [ ] Scan before every push and wait for approval
 
 ## 1. Purpose and scope
 Evaluate whether **Specmatic (open-source edition)** fits contract testing for an enterprise stack: Angular MFEs, .NET 10 microservices, Azure DevOps pipelines and OAuth2.
@@ -15,8 +82,8 @@ Out of scope: production-grade code, a real OAuth2 identity provider, and a full
 | 0 | Environment check | ✅ done |
 | 1 | Project structure and design | ✅ done |
 | 2 | Contracts (specs, examples, `consumers.yaml`, tag `v1`); services moved under `/v2` with `/liveness` and `/readiness` | ✅ done |
-| 3 | Case 1: a service's own API (provider tests, reports, xUnit for the internal layer, break experiments) | next |
-| 4 | Case 2: service-to-service within an app, both directions (provider tests + consumer tests against stubs) | |
+| 3 | Case 1: a service's own API (provider tests, reports, xUnit for the internal layer, break experiments) | ✅ done |
+| 4 | Case 2: service-to-service within an app, both directions (provider tests + consumer tests against stubs) | next |
 | 5 | Case 3: cross-application, both directions, specs from the central `contracts/` repo; backward-compatibility check against `v1`; drift | |
 | 6 | **Minimal Angular MFE consumer**: generated TypeScript client from the spec, contract break as a compile error, Playwright against a Specmatic stub via the dev-server proxy | |
 | 7 | Pipeline simulation: `run-all.ps1` + sample `azure-pipelines.yml` (**BuildService** stage with unit tests, xUnit `ContractTests` projects and the Angular steps; the deploy stage depends on it) | |
@@ -317,17 +384,99 @@ flowchart LR
   3. **Consumer examples do two jobs:** they are stub data for the consumer *and* contract tests for the provider (Phases 3–5). This is what brings Specmatic close to consumer-driven testing.
   4. **Weak stub auth (T5):** the stub proves a token is *present*, not that it is *correct*.
 
-## 6. Break-experiment results
-_Phases 3–5._
+### Phase 3 — Case 1: a service's own API + the internal boundary (well-registry)
 
-| Change | Expected | Caught? | Evidence |
-|---|---|---|---|
+**New tooling**
+- `scripts/run-provider-test.ps1 -Service <name> -Out <folder> [-Config <specmatic.yaml>] [-Env @{..}] [-ExtraArgs ..]` runs Specmatic against a running service. It:
+  - saves **every** report into `results/<folder>/`: `console.txt` (all requests and responses), `coverage.txt`, `junit/*.xml`, `build/reports/specmatic/test/html/index.html` and `summary.json`;
+  - mounts `contracts/` **read-only**, so no report can land in the contract repo again;
+  - adds `--add-host host.docker.internal:host-gateway` (see the network finding below).
+- `specmatic/well-registry.specmatic.yaml`: the provider's **v3 config**. It lives with the service, reads the spec from the contracts folder (`filesystem` source) and turns on `schemaResiliencyTests: all`. `specmatic config validate --input=<file>` says it is valid. (Note: `config validate` uses `--input`, while `test` uses `--config`.)
+- `scripts/break-experiment.ps1` and `scripts/case1-break-experiments.ps1`: apply one change, build, run xUnit **and** Specmatic, record the result, revert. Checksums before and after prove the revert.
+
+**3a. Provider contract tests: four runs**
+
+| Run | What changed | Tests | Passed | API coverage | Evidence |
+|---|---|---|---|---|---|
+| 01 baseline | inline + consumer examples only | 8 | 8 | **40%** | [results/case1/01-baseline/](results/case1/01-baseline/) |
+| 02 | + 400 and 401 examples (one with **no** `Authorization` header) | 13 | 12 | 80% | [results/case1/02-error-examples/](results/case1/02-error-examples/) |
+| 03 | no-token example changed to an **empty** header; 401 examples for all 3 operations | 15 | 15 | **100%** | [results/case1/03-all-examples/](results/case1/03-all-examples/) |
+| 04 | + `schemaResiliencyTests: all`, **no cap** | 7,346 | 158 (+1 failed, 7,187 errors) | 10% | [results/case1/04-resiliency/](results/case1/04-resiliency/) |
+| 04b | + resiliency, `MAX_TEST_REQUEST_COMBINATIONS=1`, `--timeout-in-ms=30000`, `--add-host` | **36** (17 positive, **19 negative**) | **36** | **100%** | [results/case1/04b-resiliency-capped/](results/case1/04b-resiliency-capped/) |
+
+**Report formats produced (all free):** console text, the coverage table (`coverage.txt`), JUnit XML (`--junitReportDir`) and HTML (`build/reports/specmatic/test/html/index.html`, written to the **working directory**). CTRF JSON is commercial-only.
+
+**Findings**
+1. **Auth in examples (free edition):**
+   - An example **without** an `Authorization` header still gets the configured token added (`Bearer test-token-123`). The service then returns 200 and the "expect 401" test **fails**.
+   - An example with an **explicit invalid** token (`Bearer wrong-token`) works.
+   - An example with an **empty** header (`"Authorization": ""`) also works and stands in for "no token".
+   - So the free edition can test 401 behaviour, but the example must set the header explicitly.
+2. **Examples are the main lever for coverage.** Adding 7 provider-owned error examples (`provider__*`) took API coverage from **40% to 100%**. Coverage counts *documented responses that were exercised* (10 here), not code.
+3. **Resiliency tests are free and useful, but must be capped.**
+   - Uncapped, 3 operations produced **7,346 tests** (every enum value, boundary and type mutation, in combination). That is too many for a pipeline.
+   - With `MAX_TEST_REQUEST_COMBINATIONS=1` it ran **36**, including **19 negative tests** generated automatically (null in a required field, an invalid enum `ACTIVE_`, wrong path types, an invalid id pattern, a missing body). All were correctly rejected with 4xx, thanks to the strict JSON settings from Phase 1.
+4. **Network finding (this machine):**
+   - The uncapped run collapsed: after 158 requests, one request took more than the default **6 s timeout**. Specmatic then reported the server as unreachable and marked the remaining 7,187 tests as **errors**, not failures.
+   - Measured cause: from inside a container, resolving `host.docker.internal` took **up to 3.7 s** (a whole request up to 5.4 s). From Windows the same request takes **0.005 s**.
+   - Fix: `--add-host host.docker.internal:host-gateway` (lookup then takes 0 s) and a longer `--timeout-in-ms`. On a CI agent with Linux Docker this should not happen, but the timeout is now a documented control point.
+5. **Filter syntax:** values must be quoted. `--filter=STATUS=401` fails with "Expected quote"; `--filter="STATUS='401'"` works.
+6. **NuGet (side finding):**
+   - The machine's global NuGet config includes a private company feed that answered 401, and the first restore failed after 4 minutes.
+   - A repo-local `nuget.config` with `<clear/>` plus nuget.org only makes restores reproducible (1.4 s) and keeps internal URLs out of logs.
+   - **In the real project, the xUnit package versions should match whatever the team's service repos already use, not the SDK template defaults used here.**
+
+**3b. The internal boundary: xUnit (`app-a-production/well-registry-service.Tests`)**
+- Packages pinned to the .NET SDK 10.0.101 template set: xunit 2.9.3, xunit.runner.visualstudio 3.1.4, Microsoft.NET.Test.Sdk 17.14.1, coverlet.collector 6.0.4. Restore evidence: [results/case1/nuget-restore.txt](results/case1/nuget-restore.txt).
+- **13 tests, all passing** ([results/case1/05-xunit-baseline.txt](results/case1/05-xunit-baseline.txt)):
+  - **repository:** seed data, the status filter, sequential ids;
+  - **service:** all missing fields reported at once, coordinate ranges, `NextId()` called **before** `Add()` and `Add()` called exactly once, the filter passed through;
+  - **endpoint (hosted in-process, random port):** `GET /v2/wells/W-001` calls `Get(W-001)` **exactly once**; an invalid id or body **never reaches** the repository; a request with no token **touches nothing**; the status filter reaches the repository.
+- **What Specmatic cannot see, and why:** Specmatic is a *black-box* tool. It sends HTTP requests from outside the process and checks only what comes back over HTTP (status, headers, body shape). It has no view of:
+  - which internal methods ran, how often and in what order (e.g. `NextId()` before `Add()`);
+  - whether invalid input was stopped *before* touching data, or rejected only after a write;
+  - business rules whose result still has the right *shape* (see break experiment 07);
+  - in-process calls between classes, database or cache state, logs and side effects.
+
+  Those belong to xUnit, which the developers own. The two layers complement each other: Specmatic proves the **promise to consumers**, and xUnit proves the **internal behaviour behind it**.
+
+## 6. Break-experiment results
+
+### Case 1: well-registry-service (Phase 3)
+Each change was applied on its own, then the solution was rebuilt and both layers were run: **Specmatic** (15 example-driven tests from contracts `v1.1`) and **xUnit** (13 internal tests). The original file bytes were then restored. Checksums before and after are identical: [checksums-before](results/case1/break/checksums-before.txt), [checksums-after](results/case1/break/checksums-after.txt). Script: `scripts/case1-break-experiments.ps1`, summary: [results/case1/break/summary.md](results/case1/break/summary.md).
+
+| # | Change | Expected | Specmatic caught? | xUnit caught? | Evidence |
+|---|---|---|---|---|---|
+| 01 | Rename response field `dailyCapacityBbl` → `dailyCapacity` | caught | **YES** (6/15 failed) | no | [01-rename-field](results/case1/break/01-rename-field/) |
+| 02 | Change field type: `latitude` number → string (`"28.5"`) | caught | **YES** (6/15) | no | [02-change-type](results/case1/break/02-change-type/) |
+| 03 | Remove required response field `spudDate` | caught | **YES** (6/15) | no | [03-remove-required-field](results/case1/break/03-remove-required-field/) |
+| 04 | Success status of `POST /wells`: 201 → 200 | caught | **YES** (1/15) | no | [04-change-success-status](results/case1/break/04-change-success-status/) |
+| 05 | 404 body `{message}` as `application/json`, not ProblemDetails | caught | **YES** (2/15) | no | [05-non-problemdetails-error](results/case1/break/05-non-problemdetails-error/) |
+| 06 | Drop the auth check (every request accepted) | caught via 401 examples | **YES** (4/15: the four 401 examples) | **YES** | [06-drop-auth-check](results/case1/break/06-drop-auth-check/) |
+| 07 | **Wrong logic, correct shape:** status filter inverted (`?status=SHUT_IN` returns the ACTIVE wells) | NOT caught by Specmatic | **no** (15/15 passed) | **YES** | [07-wrong-business-logic](results/case1/break/07-wrong-business-logic/) |
+| 08 | Provider adds a NEW response field `region` without a spec update | caught (closed schema) | **YES** (6/15, `Unknown property`) | no | [08-new-field-no-spec-update](results/case1/break/08-new-field-no-spec-update/) |
+| 09 | Same new field, but the spec's `Well` schema has `additionalProperties: true` | not caught (open schema) | no (15/15 passed) | no | [09-new-field-additionalProperties-true](results/case1/break/09-new-field-additionalProperties-true/) |
+
+**Break-detection rate (Case 1):** Specmatic caught **7 of the 7 contract breaks** (01–06, 08). It missed only 07, a business-logic bug that keeps the right shape, which no contract tool is designed to catch. Experiment 09 is not a break: it shows the setting that controls schema strictness. Each layer catches what the other misses: Specmatic caught 6 breaks that xUnit didn't, and xUnit caught 07, which Specmatic didn't.
+
+**What to notice**
+- **Specmatic validates shape, not values.** In 07 the example `LIST_SHUT_IN` says the answer is `[W-003]`, the service returned W-001 and W-002, and the test still passed. Example *response* values are not compared, only status, headers, required fields, types, enums and patterns. Specific values belong to xUnit, or to API automation.
+- **Closed vs open schemas is a design decision, and the provider controls it:**
+  - By default, a provider that adds a field **without a spec update** fails its contract tests (08). That forces the contract-first habit: spec PR first, then code.
+  - `additionalProperties: true` (09) allows extra fields. That is more tolerant, but undocumented fields can then leak to consumers unnoticed.
+  - Recommendation: keep the default (closed). Add new fields to the spec first, as a MINOR version.
+- **One failing endpoint fails several tests:** a broken `Well` shape (01–03, 08) failed 6 tests at once, because every operation returning a `Well`, plus the consumer examples, failed together. The report shows which consumer examples break (`production-forecast__…`), which tells you **who is affected**.
+- **Experiments 04 and 05 only show up because of examples:** the 201 and 404 checks fail only because examples exercise those responses. Without the 404 examples, a broken error format would go unnoticed.
+
+### Cases 2–3
+_Phases 4–5._
 
 ## 7. Coverage
 _Phase 8._
 
 ## 8. Control points
-_Phase 8._
+_Phase 8._ Pre-recorded:
+- **Auth checks have a second line of defence outside Specmatic.** If a provider's auth check is dropped and Specmatic can't send a no-token or invalid-token request in the free edition (verified in Phase 3), the break is still caught by our API automation (Playwright API tests calling without or with a wrong token) or by the xUnit layer. Owner: QA (API automation) and developers (xUnit).
 
 ## 9. Scorecard
 _Phase 8._ Rows will include **"Angular MFE consumer support"** (Phase 6). Pre-recorded risk: **T2**, the bundled OSS licence expires 14 Dec 2027.
@@ -357,4 +506,14 @@ _Phase 8_ (will include the Angular MFE findings from Phase 6).
    docker run --rm -v "${PWD}\contracts:/usr/src/app" -w /usr/src/app specmatic/specmatic:2.55.0 `
      examples validate --spec-file specs/app-a-production/well-registry-service.yaml --examples-to-validate BOTH
    ```
-6. _Further steps added as phases complete (`scripts/run-all.ps1` in Phase 7)._
+6. Phase 3 (Case 1), from the prototype root:
+   ```powershell
+   .\scripts\start-services.ps1 -Only well-registry-service
+   .\scripts\run-provider-test.ps1 -Service well-registry-service -Out case1\03-all-examples          # 15 tests, 100%
+   .\scripts\run-provider-test.ps1 -Service well-registry-service -Out case1\04b-resiliency-capped `
+       -Config specmatic\well-registry.specmatic.yaml -Env @{ MAX_TEST_REQUEST_COMBINATIONS = '1' } -ExtraArgs @('--timeout-in-ms=30000')   # 36 tests
+   .\scripts\stop-services.ps1
+   dotnet test app-a-production\well-registry-service.Tests\WellRegistryService.Tests.csproj           # 13 xUnit tests
+   .\scripts\case1-break-experiments.ps1        # all 9 break experiments, about 4-5 min each; -From <n> resumes
+   ```
+7. _Further steps added as phases complete (`scripts/run-all.ps1` in Phase 7)._

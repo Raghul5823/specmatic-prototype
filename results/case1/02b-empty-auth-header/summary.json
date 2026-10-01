@@ -1,0 +1,11 @@
+﻿{
+    "service":  "well-registry-service",
+    "run":  "case1\\02b-empty-auth-header",
+    "exitCode":  0,
+    "testsRun":  2,
+    "successes":  2,
+    "failures":  0,
+    "errors":  0,
+    "apiCoveragePct":  33,
+    "coverageOperations":  3
+}

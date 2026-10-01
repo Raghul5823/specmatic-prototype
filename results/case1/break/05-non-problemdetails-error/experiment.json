@@ -1,0 +1,11 @@
+﻿{
+    "name":  "404 body is {message} (application/json), not ProblemDetails",
+    "expected":  "caught",
+    "compiled":  true,
+    "xunitFailed":  false,
+    "specmaticFailures":  2,
+    "specmaticExit":  1,
+    "specmaticTests":  15,
+    "specmaticCaught":  true,
+    "changes":  "app-a-production\\well-registry-service\\WellEndpoints.cs: \u0027: Results.Problem(statusCode: 404, title: \"Not Found\", detail: $\"Well {wellId} does not exist.\");\u0027 -\u003e \u0027: Results.NotFound(new { message = $\"Well {wellId} does not exist.\" });\u0027"
+}

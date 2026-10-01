@@ -1,0 +1,11 @@
+﻿{
+    "name":  "Drop the auth check (every request accepted)",
+    "expected":  "caught via 401 examples",
+    "compiled":  true,
+    "xunitFailed":  true,
+    "specmaticFailures":  4,
+    "specmaticExit":  1,
+    "specmaticTests":  15,
+    "specmaticCaught":  true,
+    "changes":  "shared\\Prototype.ServiceDefaults\\ServiceDefaults.cs: \u0027|| context.Request.Headers.Authorization.ToString() == _expected)\u0027 -\u003e \u0027|| true)\u0027"
+}

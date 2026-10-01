@@ -1,0 +1,25 @@
+﻿|------------------------------------------------------------------------------------------------------------------------|
+| SPECMATIC API COVERAGE SUMMARY                                                                                         |
+|------------------------------------------------------------------------------------------------------------------------|
+| coverage | path            | method | requestContentType | response | responseContentType      | remarks      | result |
+|----------|-----------------|--------|--------------------|----------|--------------------------|--------------|--------|
+| 0%       | /wells          | POST   | application/json   | 201      | application/json         | not tested*! |        |
+|          |                 |        |                    | 400      | application/problem+json | not tested*! |        |
+|          |                 |        |                    | 401      | application/problem+json | not tested   |        |
+|          |                 | GET    | NA                 | 200      | application/json         | not tested*! |        |
+|          |                 |        |                    | 400      | application/problem+json | not tested*! |        |
+|          |                 |        |                    | 401      | application/problem+json | not tested   |        |
+| 100%     | /wells/{wellId} | GET    | NA                 | 200      | application/json         | not tested*! |        |
+|          |                 |        |                    | 400      | application/problem+json | not tested*! |        |
+|          |                 |        |                    | 401      | application/problem+json | covered      | 2p     |
+|          |                 |        |                    | 404      | application/problem+json | not tested*! |        |
+|------------------------------------------------------------------------------------------------------------------------|
+| * = Operation not eligible for coverage                                                                                |
+| ! = Operation excluded from the run due to a filter                                                                    |
+| p = passed tests                                                                                                       |
+| f = failed tests                                                                                                       |
+| w = wip tests                                                                                                          |
+|                                                                                                                        |
+| 33% API Coverage reported from 3 operations eligible for coverage                                                      |
+| 10% Absolute Coverage (includes excluded operations that were not tested)                                              |
+|------------------------------------------------------------------------------------------------------------------------|

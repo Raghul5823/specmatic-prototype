@@ -1,0 +1,913 @@
+﻿Command: docker run --rm --add-host host.docker.internal:host-gateway -e bearerAuth=test-token-123 -v <prototype-root>:/work -v <prototype-root>\contracts:/work/contracts:ro -w /work/results/case1/break/01-rename-field/specmatic specmatic/specmatic:2.55.0 test /work/contracts/specs/app-a-production/well-registry-service.yaml --testBaseURL=http://host.docker.internal:5101/v2 --junitReportDir=/work/results/case1/break/01-rename-field/specmatic/junit
+Specmatic Version: v2.55.0(299682d5)
+
+Could not find the Specmatic configuration at path /work/results/case1/break/01-rename-field/specmatic/specmatic.yaml
+Could not find the Specmatic configuration at path /work/results/case1/break/01-rename-field/specmatic/specmatic.yaml
+API Specification Summary: /work/contracts/specs/app-a-production/well-registry-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 3
+  Schema components: 5, Security Schemes: [http]
+
+
+Test directory /work/contracts/specs/app-a-production/well-registry-service_examples found
+
+Loading externalised examples from /work/contracts/specs/app-a-production/well-registry-service_examples: 
+  10 examples(s) found in /work/contracts/specs/app-a-production/well-registry-service_examples
+
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-001_active.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-003_shut_in.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-999_not_found.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__create_well_invalid_token_401.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__create_well_missing_name_400.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_bad_id_400.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_empty_token_401.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_invalid_token_401.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__list_wells_bad_status_400.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__list_wells_invalid_token_401.json
+
+No application API source was exposed by the application, so cannot calculate actual coverage
+
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:33:40.272
+    POST /v2/wells
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 201
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "name": "Eagle-9",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.7,
+        "longitude": -98.1,
+        "spudDate": "2024-05-01",
+        "dailyCapacityBbl": 650
+    }
+
+  Response at 2026-10-1 8:33:40.533
+    201 Created
+    Content-Type: application/json; charset=utf-8
+    Date: Thu, 01 Oct 2026 08:32:40 GMT
+    Server: Kestrel
+    Location: /v2/wells/W-004
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "W-004",
+        "name": "Eagle-9",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.7,
+        "longitude": -98.1,
+        "spudDate": "2024-05-01",
+        "dailyCapacity": 650
+    }
+
+Scenario: POST /wells -> 201 with the request from the example 'CREATE_EAGLE_9' has FAILED
+Reason:
+Testing scenario "Register a new well.. Response: Created."
+API: POST /wells -> 201
+
+  >> RESPONSE.BODY.dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:33:40.857
+    POST /v2/wells
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 400
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.7,
+        "longitude": -98.1,
+        "spudDate": "2024-05-01",
+        "dailyCapacityBbl": 650
+    }
+
+  Response at 2026-10-1 8:33:41.30
+    400 Bad Request
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:32:41 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+            "name": [
+                "name is required (1-100 characters)."
+            ]
+        },
+        "traceId": "00-df18757fbdfe6cf3099e8797d50e8d7e-0fa4871750cf698c-00"
+    }
+
+Scenario: POST /wells -> 400 with the request from the example 'provider__create_well_missing_name_400' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:33:41.99
+    POST /v2/wells
+    Authorization: Bearer wrong-token
+    Specmatic-Response-Code: 401
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "name": "Eagle-10",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.8,
+        "longitude": -98.0,
+        "spudDate": "2024-06-01",
+        "dailyCapacityBbl": 500
+    }
+
+  Response at 2026-10-1 8:33:41.167
+    401 Unauthorized
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:32:41 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    WWW-Authenticate: Bearer
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.2",
+        "title": "Unauthorized",
+        "status": 401,
+        "detail": "Missing or invalid bearer token.",
+        "traceId": "00-4ee814213b45dcd5e42a21450b5d15ff-eb198aecbc4fb0bd-00"
+    }
+
+Scenario: POST /wells -> 401 with the request from the example 'provider__create_well_invalid_token_401' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:33:41.250
+    GET /v2/wells?status=ACTIVE
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:33:41.456
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Thu, 01 Oct 2026 08:32:41 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    [
+        {
+            "id": "W-001",
+            "name": "Eagle-1",
+            "field": "Eagle Ford",
+            "status": "ACTIVE",
+            "latitude": 28.5,
+            "longitude": -98.3,
+            "spudDate": "2019-04-12",
+            "dailyCapacity": 1200
+        },
+        {
+            "id": "W-002",
+            "name": "Eagle-2",
+            "field": "Eagle Ford",
+            "status": "ACTIVE",
+            "latitude": 28.6,
+            "longitude": -98.2,
+            "spudDate": "2020-08-01",
+            "dailyCapacity": 800
+        },
+        {
+            "id": "W-004",
+            "name": "Eagle-9",
+            "field": "Eagle Ford",
+            "status": "ACTIVE",
+            "latitude": 28.7,
+            "longitude": -98.1,
+            "spudDate": "2024-05-01",
+            "dailyCapacity": 650
+        }
+    ]
+
+Scenario: GET /wells -> 200 with the request from the example 'LIST_ACTIVE' where REQUEST.PARAMETERS.QUERY contains the param 'status' has FAILED
+Reason:
+Testing scenario "List wells, optionally filtered by status.. Response: Wells matching the filter (may be empty)."
+API: GET /wells -> 200
+
+  >> RESPONSE.BODY[0].dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY[0].dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+  
+  >> RESPONSE.BODY[1].dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY[1].dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+  
+  >> RESPONSE.BODY[2].dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY[2].dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:33:41.535
+    GET /v2/wells?status=SHUT_IN
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:32:42.239
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Thu, 01 Oct 2026 08:32:41 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    [
+        {
+            "id": "W-003",
+            "name": "Permian-7",
+            "field": "Permian Basin",
+            "status": "SHUT_IN",
+            "latitude": 31.9,
+            "longitude": -102.1,
+            "spudDate": "2015-02-20",
+            "dailyCapacity": 0
+        }
+    ]
+
+Scenario: GET /wells -> 200 with the request from the example 'LIST_SHUT_IN' where REQUEST.PARAMETERS.QUERY contains the param 'status' has FAILED
+Reason:
+Testing scenario "List wells, optionally filtered by status.. Response: Wells matching the filter (may be empty)."
+API: GET /wells -> 200
+
+  >> RESPONSE.BODY[0].dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY[0].dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:32:42.320
+    GET /v2/wells?status=PUMPING
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 400
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:32:42.442
+    400 Bad Request
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:32:42 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+            "status": [
+                "status must be one of ACTIVE, SHUT_IN, ABANDONED."
+            ]
+        },
+        "traceId": "00-7a4901f429e4f4e415c72576f0446e50-0d54c66c08820b8b-00"
+    }
+
+Scenario: GET /wells -> 400 with the request from the example 'provider__list_wells_bad_status_400' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:32:42.482
+    GET /v2/wells
+    Authorization: Bearer wrong-token
+    Specmatic-Response-Code: 401
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:33:43.71
+    401 Unauthorized
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:32:42 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    WWW-Authenticate: Bearer
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.2",
+        "title": "Unauthorized",
+        "status": 401,
+        "detail": "Missing or invalid bearer token.",
+        "traceId": "00-4c395539f7765cb0ea14439f0fe9d2dc-45c5fe27e57850d8-00"
+    }
+
+Scenario: GET /wells -> 401 with the request from the example 'provider__list_wells_invalid_token_401' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:33:43.110
+    GET /v2/wells/W-001
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:33:43.203
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Thu, 01 Oct 2026 08:32:42 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "W-001",
+        "name": "Eagle-1",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.5,
+        "longitude": -98.3,
+        "spudDate": "2019-04-12",
+        "dailyCapacity": 1200
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 200 with the request from the example 'GET_W001' has FAILED
+Reason:
+Testing scenario "Get one well by id.. Response: The well."
+API: GET /wells/(wellId:WellId) -> 200
+
+  >> RESPONSE.BODY.dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:33:43.250
+    GET /v2/wells/W-001
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:33:43.311
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Thu, 01 Oct 2026 08:32:42 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "W-001",
+        "name": "Eagle-1",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.5,
+        "longitude": -98.3,
+        "spudDate": "2019-04-12",
+        "dailyCapacity": 1200
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 200 with the request from the example 'production-forecast__get_well_W-001_active' has FAILED
+Reason:
+Testing scenario "Get one well by id.. Response: The well."
+API: GET /wells/(wellId:WellId) -> 200
+
+  >> RESPONSE.BODY.dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:33:43.380
+    GET /v2/wells/W-003
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:33:43.462
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Thu, 01 Oct 2026 08:32:42 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "W-003",
+        "name": "Permian-7",
+        "field": "Permian Basin",
+        "status": "SHUT_IN",
+        "latitude": 31.9,
+        "longitude": -102.1,
+        "spudDate": "2015-02-20",
+        "dailyCapacity": 0
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 200 with the request from the example 'production-forecast__get_well_W-003_shut_in' has FAILED
+Reason:
+Testing scenario "Get one well by id.. Response: The well."
+API: GET /wells/(wellId:WellId) -> 200
+
+  >> RESPONSE.BODY.dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:33:43.543
+    GET /v2/wells/WELL-1
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 400
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:33:43.650
+    400 Bad Request
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:32:42 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+            "wellId": [
+                "wellId must match W-000."
+            ]
+        },
+        "traceId": "00-9d239757fa0b44a86c83387a4654ff8b-9772e207c08846b6-00"
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 400 with the request from the example 'provider__get_well_bad_id_400' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:33:43.692
+    GET /v2/wells/W-001
+    Authorization: 
+    Specmatic-Response-Code: 401
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:33:43.745
+    401 Unauthorized
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:32:43 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    WWW-Authenticate: Bearer
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.2",
+        "title": "Unauthorized",
+        "status": 401,
+        "detail": "Missing or invalid bearer token.",
+        "traceId": "00-fb979b8c1c5d609274e116a7b9d1cb14-e6030d678df68186-00"
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 401 with the request from the example 'provider__get_well_empty_token_401' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:33:43.783
+    GET /v2/wells/W-001
+    Authorization: Bearer wrong-token
+    Specmatic-Response-Code: 401
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:33:43.839
+    401 Unauthorized
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:32:43 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    WWW-Authenticate: Bearer
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.2",
+        "title": "Unauthorized",
+        "status": 401,
+        "detail": "Missing or invalid bearer token.",
+        "traceId": "00-8e876e3ad6998042efa5c32604de215e-6eac7532fb008741-00"
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 401 with the request from the example 'provider__get_well_invalid_token_401' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:33:43.884
+    GET /v2/wells/W-999
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 404
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:33:44.96
+    404 Not Found
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:32:43 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+        "title": "Not Found",
+        "status": 404,
+        "detail": "Well W-999 does not exist.",
+        "traceId": "00-3225499c55d8968bb900d5563933260c-1a4863924bb5e512-00"
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 404 with the request from the example 'UNKNOWN_WELL' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:33:44.136
+    GET /v2/wells/W-999
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 404
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:33:44.225
+    404 Not Found
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:32:43 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+        "title": "Not Found",
+        "status": 404,
+        "detail": "Well W-999 does not exist.",
+        "traceId": "00-10642da6b87d521fb7dafa01f7867789-7d60e4e47413a11e-00"
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 404 with the request from the example 'production-forecast__get_well_W-999_not_found' has SUCCEEDED
+
+Could not load report configuration, coverage will be calculated but no coverage threshold will be enforced
+
+|-------------------------------------------------------------------------------------------------------------------|
+| SPECMATIC API COVERAGE SUMMARY                                                                                    |
+|-------------------------------------------------------------------------------------------------------------------|
+| coverage | path            | method | requestContentType | response | responseContentType      | remarks | result |
+|----------|-----------------|--------|--------------------|----------|--------------------------|---------|--------|
+| 100%     | /wells          | POST   | application/json   | 201      | application/json         | covered | 1f     |
+|          |                 |        |                    | 400      | application/problem+json | covered | 1p     |
+|          |                 |        |                    | 401      | application/problem+json | covered | 1p     |
+|          |                 | GET    | NA                 | 200      | application/json         | covered | 2f     |
+|          |                 |        |                    | 400      | application/problem+json | covered | 1p     |
+|          |                 |        |                    | 401      | application/problem+json | covered | 1p     |
+| 100%     | /wells/{wellId} | GET    | NA                 | 200      | application/json         | covered | 3f     |
+|          |                 |        |                    | 400      | application/problem+json | covered | 1p     |
+|          |                 |        |                    | 401      | application/problem+json | covered | 2p     |
+|          |                 |        |                    | 404      | application/problem+json | covered | 2p     |
+|-------------------------------------------------------------------------------------------------------------------|
+| * = Operation not eligible for coverage                                                                           |
+| ! = Operation excluded from the run due to a filter                                                               |
+| p = passed tests                                                                                                  |
+| f = failed tests                                                                                                  |
+| w = wip tests                                                                                                     |
+|                                                                                                                   |
+| 100% API Coverage reported from 10 operations eligible for coverage                                               |
+| 100% Absolute Coverage (includes excluded operations that were not tested)                                        |
+|-------------------------------------------------------------------------------------------------------------------|
+
+
+
+Generating CTRF report using coverage report specifications...
+Generating report for 15 tests and 10 coverage operations...
+Using report generation method that accepts coverage report specifications.
+Generating HTML report in build/reports/specmatic/test/html/index.html
+
+
+
+Unsuccessful Scenarios:
+  "Scenario: POST /wells -> 201 with the request from the example 'CREATE_EAGLE_9' FAILED"
+        Reason:
+    Testing scenario "Register a new well.. Response: Created."
+    API: POST /wells -> 201
+  
+      >> RESPONSE.BODY.dailyCapacityBbl
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.dailyCapacity
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "dailyCapacity" in the response was not in the specification
+
+  "Scenario: GET /wells -> 200 with the request from the example 'LIST_ACTIVE' where REQUEST.PARAMETERS.QUERY contains the param 'status' FAILED"
+        Reason:
+    Testing scenario "List wells, optionally filtered by status.. Response: Wells matching the filter (may be empty)."
+    API: GET /wells -> 200
+  
+      >> RESPONSE.BODY[0].dailyCapacityBbl
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+      >> RESPONSE.BODY[0].dailyCapacity
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "dailyCapacity" in the response was not in the specification
+  
+      >> RESPONSE.BODY[1].dailyCapacityBbl
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+      >> RESPONSE.BODY[1].dailyCapacity
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "dailyCapacity" in the response was not in the specification
+  
+      >> RESPONSE.BODY[2].dailyCapacityBbl
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+      >> RESPONSE.BODY[2].dailyCapacity
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "dailyCapacity" in the response was not in the specification
+
+  "Scenario: GET /wells -> 200 with the request from the example 'LIST_SHUT_IN' where REQUEST.PARAMETERS.QUERY contains the param 'status' FAILED"
+        Reason:
+    Testing scenario "List wells, optionally filtered by status.. Response: Wells matching the filter (may be empty)."
+    API: GET /wells -> 200
+  
+      >> RESPONSE.BODY[0].dailyCapacityBbl
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+      >> RESPONSE.BODY[0].dailyCapacity
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "dailyCapacity" in the response was not in the specification
+
+  "Scenario: GET /wells/(wellId:WellId) -> 200 with the request from the example 'GET_W001' FAILED"
+        Reason:
+    Testing scenario "Get one well by id.. Response: The well."
+    API: GET /wells/(wellId:WellId) -> 200
+  
+      >> RESPONSE.BODY.dailyCapacityBbl
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.dailyCapacity
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "dailyCapacity" in the response was not in the specification
+
+  "Scenario: GET /wells/(wellId:WellId) -> 200 with the request from the example 'production-forecast__get_well_W-001_active' FAILED"
+        Reason:
+    Testing scenario "Get one well by id.. Response: The well."
+    API: GET /wells/(wellId:WellId) -> 200
+  
+      >> RESPONSE.BODY.dailyCapacityBbl
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.dailyCapacity
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "dailyCapacity" in the response was not in the specification
+
+  "Scenario: GET /wells/(wellId:WellId) -> 200 with the request from the example 'production-forecast__get_well_W-003_shut_in' FAILED"
+        Reason:
+    Testing scenario "Get one well by id.. Response: The well."
+    API: GET /wells/(wellId:WellId) -> 200
+  
+      >> RESPONSE.BODY.dailyCapacityBbl
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.dailyCapacity
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "dailyCapacity" in the response was not in the specification
+
+Tests run: 15, Successes: 9, Failures: 6, WIP: 0, Errors: 0
+
+Executed at 2026-10-01T08:33:55.105539260

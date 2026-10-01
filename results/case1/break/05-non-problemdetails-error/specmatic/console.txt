@@ -1,0 +1,773 @@
+﻿Command: docker run --rm --add-host host.docker.internal:host-gateway -e bearerAuth=test-token-123 -v <prototype-root>:/work -v <prototype-root>\contracts:/work/contracts:ro -w /work/results/case1/break/05-non-problemdetails-error/specmatic specmatic/specmatic:2.55.0 test /work/contracts/specs/app-a-production/well-registry-service.yaml --testBaseURL=http://host.docker.internal:5101/v2 --junitReportDir=/work/results/case1/break/05-non-problemdetails-error/specmatic/junit
+Specmatic Version: v2.55.0(299682d5)
+
+Could not find the Specmatic configuration at path /work/results/case1/break/05-non-problemdetails-error/specmatic/specmatic.yaml
+Could not find the Specmatic configuration at path /work/results/case1/break/05-non-problemdetails-error/specmatic/specmatic.yaml
+API Specification Summary: /work/contracts/specs/app-a-production/well-registry-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 3
+  Schema components: 5, Security Schemes: [http]
+
+
+Test directory /work/contracts/specs/app-a-production/well-registry-service_examples found
+
+Loading externalised examples from /work/contracts/specs/app-a-production/well-registry-service_examples: 
+  10 examples(s) found in /work/contracts/specs/app-a-production/well-registry-service_examples
+
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-001_active.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-003_shut_in.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-999_not_found.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__create_well_invalid_token_401.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__create_well_missing_name_400.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_bad_id_400.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_empty_token_401.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_invalid_token_401.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__list_wells_bad_status_400.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__list_wells_invalid_token_401.json
+
+No application API source was exposed by the application, so cannot calculate actual coverage
+
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:49:56.153
+    POST /v2/wells
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 201
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "name": "Eagle-9",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.7,
+        "longitude": -98.1,
+        "spudDate": "2024-05-01",
+        "dailyCapacityBbl": 650
+    }
+
+  Response at 2026-10-1 8:49:57.159
+    201 Created
+    Content-Type: application/json; charset=utf-8
+    Date: Thu, 01 Oct 2026 08:48:56 GMT
+    Server: Kestrel
+    Location: /v2/wells/W-004
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "W-004",
+        "name": "Eagle-9",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.7,
+        "longitude": -98.1,
+        "spudDate": "2024-05-01",
+        "dailyCapacityBbl": 650
+    }
+
+Scenario: POST /wells -> 201 with the request from the example 'CREATE_EAGLE_9' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:49:58.38
+    POST /v2/wells
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 400
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.7,
+        "longitude": -98.1,
+        "spudDate": "2024-05-01",
+        "dailyCapacityBbl": 650
+    }
+
+  Response at 2026-10-1 8:49:58.77
+    400 Bad Request
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:48:56 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+            "name": [
+                "name is required (1-100 characters)."
+            ]
+        },
+        "traceId": "00-a849e20f93ad4eddd90ea7dfac421e6c-732b42322bf3d4c5-00"
+    }
+
+Scenario: POST /wells -> 400 with the request from the example 'provider__create_well_missing_name_400' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:49:58.86
+    POST /v2/wells
+    Authorization: Bearer wrong-token
+    Specmatic-Response-Code: 401
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "name": "Eagle-10",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.8,
+        "longitude": -98.0,
+        "spudDate": "2024-06-01",
+        "dailyCapacityBbl": 500
+    }
+
+  Response at 2026-10-1 8:49:58.555
+    401 Unauthorized
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:48:57 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    WWW-Authenticate: Bearer
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.2",
+        "title": "Unauthorized",
+        "status": 401,
+        "detail": "Missing or invalid bearer token.",
+        "traceId": "00-356ca3d706b21a22a5adf11a7756f5bf-137ec2a66dc75910-00"
+    }
+
+Scenario: POST /wells -> 401 with the request from the example 'provider__create_well_invalid_token_401' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:49:58.614
+    GET /v2/wells?status=ACTIVE
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:49:59.925
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Thu, 01 Oct 2026 08:48:58 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    [
+        {
+            "id": "W-001",
+            "name": "Eagle-1",
+            "field": "Eagle Ford",
+            "status": "ACTIVE",
+            "latitude": 28.5,
+            "longitude": -98.3,
+            "spudDate": "2019-04-12",
+            "dailyCapacityBbl": 1200
+        },
+        {
+            "id": "W-002",
+            "name": "Eagle-2",
+            "field": "Eagle Ford",
+            "status": "ACTIVE",
+            "latitude": 28.6,
+            "longitude": -98.2,
+            "spudDate": "2020-08-01",
+            "dailyCapacityBbl": 800
+        },
+        {
+            "id": "W-004",
+            "name": "Eagle-9",
+            "field": "Eagle Ford",
+            "status": "ACTIVE",
+            "latitude": 28.7,
+            "longitude": -98.1,
+            "spudDate": "2024-05-01",
+            "dailyCapacityBbl": 650
+        }
+    ]
+
+Scenario: GET /wells -> 200 with the request from the example 'LIST_ACTIVE' where REQUEST.PARAMETERS.QUERY contains the param 'status' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:49:59.961
+    GET /v2/wells?status=SHUT_IN
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:50:0.343
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Thu, 01 Oct 2026 08:48:59 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    [
+        {
+            "id": "W-003",
+            "name": "Permian-7",
+            "field": "Permian Basin",
+            "status": "SHUT_IN",
+            "latitude": 31.9,
+            "longitude": -102.1,
+            "spudDate": "2015-02-20",
+            "dailyCapacityBbl": 0
+        }
+    ]
+
+Scenario: GET /wells -> 200 with the request from the example 'LIST_SHUT_IN' where REQUEST.PARAMETERS.QUERY contains the param 'status' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:50:0.376
+    GET /v2/wells?status=PUMPING
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 400
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:50:0.772
+    400 Bad Request
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:48:59 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+            "status": [
+                "status must be one of ACTIVE, SHUT_IN, ABANDONED."
+            ]
+        },
+        "traceId": "00-d8b8c26aea05a27b43fd99d3584c40bb-23470ac81c4c15d1-00"
+    }
+
+Scenario: GET /wells -> 400 with the request from the example 'provider__list_wells_bad_status_400' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:50:0.794
+    GET /v2/wells
+    Authorization: Bearer wrong-token
+    Specmatic-Response-Code: 401
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:50:1.280
+    401 Unauthorized
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:48:59 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    WWW-Authenticate: Bearer
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.2",
+        "title": "Unauthorized",
+        "status": 401,
+        "detail": "Missing or invalid bearer token.",
+        "traceId": "00-7bb9351636ed2cbbdb2a27f0349481fb-ea17246b0d8758ec-00"
+    }
+
+Scenario: GET /wells -> 401 with the request from the example 'provider__list_wells_invalid_token_401' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:50:1.304
+    GET /v2/wells/W-001
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:50:1.715
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Thu, 01 Oct 2026 08:49:00 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "W-001",
+        "name": "Eagle-1",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.5,
+        "longitude": -98.3,
+        "spudDate": "2019-04-12",
+        "dailyCapacityBbl": 1200
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 200 with the request from the example 'GET_W001' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:50:1.758
+    GET /v2/wells/W-001
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:50:2.366
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Thu, 01 Oct 2026 08:49:01 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "W-001",
+        "name": "Eagle-1",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.5,
+        "longitude": -98.3,
+        "spudDate": "2019-04-12",
+        "dailyCapacityBbl": 1200
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 200 with the request from the example 'production-forecast__get_well_W-001_active' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:50:2.389
+    GET /v2/wells/W-003
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:50:2.677
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Thu, 01 Oct 2026 08:49:01 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "W-003",
+        "name": "Permian-7",
+        "field": "Permian Basin",
+        "status": "SHUT_IN",
+        "latitude": 31.9,
+        "longitude": -102.1,
+        "spudDate": "2015-02-20",
+        "dailyCapacityBbl": 0
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 200 with the request from the example 'production-forecast__get_well_W-003_shut_in' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:50:2.703
+    GET /v2/wells/WELL-1
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 400
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:50:3.0
+    400 Bad Request
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:49:01 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+            "wellId": [
+                "wellId must match W-000."
+            ]
+        },
+        "traceId": "00-79e35b1cea24b7537d44b797cf11335c-14b46ae98bae5a50-00"
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 400 with the request from the example 'provider__get_well_bad_id_400' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:50:3.55
+    GET /v2/wells/W-001
+    Authorization: 
+    Specmatic-Response-Code: 401
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:50:3.419
+    401 Unauthorized
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:49:02 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    WWW-Authenticate: Bearer
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.2",
+        "title": "Unauthorized",
+        "status": 401,
+        "detail": "Missing or invalid bearer token.",
+        "traceId": "00-5c561741775939fd0356bc3ccaa63150-843e44b76abc8e5b-00"
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 401 with the request from the example 'provider__get_well_empty_token_401' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:50:3.437
+    GET /v2/wells/W-001
+    Authorization: Bearer wrong-token
+    Specmatic-Response-Code: 401
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:50:3.814
+    401 Unauthorized
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 08:49:02 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    WWW-Authenticate: Bearer
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.2",
+        "title": "Unauthorized",
+        "status": 401,
+        "detail": "Missing or invalid bearer token.",
+        "traceId": "00-7953acef5e252cc8227c30d3f122e39b-c4a627dca9e6bf1a-00"
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 401 with the request from the example 'provider__get_well_invalid_token_401' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:50:3.827
+    GET /v2/wells/W-999
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 404
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:50:4.118
+    404 Not Found
+    Content-Type: application/json; charset=utf-8
+    Date: Thu, 01 Oct 2026 08:49:02 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "message": "Well W-999 does not exist."
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 404 with the request from the example 'UNKNOWN_WELL' has FAILED
+Reason:
+Testing scenario "Get one well by id.. Response: The well does not exist."
+API: GET /wells/(wellId:WellId) -> 404
+
+  >> RESPONSE.HEADER.Content-Type
+  
+      R1002: Value mismatch
+      Documentation: https://docs.specmatic.io/rules#r1002
+      Summary: The value does not match the expected value defined in the specification
+  
+      Specification expected application/problem+json but response contained application/json; charset=utf-8
+  
+  >> RESPONSE.BODY.type
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "type" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.title
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "title" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.status
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "status" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.message
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "message" in the response was not in the specification
+
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 8:50:4.196
+    GET /v2/wells/W-999
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 404
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 8:50:4.342
+    404 Not Found
+    Content-Type: application/json; charset=utf-8
+    Date: Thu, 01 Oct 2026 08:49:03 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "message": "Well W-999 does not exist."
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 404 with the request from the example 'production-forecast__get_well_W-999_not_found' has FAILED
+Reason:
+Testing scenario "Get one well by id.. Response: The well does not exist."
+API: GET /wells/(wellId:WellId) -> 404
+
+  >> RESPONSE.HEADER.Content-Type
+  
+      R1002: Value mismatch
+      Documentation: https://docs.specmatic.io/rules#r1002
+      Summary: The value does not match the expected value defined in the specification
+  
+      Specification expected application/problem+json but response contained application/json; charset=utf-8
+  
+  >> RESPONSE.BODY.type
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "type" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.title
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "title" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.status
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "status" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.message
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "message" in the response was not in the specification
+
+
+Could not load report configuration, coverage will be calculated but no coverage threshold will be enforced
+
+|---------------------------------------------------------------------------------------------------------------------------|
+| SPECMATIC API COVERAGE SUMMARY                                                                                            |
+|---------------------------------------------------------------------------------------------------------------------------|
+| coverage | path            | method | requestContentType | response | responseContentType      | remarks         | result |
+|----------|-----------------|--------|--------------------|----------|--------------------------|-----------------|--------|
+| 100%     | /wells          | POST   | application/json   | 201      | application/json         | covered         | 1p     |
+|          |                 |        |                    | 400      | application/problem+json | covered         | 1p     |
+|          |                 |        |                    | 401      | application/problem+json | covered         | 1p     |
+|          |                 | GET    | NA                 | 200      | application/json         | covered         | 2p     |
+|          |                 |        |                    | 400      | application/problem+json | covered         | 1p     |
+|          |                 |        |                    | 401      | application/problem+json | covered         | 1p     |
+| 75%      | /wells/{wellId} | GET    | NA                 | 200      | application/json         | covered         | 3p     |
+|          |                 |        |                    | 400      | application/problem+json | covered         | 1p     |
+|          |                 |        |                    | 401      | application/problem+json | covered         | 2p     |
+|          |                 |        |                    | 404      | application/problem+json | not implemented | 2f     |
+|---------------------------------------------------------------------------------------------------------------------------|
+| * = Operation not eligible for coverage                                                                                   |
+| ! = Operation excluded from the run due to a filter                                                                       |
+| p = passed tests                                                                                                          |
+| f = failed tests                                                                                                          |
+| w = wip tests                                                                                                             |
+|                                                                                                                           |
+| 90% API Coverage reported from 10 operations eligible for coverage                                                        |
+| 90% Absolute Coverage (includes excluded operations that were not tested)                                                 |
+|---------------------------------------------------------------------------------------------------------------------------|
+
+1 operation found in the spec is not implemented.
+
+Generating CTRF report using coverage report specifications...
+Generating report for 15 tests and 10 coverage operations...
+Using report generation method that accepts coverage report specifications.
+Generating HTML report in build/reports/specmatic/test/html/index.html
+
+
+
+Unsuccessful Scenarios:
+  "Scenario: GET /wells/(wellId:WellId) -> 404 with the request from the example 'UNKNOWN_WELL' FAILED"
+        Reason:
+    Testing scenario "Get one well by id.. Response: The well does not exist."
+    API: GET /wells/(wellId:WellId) -> 404
+  
+      >> RESPONSE.HEADER.Content-Type
+  
+          R1002: Value mismatch
+          Documentation: https://docs.specmatic.io/rules#r1002
+          Summary: The value does not match the expected value defined in the specification
+  
+          Specification expected application/problem+json but response contained application/json; charset=utf-8
+  
+      >> RESPONSE.BODY.type
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "type" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.title
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "title" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.status
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "status" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.message
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "message" in the response was not in the specification
+
+  "Scenario: GET /wells/(wellId:WellId) -> 404 with the request from the example 'production-forecast__get_well_W-999_not_found' FAILED"
+        Reason:
+    Testing scenario "Get one well by id.. Response: The well does not exist."
+    API: GET /wells/(wellId:WellId) -> 404
+  
+      >> RESPONSE.HEADER.Content-Type
+  
+          R1002: Value mismatch
+          Documentation: https://docs.specmatic.io/rules#r1002
+          Summary: The value does not match the expected value defined in the specification
+  
+          Specification expected application/problem+json but response contained application/json; charset=utf-8
+  
+      >> RESPONSE.BODY.type
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "type" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.title
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "title" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.status
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "status" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.message
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "message" in the response was not in the specification
+
+Tests run: 15, Successes: 13, Failures: 2, WIP: 0, Errors: 0
+
+Executed at 2026-10-01T08:50:34.186038649

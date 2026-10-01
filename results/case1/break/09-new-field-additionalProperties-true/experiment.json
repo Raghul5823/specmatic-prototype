@@ -1,0 +1,14 @@
+﻿{
+    "name":  "Same new field, but spec Well schema has additionalProperties: true",
+    "expected":  "not caught (open schema)",
+    "compiled":  true,
+    "xunitFailed":  false,
+    "specmaticFailures":  0,
+    "specmaticExit":  0,
+    "specmaticTests":  15,
+    "specmaticCaught":  false,
+    "changes":  [
+                    "app-a-production\\well-registry-service\\Models.cs: \u0027    double DailyCapacityBbl);\u0027 -\u003e \u0027    double DailyCapacityBbl)\n{\n    public string Region =\u003e \"Americas\";\n}\u0027",
+                    "contracts\\specs\\app-a-production\\well-registry-service.yaml: \u0027    Well:\n      type: object\n\u0027 -\u003e \u0027    Well:\n      type: object\n      additionalProperties: true\n\u0027"
+                ]
+}

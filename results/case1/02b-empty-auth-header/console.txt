@@ -1,0 +1,192 @@
+﻿Command: docker run --rm -e bearerAuth=test-token-123 -v <prototype-root>:/work -v <prototype-root>\contracts:/work/contracts:ro -w /work/results/case1/02b-empty-auth-header specmatic/specmatic:2.55.0 test /work/contracts/specs/app-a-production/well-registry-service.yaml --testBaseURL=http://host.docker.internal:5101/v2 --junitReportDir=/work/results/case1/02b-empty-auth-header/junit --filter=STATUS='401'
+Specmatic Version: v2.55.0(299682d5)
+
+Could not find the Specmatic configuration at path /work/results/case1/02b-empty-auth-header/specmatic.yaml
+Could not find the Specmatic configuration at path /work/results/case1/02b-empty-auth-header/specmatic.yaml
+API Specification Summary: /work/contracts/specs/app-a-production/well-registry-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 3
+  Schema components: 5, Security Schemes: [http]
+
+
+Test directory /work/contracts/specs/app-a-production/well-registry-service_examples found
+
+Loading externalised examples from /work/contracts/specs/app-a-production/well-registry-service_examples: 
+  8 examples(s) found in /work/contracts/specs/app-a-production/well-registry-service_examples
+
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-001_active.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-003_shut_in.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-999_not_found.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__create_well_missing_name_400.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_bad_id_400.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_invalid_token_401.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_no_token_401.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__list_wells_bad_status_400.json
+
+No application API source was exposed by the application, so cannot calculate actual coverage
+
+
+--------------------
+  Skipping Scenario: POST /wells -> 201 (requestContentType application/json, responseContentType application/json)
+  T00001: Excluded by Filter
+  Documentation: https://docs.specmatic.io/rules#t00001
+  Summary: This operation was skipped because it did not match the specified filter
+  
+
+--------------------
+  Skipping Scenario: POST /wells -> 400 (requestContentType application/json, responseContentType application/problem+json)
+  T00001: Excluded by Filter
+  Documentation: https://docs.specmatic.io/rules#t00001
+  Summary: This operation was skipped because it did not match the specified filter
+  
+
+--------------------
+  Skipping Scenario: POST /wells -> 401 (requestContentType application/json, responseContentType application/problem+json)
+  T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Skipping Scenario: GET /wells -> 200 (responseContentType application/json)
+  T00001: Excluded by Filter
+  Documentation: https://docs.specmatic.io/rules#t00001
+  Summary: This operation was skipped because it did not match the specified filter
+  
+
+--------------------
+  Skipping Scenario: GET /wells -> 400 (responseContentType application/problem+json)
+  T00001: Excluded by Filter
+  Documentation: https://docs.specmatic.io/rules#t00001
+  Summary: This operation was skipped because it did not match the specified filter
+  
+
+--------------------
+  Skipping Scenario: GET /wells -> 401 (responseContentType application/problem+json)
+  T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Skipping Scenario: GET /wells/(wellId:WellId) -> 200 (responseContentType application/json)
+  T00001: Excluded by Filter
+  Documentation: https://docs.specmatic.io/rules#t00001
+  Summary: This operation was skipped because it did not match the specified filter
+  
+
+--------------------
+  Skipping Scenario: GET /wells/(wellId:WellId) -> 400 (responseContentType application/problem+json)
+  T00001: Excluded by Filter
+  Documentation: https://docs.specmatic.io/rules#t00001
+  Summary: This operation was skipped because it did not match the specified filter
+  
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 7:35:55.554
+    GET /v2/wells/W-001
+    Authorization: Bearer wrong-token
+    Specmatic-Response-Code: 401
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 7:35:55.716
+    401 Unauthorized
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 07:34:55 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    WWW-Authenticate: Bearer
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.2",
+        "title": "Unauthorized",
+        "status": 401,
+        "detail": "Missing or invalid bearer token.",
+        "traceId": "00-8e4789f7774b48ce30113098adfc21fa-066bc92991c1918a-00"
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 401 with the request from the example 'provider__get_well_invalid_token_401' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 7:35:56.141
+    GET /v2/wells/W-001
+    Authorization: 
+    Specmatic-Response-Code: 401
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-1 7:35:56.218
+    401 Unauthorized
+    Content-Type: application/problem+json
+    Date: Thu, 01 Oct 2026 07:34:56 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    WWW-Authenticate: Bearer
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.2",
+        "title": "Unauthorized",
+        "status": 401,
+        "detail": "Missing or invalid bearer token.",
+        "traceId": "00-493368ecf2a5bba0e9bb5e7891167bfe-0bc9095bcf43d567-00"
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 401 with the request from the example 'provider__get_well_no_token_401' has SUCCEEDED
+
+
+--------------------
+  Skipping Scenario: GET /wells/(wellId:WellId) -> 404 (responseContentType application/problem+json)
+  T00001: Excluded by Filter
+  Documentation: https://docs.specmatic.io/rules#t00001
+  Summary: This operation was skipped because it did not match the specified filter
+  
+Could not load report configuration, coverage will be calculated but no coverage threshold will be enforced
+
+|------------------------------------------------------------------------------------------------------------------------|
+| SPECMATIC API COVERAGE SUMMARY                                                                                         |
+|------------------------------------------------------------------------------------------------------------------------|
+| coverage | path            | method | requestContentType | response | responseContentType      | remarks      | result |
+|----------|-----------------|--------|--------------------|----------|--------------------------|--------------|--------|
+| 0%       | /wells          | POST   | application/json   | 201      | application/json         | not tested*! |        |
+|          |                 |        |                    | 400      | application/problem+json | not tested*! |        |
+|          |                 |        |                    | 401      | application/problem+json | not tested   |        |
+|          |                 | GET    | NA                 | 200      | application/json         | not tested*! |        |
+|          |                 |        |                    | 400      | application/problem+json | not tested*! |        |
+|          |                 |        |                    | 401      | application/problem+json | not tested   |        |
+| 100%     | /wells/{wellId} | GET    | NA                 | 200      | application/json         | not tested*! |        |
+|          |                 |        |                    | 400      | application/problem+json | not tested*! |        |
+|          |                 |        |                    | 401      | application/problem+json | covered      | 2p     |
+|          |                 |        |                    | 404      | application/problem+json | not tested*! |        |
+|------------------------------------------------------------------------------------------------------------------------|
+| * = Operation not eligible for coverage                                                                                |
+| ! = Operation excluded from the run due to a filter                                                                    |
+| p = passed tests                                                                                                       |
+| f = failed tests                                                                                                       |
+| w = wip tests                                                                                                          |
+|                                                                                                                        |
+| 33% API Coverage reported from 3 operations eligible for coverage                                                      |
+| 10% Absolute Coverage (includes excluded operations that were not tested)                                              |
+|------------------------------------------------------------------------------------------------------------------------|
+
+
+
+Generating CTRF report using coverage report specifications...
+Generating report for 2 tests and 10 coverage operations...
+Using report generation method that accepts coverage report specifications.
+Generating HTML report in build/reports/specmatic/test/html/index.html
+
+
+Tests run: 2, Successes: 2, Failures: 0, WIP: 0, Errors: 0
+
+Executed at 2026-10-01T07:36:18.516582998

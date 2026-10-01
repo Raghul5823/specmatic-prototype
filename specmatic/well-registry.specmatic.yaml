@@ -1,0 +1,38 @@
+# Specmatic config (v3) for provider contract tests of well-registry-service.
+# Lives with the SERVICE (prototype repo); the specs come from the central contracts repo.
+# Paths are as seen inside the Specmatic container (scripts mount the prototype root at /work).
+version: 3
+
+systemUnderTest:
+  service:
+    $ref: "#/components/services/wellRegistry"
+    runOptions:
+      $ref: "#/components/runOptions/wellRegistryTest"
+
+specmatic:
+  settings:
+    test:
+      # Free edition: generate positive + negative (wrong type, missing field, boundary) tests.
+      schemaResiliencyTests: all
+
+components:
+  sources:
+    centralContracts:
+      filesystem:
+        directory: /work/contracts
+
+  services:
+    wellRegistry:
+      description: well-registry-service (App A, Production)
+      definitions:
+        - definition:
+            source:
+              $ref: "#/components/sources/centralContracts"
+            specs:
+              - specs/app-a-production/well-registry-service.yaml
+
+  runOptions:
+    wellRegistryTest:
+      openapi:
+        type: test
+        baseUrl: "{WELL_REGISTRY_URL:http://host.docker.internal:5101/v2}"

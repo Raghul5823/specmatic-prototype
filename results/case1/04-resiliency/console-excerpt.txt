@@ -1,0 +1,94 @@
+EXCERPT of results/case1/04-resiliency/console.txt. The full file (9.1 MB) and JUnit XML (11.9 MB) are not committed:
+they hold 7,346 near-identical entries. Rerun the case to regenerate them.
+
+=== start ===
+Command: docker run --rm -e bearerAuth=test-token-123 -v <prototype-root>:/work -v <prototype-root>\contracts:/work/contracts:ro -w /work/results/case1/04-resiliency specmatic/specmatic:2.55.0 test --config=/work/specmatic/well-registry.specmatic.yaml --junitReportDir=/work/results/case1/04-resiliency/junit
+Specmatic Version: v2.55.0(299682d5)
+
+Loading config file /work/specmatic/well-registry.specmatic.yaml
+API Specification Summary: /work/contracts/specs/app-a-production/well-registry-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 3
+  Schema components: 5, Security Schemes: [http]
+
+
+Test directory /work/contracts/specs/app-a-production/well-registry-service_examples found
+
+Loading externalised examples from /work/contracts/specs/app-a-production/well-registry-service_examples: 
+  10 examples(s) found in /work/contracts/specs/app-a-production/well-registry-service_examples
+
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-001_active.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-003_shut_in.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-999_not_found.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__create_well_invalid_token_401.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__create_well_missing_name_400.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_bad_id_400.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_empty_token_401.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_invalid_token_401.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__list_wells_bad_status_400.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__list_wells_invalid_token_401.json
+
+No application API source was exposed by the application, so cannot calculate actual coverage
+
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+--------------------
+
+=== first failure (line 6666) and the request before it ===
++ve  Scenario: POST /wells -> 201 with the request from the example 'CREATE_EAGLE_9' where REQUEST.BODY contains all the keys AND the key field is set to the longest possible string AND status is set to 'ABANDONED' from enum AND latitude is set to the smallest possible value '-90' AND longitude is set to the largest possible value has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-1 7:49:50.720
+    POST /v2/wells
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 201
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "name": "Eagle-9",
+        "field": "YIJVPXHUUBIVGXGQNDMUTIENNJGNIYKPTUWGVCQFLKJPVVMMVTVUDQSHPNWOKSDWDONGBMWXKEPFEKCXHFFSNCHBNHAUENVNIKDX",
+        "status": "ABANDONED",
+        "latitude": -90,
+        "longitude": 180,
+        "spudDate": "2024-05-01",
+        "dailyCapacityBbl": 0
+    }
+
+  Response at 2026-10-1 7:49:53.709
+    201 Created
+    Content-Type: application/json; charset=utf-8
+    Date: Thu, 01 Oct 2026 07:48:53 GMT
+    Server: Kestrel
+    Location: /v2/wells/W-164
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "W-164",
+        "name": "Eagle-9",
+        "field": "YIJVPXHUUBIVGXGQNDMUTIENNJGNIYKPTUWGVCQFLKJPVVMMVTVUDQSHPNWOKSDWDONGBMWXKEPFEKCXHFFSNCHBNHAUENVNIKDX",
+        "status": "ABANDONED",
+        "latitude": -90,
+        "longitude": 180,
+        "spudDate": "2024-05-01",
+        "dailyCapacityBbl": 0
+    }
+
++ve  Scenario: POST /wells -> 201 with the request from the example 'CREATE_EAGLE_9' where REQUEST.BODY contains all the keys AND the key field is set to the longest possible string AND status is set to 'ABANDONED' from enum AND latitude is set to the smallest possible value '-90' AND longitude is set to the largest possible value AND dailyCapacityBbl is set to the smallest possible value '0' has SUCCEEDED
+
++ve  Scenario: POST /wells -> 201 with the request from the example 'CREATE_EAGLE_9' where REQUEST.BODY contains all the keys AND the key field is set to the longest possible string AND status is set to 'ABANDONED' from enum AND latitude is set to the largest possible value has FAILED
+Reason:
+Cannot connect to server at: http://host.docker.internal:5101/v2
+Reason: Request timeout has expired [url=http://host.docker.internal:5101/v2/wells, request_timeout=6000 ms]
+Please check:
+- Is the server running?
+- Is the testBaseURL correct?
+
+
+=== totals ===
+| 10% API Coverage reported from 10 operations eligible for coverage                                                    |
+Tests run: 7346, Successes: 158, Failures: 1, WIP: 0, Errors: 7187
+Lines containing 'Request timeout has expired': 14376

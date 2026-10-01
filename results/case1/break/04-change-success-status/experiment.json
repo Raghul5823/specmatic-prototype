@@ -1,0 +1,11 @@
+﻿{
+    "name":  "Change success status of POST /wells: 201 -\u003e 200",
+    "expected":  "caught",
+    "compiled":  true,
+    "xunitFailed":  false,
+    "specmaticFailures":  1,
+    "specmaticExit":  1,
+    "specmaticTests":  15,
+    "specmaticCaught":  true,
+    "changes":  "app-a-production\\well-registry-service\\WellEndpoints.cs: \u0027return Results.Created($\"/v2/wells/{well.Id}\", well);\u0027 -\u003e \u0027return Results.Ok(well);\u0027"
+}

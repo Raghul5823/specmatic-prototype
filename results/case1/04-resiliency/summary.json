@@ -1,0 +1,11 @@
+﻿{
+    "service":  "well-registry-service",
+    "run":  "case1\\04-resiliency",
+    "exitCode":  1,
+    "testsRun":  7346,
+    "successes":  158,
+    "failures":  1,
+    "errors":  7187,
+    "apiCoveragePct":  10,
+    "coverageOperations":  10
+}

@@ -1,0 +1,11 @@
+﻿{
+    "name":  "Wrong logic, correct shape: status filter inverted (SHUT_IN returns the ACTIVE wells)",
+    "expected":  "NOT caught by Specmatic",
+    "compiled":  true,
+    "xunitFailed":  true,
+    "specmaticFailures":  0,
+    "specmaticExit":  0,
+    "specmaticTests":  15,
+    "specmaticCaught":  false,
+    "changes":  "app-a-production\\well-registry-service\\WellRepository.cs: \u0027w.Status == status\u0027 -\u003e \u0027w.Status != status\u0027"
+}

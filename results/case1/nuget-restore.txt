@@ -1,0 +1,41 @@
+Package sources used (repo-local nuget.config, <clear/> + nuget.org only):
+Registered Sources:
+  1.  nuget.org [Enabled]
+      https://api.nuget.org/v3/index.json
+
+Command: dotnet restore "app-a-production\well-registry-service.Tests\WellRegistryService.Tests.csproj" --force
+  Determining projects to restore...
+  Restored .\app-a-production\well-registry-service\WellRegistryService.csproj (in 834 ms).
+  Restored .\shared\Prototype.ServiceDefaults\Prototype.ServiceDefaults.csproj (in 776 ms).
+  Restored .\app-a-production\well-registry-service.Tests\WellRegistryService.Tests.csproj (in 1.41 sec).
+exit=0
+
+Command: dotnet list <test project> package --include-transitive
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+Project 'WellRegistryService.Tests' has the following package references
+   [net10.0]: 
+   Top-level Package                Requested   Resolved
+   > coverlet.collector             6.0.4       6.0.4   
+   > Microsoft.NET.Test.Sdk         17.14.1     17.14.1 
+   > xunit                          2.9.3       2.9.3   
+   > xunit.runner.visualstudio      3.1.4       3.1.4   
+
+   Transitive Package                        Resolved
+   > Microsoft.CodeCoverage                  17.14.1 
+   > Microsoft.TestPlatform.ObjectModel      17.14.1 
+   > Microsoft.TestPlatform.TestHost         17.14.1 
+   > Newtonsoft.Json                         13.0.3  
+   > xunit.abstractions                      2.0.3   
+   > xunit.analyzers                         1.18.0  
+   > xunit.assert                            2.9.3   
+   > xunit.core                              2.9.3   
+   > xunit.extensibility.core                2.9.3   
+   > xunit.extensibility.execution           2.9.3   
+
+
+Download source recorded in each package's .nupkg.metadata:
+  xunit/2.9.3                        https://api.nuget.org/v3/index.json
+  xunit.runner.visualstudio/3.1.4    https://api.nuget.org/v3/index.json
+  microsoft.net.test.sdk/17.14.1     https://api.nuget.org/v3/index.json
+  coverlet.collector/6.0.4           https://api.nuget.org/v3/index.json

@@ -1,0 +1,11 @@
+﻿{
+    "service":  "well-registry-service",
+    "run":  "case1\\break\\03-remove-required-field\\specmatic",
+    "exitCode":  1,
+    "testsRun":  15,
+    "successes":  9,
+    "failures":  6,
+    "errors":  0,
+    "apiCoveragePct":  100,
+    "coverageOperations":  10
+}
