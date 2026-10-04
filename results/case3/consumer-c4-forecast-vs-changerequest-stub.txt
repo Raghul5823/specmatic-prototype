@@ -1,0 +1,52 @@
+Test run for .\app-a-production\production-forecast-service.Tests\bin\Debug\net10.0\ProductionForecastService.Tests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.1)
+[xUnit.net 00:00:00.23]   Discovering: ProductionForecastService.Tests
+[xUnit.net 00:00:00.32]   Discovered:  ProductionForecastService.Tests
+[xUnit.net 00:00:00.35]   Starting:    ProductionForecastService.Tests
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[100]
+      Start processing HTTP request GET http://localhost:9201/v2/change-requests?*
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[100]
+      Sending HTTP request GET http://localhost:9201/v2/change-requests?*
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[101]
+      Received HTTP response headers after 369.0571ms - 200
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[101]
+      End processing HTTP request after 396.4097ms - 200
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[100]
+      Start processing HTTP request GET http://localhost:9201/v2/change-requests?*
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[100]
+      Sending HTTP request GET http://localhost:9201/v2/change-requests?*
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[101]
+      Received HTTP response headers after 207.3047ms - 200
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[101]
+      End processing HTTP request after 207.7654ms - 200
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[100]
+      Start processing HTTP request GET http://localhost:9201/v2/change-requests?*
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[100]
+      Sending HTTP request GET http://localhost:9201/v2/change-requests?*
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[101]
+      Received HTTP response headers after 142.6798ms - 200
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[101]
+      End processing HTTP request after 142.8368ms - 200
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[100]
+      Start processing HTTP request GET http://localhost:9201/v2/change-requests?*
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[100]
+      Sending HTTP request GET http://localhost:9201/v2/change-requests?*
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[101]
+      Received HTTP response headers after 156.2492ms - 400
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[101]
+      End processing HTTP request after 156.3849ms - 400
+[xUnit.net 00:00:02.45]   Finished:    ProductionForecastService.Tests
+  Passed ProductionForecastService.Tests.ChangeRequestClientStubTests.Empty_list_from_consumer_example_is_handled [1 s]
+  Passed ProductionForecastService.Tests.ChangeRequestClientStubTests.Approved_changes_for_W001_are_mapped [256 ms]
+  Passed ProductionForecastService.Tests.ChangeRequestClientStubTests.Consumer_sends_token_and_the_exact_query_it_relies_on [153 ms]
+  Passed ProductionForecastService.Tests.ChangeRequestClientStubTests.Query_without_an_example_is_refused_in_strict_mode [177 ms]
+
+Test Run Successful.
+Total tests: 4
+     Passed: 4
+ Total time: 4.3550 Seconds
+Results File: .\results\case3\consumer-c4-forecast-vs-changerequest-stub.trx

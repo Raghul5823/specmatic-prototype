@@ -1,0 +1,171 @@
+Branch under check: feature/breaking-rename-field   Base: v1
+Change: Rename required response field Forecast.wellId -> wellID
+Command: docker run --rm -v <contracts-clone>:/repo -w /repo specmatic/specmatic:2.55.0 backward-compatibility-check --repo-dir=/repo --base-branch=v1
+
+Specmatic Version: v2.55.0(299682d5)
+
+  - Externalised examples that have changed: 
+    1. /repo/specs/app-a-production/well-registry-service_examples/provider__create_well_invalid_token_401.json
+    2. /repo/specs/app-a-production/well-registry-service_examples/provider__create_well_missing_name_400.json
+    3. /repo/specs/app-a-production/well-registry-service_examples/provider__get_well_bad_id_400.json
+    4. /repo/specs/app-a-production/well-registry-service_examples/provider__get_well_empty_token_401.json
+    5. /repo/specs/app-a-production/well-registry-service_examples/provider__get_well_invalid_token_401.json
+    6. /repo/specs/app-a-production/well-registry-service_examples/provider__list_wells_bad_status_400.json
+    7. /repo/specs/app-a-production/well-registry-service_examples/provider__list_wells_invalid_token_401.json
+
+Checking backward compatibility of the following specs:
+
+  - Specs that have changed: 
+    1. /repo/specs/app-a-production/production-forecast-service.yaml
+
+  - Specs referring to the changed specs: 
+    1. /repo/consumers.yaml
+
+  - Specs whose externalised examples were changed: 
+    1. /repo/specs/app-a-production/well-registry-service.yaml
+
+--------------------
+
+Loading newer specification '/repo/specs/app-a-production/production-forecast-service.yaml' from branch 'feature/breaking-rename-field'
+
+API Specification Summary: /repo/specs/app-a-production/production-forecast-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 2
+  Schema components: 6, Security Schemes: [http]
+
+
+Finished loading newer specification '/repo/specs/app-a-production/production-forecast-service.yaml' from branch 'feature/breaking-rename-field'
+
+Test directory /repo/specs/app-a-production/production-forecast-service_examples found
+
+Loading externalised examples from /repo/specs/app-a-production/production-forecast-service_examples: 
+  2 examples(s) found in /repo/specs/app-a-production/production-forecast-service_examples
+
+Loading test file /repo/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-5001.json
+Loading test file /repo/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-9999_not_found.json
+
+Loading older specification '/repo/specs/app-a-production/production-forecast-service.yaml' from branch 'v1'
+
+API Specification Summary: /repo/specs/app-a-production/production-forecast-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 2
+  Schema components: 6, Security Schemes: [http]
+
+
+Finished loading older specification '/repo/specs/app-a-production/production-forecast-service.yaml' from branch 'v1'
+
+[Compatibility Check] Executing 1 scenarios for POST /forecasts against 4 operations
+  - POST /forecasts -> 201 (requestContentType application/json, responseContentType application/json)
+  - POST /forecasts -> 400 (requestContentType application/json, responseContentType application/problem+json)
+  - POST /forecasts -> 401 (requestContentType application/json, responseContentType application/problem+json)
+  - POST /forecasts -> 502 (requestContentType application/json, responseContentType application/problem+json)
+[Compatibility Check] Verdict: FAIL
+
+[Compatibility Check] Executing 1 scenarios for GET /forecasts/(forecastId:ForecastId) against 4 operations
+  - GET /forecasts/(forecastId:ForecastId) -> 200 (responseContentType application/json)
+  - GET /forecasts/(forecastId:ForecastId) -> 400 (responseContentType application/problem+json)
+  - GET /forecasts/(forecastId:ForecastId) -> 401 (responseContentType application/problem+json)
+  - GET /forecasts/(forecastId:ForecastId) -> 404 (responseContentType application/problem+json)
+[Compatibility Check] Verdict: FAIL
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+Loading newer specification '/repo/consumers.yaml' from branch 'feature/breaking-rename-field'
+
+Finished loading newer specification '/repo/consumers.yaml' from branch 'feature/breaking-rename-field'
+
+Loading older specification '/repo/consumers.yaml' from branch 'v1'
+
+Finished loading older specification '/repo/consumers.yaml' from branch 'v1'
+
+Loading newer specification '/repo/specs/app-a-production/well-registry-service.yaml' from branch 'feature/breaking-rename-field'
+
+API Specification Summary: /repo/specs/app-a-production/well-registry-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 3
+  Schema components: 5, Security Schemes: [http]
+
+
+Finished loading newer specification '/repo/specs/app-a-production/well-registry-service.yaml' from branch 'feature/breaking-rename-field'
+
+Test directory /repo/specs/app-a-production/well-registry-service_examples found
+
+Loading externalised examples from /repo/specs/app-a-production/well-registry-service_examples: 
+  10 examples(s) found in /repo/specs/app-a-production/well-registry-service_examples
+
+Loading test file /repo/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-001_active.json
+Loading test file /repo/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-003_shut_in.json
+Loading test file /repo/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-999_not_found.json
+Loading test file /repo/specs/app-a-production/well-registry-service_examples/provider__create_well_invalid_token_401.json
+Loading test file /repo/specs/app-a-production/well-registry-service_examples/provider__create_well_missing_name_400.json
+Loading test file /repo/specs/app-a-production/well-registry-service_examples/provider__get_well_bad_id_400.json
+Loading test file /repo/specs/app-a-production/well-registry-service_examples/provider__get_well_empty_token_401.json
+Loading test file /repo/specs/app-a-production/well-registry-service_examples/provider__get_well_invalid_token_401.json
+Loading test file /repo/specs/app-a-production/well-registry-service_examples/provider__list_wells_bad_status_400.json
+Loading test file /repo/specs/app-a-production/well-registry-service_examples/provider__list_wells_invalid_token_401.json
+
+Loading older specification '/repo/specs/app-a-production/well-registry-service.yaml' from branch 'v1'
+
+API Specification Summary: /repo/specs/app-a-production/well-registry-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 3
+  Schema components: 5, Security Schemes: [http]
+
+
+Finished loading older specification '/repo/specs/app-a-production/well-registry-service.yaml' from branch 'v1'
+
+[Compatibility Check] Executing 3 scenarios for POST /wells against 3 operations
+  - POST /wells -> 201 (requestContentType application/json, responseContentType application/json)
+  - POST /wells -> 400 (requestContentType application/json, responseContentType application/problem+json)
+  - POST /wells -> 401 (requestContentType application/json, responseContentType application/problem+json)
+[Compatibility Check] Verdict: PASS
+
+[Compatibility Check] Executing 4 scenarios for GET /wells against 3 operations
+  - GET /wells -> 200 (responseContentType application/json)
+  - GET /wells -> 400 (responseContentType application/problem+json)
+  - GET /wells -> 401 (responseContentType application/problem+json)
+[Compatibility Check] Verdict: PASS
+
+[Compatibility Check] Executing 1 scenarios for GET /wells/(wellId:WellId) against 4 operations
+  - GET /wells/(wellId:WellId) -> 200 (responseContentType application/json)
+  - GET /wells/(wellId:WellId) -> 400 (responseContentType application/problem+json)
+  - GET /wells/(wellId:WellId) -> 401 (responseContentType application/problem+json)
+  - GET /wells/(wellId:WellId) -> 404 (responseContentType application/problem+json)
+[Compatibility Check] Verdict: PASS
+1. Running the check for /repo/specs/app-a-production/production-forecast-service.yaml:
+  ________________________________________
+  The Incompatibility Report:
+  
+    In scenario "Create a forecast (exponential decline on effective capacity).. Response: Created."
+    API: POST /forecasts -> 201
+    
+      >> RESPONSE.BODY.wellId (specs/app-a-production/production-forecast-service.yaml:175:9)
+    
+          The old specification expects property "wellId" but it is missing in the new specification
+    
+    In scenario "Get one forecast by id.. Response: The forecast."
+    API: GET /forecasts/(forecastId:ForecastId) -> 200
+    
+      >> RESPONSE.BODY.wellId (specs/app-a-production/production-forecast-service.yaml:175:9)
+    
+          The old specification expects property "wellId" but it is missing in the new specification
+
+  --------------------
+  Verdict for spec /repo/specs/app-a-production/production-forecast-service.yaml:
+    (INCOMPATIBLE) The changes to the spec are NOT backward compatible with the corresponding spec from v1
+  --------------------
+
+2. Running the check for /repo/consumers.yaml:
+  --------------------
+  Verdict for spec /repo/consumers.yaml:
+    (COMPATIBLE) The spec is backward compatible with the corresponding spec from v1
+  --------------------
+
+3. Running the check for /repo/specs/app-a-production/well-registry-service.yaml:
+  --------------------
+  Verdict for spec /repo/specs/app-a-production/well-registry-service.yaml:
+    (COMPATIBLE) The spec is backward compatible with the corresponding spec from v1
+  --------------------
+
+Generating BCC report for 51 checks and 18 operations...
+Generating HTML report in build/reports/specmatic/backward_compatibility/html/index.html
+Files checked: 3 (Passed: 2, Failed: 1)

@@ -24,7 +24,7 @@ if ($Action -eq 'stop') {
     if ($SaveLogTo) {
         $dir = Join-Path $ResultsDir $SaveLogTo
         New-Item -ItemType Directory -Force $dir | Out-Null
-        docker logs $name 2>&1 | ForEach-Object { "$_" } | Set-Content -Encoding utf8 (Join-Path $dir "$name.log")
+        docker logs $name 2>&1 | ForEach-Object { "$_" } | Set-Content -Encoding utf8 (Join-Path $dir "$name.log.txt")
     }
     docker container rm --force $name 2>$null | Out-Null
     Write-Host "  STOP  $name"

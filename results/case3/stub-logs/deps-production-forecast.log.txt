@@ -1,0 +1,117 @@
+Specmatic Version: v2.55.0(299682d5)
+
+Loading config file /work/specmatic/production-forecast.specmatic.yaml
+Looking for a contract repo checkout at: /work/results/specmatic-work/.specmatic/repos/contracts
+Contract repo dir does not exist.
+Cloning file:///work/contracts into .specmatic/repos
+Resetting /work/results/specmatic-work/.specmatic/repos/contracts
+No branch specified, using default branch
+
+Loading the following spec files:
+  - .specmatic/repos/contracts/specs/app-a-production/well-registry-service.yaml
+  - .specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service.yaml
+
+API Specification Summary: .specmatic/repos/contracts/specs/app-a-production/well-registry-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 3
+  Schema components: 5, Security Schemes: [http]
+
+
+API Specification Summary: .specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 3
+  Schema components: 9, Security Schemes: [http]
+
+
+  10 examples(s) found in ./.specmatic/repos/contracts/specs/app-a-production/well-registry-service_examples
+
+
+  >> Error loading stub expectation file '/work/results/specmatic-work/.specmatic/repos/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_empty_token_401.json':
+   /work/results/specmatic-work/.specmatic/repos/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_empty_token_401.json didn't match .specmatic/repos/contracts/specs/app-a-production/well-registry-service.yaml
+    Error from contract .specmatic/repos/contracts/specs/app-a-production/well-registry-service.yaml
+  
+      In scenario "Get one well by id.. Response: Missing or invalid bearer token."
+      API: GET /wells/(wellId:WellId) -> 401
+  
+        >> REQUEST.PARAMETERS.HEADER.Authorization
+  
+            R1001: Type mismatch
+            Documentation: https://docs.specmatic.io/rules#r1001
+            Summary: The value type does not match the expected type defined in the specification
+  
+            Authorization header must be prefixed with "Bearer"
+
+  2 examples(s) found in ./.specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service_examples
+
+
+Mock server is running on the following URLs:
+- http://0.0.0.0:9101/v2 serving endpoints from specs:
+	1. .specmatic/repos/contracts/specs/app-a-production/well-registry-service.yaml
+
+- http://0.0.0.0:9201/v2 serving endpoints from specs:
+	1. .specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service.yaml
+
+Press Ctrl + C to stop.
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+--------------------
+  Contract matched: .specmatic/repos/contracts/specs/app-a-production/well-registry-service.yaml
+  External Example matched: /work/results/specmatic-work/.specmatic/repos/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-001_active.json
+
+  Request to port '9101' at 2026-10-4 5:8:20.913
+    GET /v2/wells/W-001
+    Host: localhost:9101
+    Authorization: Bearer test-token-123
+    traceparent: 00-04a5497bb6fcdd67339a232c376757b9-2b563f013ef419bb-00
+    
+    
+
+  Response at 2026-10-4 5:8:21.108
+    200 OK
+    Content-Type: application/json
+    X-Specmatic-Result: success
+    
+    {
+        "id": "W-001",
+        "name": "Eagle-1",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.5,
+        "longitude": -98.3,
+        "spudDate": "2019-04-12",
+        "dailyCapacityBbl": 1200
+    }
+
+
+--------------------
+  Contract matched: .specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service.yaml
+  External Example matched: /work/results/specmatic-work/.specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service_examples/production-forecast__list_approved_W-001.json
+
+  Request to port '9201' at 2026-10-4 5:8:21.237
+    GET /v2/change-requests?wellId=W-001&status=APPROVED
+    Host: localhost:9201
+    Authorization: Bearer test-token-123
+    traceparent: 00-04a5497bb6fcdd67339a232c376757b9-8807ba394d2c6a48-00
+    
+    
+
+  Response at 2026-10-4 5:8:21.464
+    200 OK
+    Content-Type: application/json
+    X-Specmatic-Result: success
+    
+    [
+        {
+            "id": "CR-1001",
+            "title": "Open choke on Eagle-1",
+            "wellId": "W-001",
+            "type": "CHOKE_CHANGE",
+            "capacityDeltaBbl": 150,
+            "requestedBy": "j.doe",
+            "status": "APPROVED",
+            "approvalId": "A-7001",
+            "decisionReason": "Within delegated authority (<= 500 bbl/d).",
+            "createdAt": "2026-09-01T08:00:00Z"
+        }
+    ]
+

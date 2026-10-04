@@ -1,0 +1,6 @@
+{
+  "branch": "feature/breaking-rename-field",
+  "base": "v1",
+  "exitCode": 1,
+  "verdict": "FAIL (exit 1)"
+}

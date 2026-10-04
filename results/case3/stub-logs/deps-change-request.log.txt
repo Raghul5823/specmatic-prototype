@@ -1,0 +1,107 @@
+Specmatic Version: v2.55.0(299682d5)
+
+Loading config file /work/specmatic/change-request.specmatic.yaml
+Looking for a contract repo checkout at: /work/results/specmatic-work/.specmatic/repos/contracts
+Contract repo exists, is clean, and is up to date with remote.
+
+Loading the following spec files:
+  - .specmatic/repos/contracts/specs/app-b-change-mgmt/approval-service.yaml
+  - .specmatic/repos/contracts/specs/app-a-production/production-forecast-service.yaml
+
+API Specification Summary: .specmatic/repos/contracts/specs/app-b-change-mgmt/approval-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 2
+  Schema components: 7, Security Schemes: [http]
+
+
+API Specification Summary: .specmatic/repos/contracts/specs/app-a-production/production-forecast-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 2
+  Schema components: 6, Security Schemes: [http]
+
+
+  2 examples(s) found in ./.specmatic/repos/contracts/specs/app-b-change-mgmt/approval-service_examples
+
+  2 examples(s) found in ./.specmatic/repos/contracts/specs/app-a-production/production-forecast-service_examples
+
+
+Mock server is running on the following URLs:
+- http://0.0.0.0:9102/v2 serving endpoints from specs:
+	1. .specmatic/repos/contracts/specs/app-a-production/production-forecast-service.yaml
+
+- http://0.0.0.0:9202/v2 serving endpoints from specs:
+	1. .specmatic/repos/contracts/specs/app-b-change-mgmt/approval-service.yaml
+
+Press Ctrl + C to stop.
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+--------------------
+  Contract matched: .specmatic/repos/contracts/specs/app-a-production/production-forecast-service.yaml
+  External Example matched: /work/results/specmatic-work/.specmatic/repos/contracts/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-5001.json
+
+  Request to port '9102' at 2026-10-4 5:9:7.710
+    GET /v2/forecasts/F-5001
+    Host: localhost:9102
+    Authorization: Bearer test-token-123
+    traceparent: 00-a47545ecd5923faaee83b7d86b148294-e35743fb23f41ceb-00
+    
+    
+
+  Response at 2026-10-4 5:9:7.961
+    200 OK
+    Content-Type: application/json
+    X-Specmatic-Result: success
+    
+    {
+        "id": "F-5001",
+        "wellId": "W-001",
+        "wellName": "Eagle-1",
+        "horizonMonths": 3,
+        "declineRatePct": 5,
+        "baseDailyCapacityBbl": 1200,
+        "effectiveDailyCapacityBbl": 1350,
+        "appliedChangeRequestIds": [
+            "CR-1001"
+        ],
+        "monthlyVolumesBbl": [
+            40500,
+            38475,
+            36551.3
+        ],
+        "totalVolumeBbl": 115526.3,
+        "createdAt": "2026-09-02T09:00:00Z"
+    }
+
+
+--------------------
+  Contract matched: .specmatic/repos/contracts/specs/app-b-change-mgmt/approval-service.yaml
+  External Example matched: /work/results/specmatic-work/.specmatic/repos/contracts/specs/app-b-change-mgmt/approval-service_examples/change-request__approve_small_change.json
+
+  Request to port '9202' at 2026-10-4 5:9:8.129
+    POST /v2/approvals
+    Host: localhost:9202
+    Authorization: Bearer test-token-123
+    Transfer-Encoding: chunked
+    traceparent: 00-a47545ecd5923faaee83b7d86b148294-850decdd74d8d28a-00
+    Content-Type: application/json; charset=utf-8
+    
+    {
+        "changeRequestId": "CR-1003",
+        "type": "CHOKE_CHANGE",
+        "capacityDeltaBbl": 50
+    }
+
+  Response at 2026-10-4 5:9:8.266
+    201 Created
+    Content-Type: application/json
+    Location: /v2/approvals/A-7003
+    X-Specmatic-Result: success
+    
+    {
+        "id": "A-7003",
+        "changeRequestId": "CR-1003",
+        "decision": "APPROVED",
+        "reason": "Within delegated authority (<= 500 bbl/d).",
+        "decidedAt": "2026-09-28T09:00:00Z"
+    }
+

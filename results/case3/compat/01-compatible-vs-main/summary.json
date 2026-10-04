@@ -1,0 +1,6 @@
+{
+  "branch": "feature/compatible-add-optional-field",
+  "base": "main",
+  "exitCode": 0,
+  "verdict": "PASS (exit 0)"
+}

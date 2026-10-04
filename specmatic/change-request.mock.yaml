@@ -1,0 +1,32 @@
+# Specmatic config (v3) used by CONSUMERS of change-request-service (C4: production-forecast).
+# Specs are pulled from the central contract repo through a GIT source.
+version: 3
+
+dependencies:
+  services:
+    - service:
+        $ref: "#/components/services/changeRequest"
+        runOptions:
+          $ref: "#/components/runOptions/changeRequestMock"
+
+components:
+  sources:
+    centralContractRepo:
+      git:
+        url: file:///work/contracts
+
+  services:
+    changeRequest:
+      description: change-request-service (App B) as a dependency of App A
+      definitions:
+        - definition:
+            source:
+              $ref: "#/components/sources/centralContractRepo"
+            specs:
+              - specs/app-b-change-mgmt/change-request-service.yaml
+
+  runOptions:
+    changeRequestMock:
+      openapi:
+        type: mock
+        baseUrl: "http://0.0.0.0:9000/v2"

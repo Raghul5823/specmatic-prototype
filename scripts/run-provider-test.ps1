@@ -18,6 +18,8 @@ param(
     [string]$Config,                         # optional specmatic.yaml, relative to the prototype root
     [string]$Token = $null,                  # token for the bearerAuth scheme (default: the test token)
     [hashtable]$Env = @{},                   # extra env vars for Specmatic, e.g. @{ MAX_TEST_REQUEST_COMBINATIONS = '1' }
+    [int[]]$PublishPorts = @(),              # host ports of dependency mocks started by the config (same port inside)
+    [string]$ContractsDir,                   # alternative contracts checkout (e.g. a branch clone); default: .\contracts
     [string[]]$ExtraArgs = @()
 )
 . "$PSScriptRoot\common.ps1"
@@ -35,9 +37,10 @@ $dockerArgs = @('run', '--rm',
     '--add-host', 'host.docker.internal:host-gateway',
     '-e', "bearerAuth=$Token")
 foreach ($k in $Env.Keys) { $dockerArgs += @('-e', "$k=$($Env[$k])") }
+foreach ($p in $PublishPorts) { $dockerArgs += @('-p', "${p}:${p}") }
 $dockerArgs += @(
     '-v', "${Root}:/work",
-    '-v', "$(Join-Path $Root 'contracts'):/work/contracts:ro",
+    '-v', "$(if ($ContractsDir) { $ContractsDir } else { Join-Path $Root 'contracts' }):/work/contracts:ro",
     '-w', $work,
     $SpecmaticImage, 'test')
 if ($Config) {

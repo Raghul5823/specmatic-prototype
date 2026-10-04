@@ -1,0 +1,131 @@
+Command: docker run --rm --add-host host.docker.internal:host-gateway -e bearerAuth=test-token-123 -v <prototype-root>:/work -v %USERPROFILE%\AppData\Local\Temp\sp-compat:/work/contracts:ro -w /work/results/case3/drift/d2-provider-vs-new-contract specmatic/specmatic:2.55.0 test /work/contracts/specs/app-a-production/production-forecast-service.yaml --testBaseURL=http://host.docker.internal:5102/v2 --junitReportDir=/work/results/case3/drift/d2-provider-vs-new-contract/junit
+Specmatic Version: v2.55.0(299682d5)
+
+Could not find the Specmatic configuration at path /work/results/case3/drift/d2-provider-vs-new-contract/specmatic.yaml
+Could not find the Specmatic configuration at path /work/results/case3/drift/d2-provider-vs-new-contract/specmatic.yaml
+API Specification Summary: /work/contracts/specs/app-a-production/production-forecast-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 2
+  Schema components: 6, Security Schemes: [http]
+
+
+Test directory /work/contracts/specs/app-a-production/production-forecast-service_examples found
+
+Loading externalised examples from /work/contracts/specs/app-a-production/production-forecast-service_examples: 
+  2 examples(s) found in /work/contracts/specs/app-a-production/production-forecast-service_examples
+
+Loading test file /work/contracts/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-5001.json
+Loading test file /work/contracts/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-9999_not_found.json
+Specmatic Test Suite has FAILED
+Reason:
+>> Error loading example named CREATE_W001 for POST /forecasts -> 201.RESPONSE.BODY.wellID
+
+    R2001: Missing required property
+    Documentation: https://docs.specmatic.io/rules#r2001
+    Summary: A required property defined in the specification is missing
+
+    Specification expected mandatory property "wellID" to be present but was missing from the example "CREATE_W001"
+
+>> Error loading example named CREATE_W001 for POST /forecasts -> 201.RESPONSE.BODY.wellId
+
+    R2003: Unknown property
+    Documentation: https://docs.specmatic.io/rules#r2003
+    Summary: A property was found that is not defined in the specification
+
+    Property "wellId" in the example "CREATE_W001" was not in the specification
+
+>> Error loading example named GET_F5001 for GET /forecasts/(forecastId:ForecastId) -> 200.RESPONSE.BODY.wellID
+
+    R2001: Missing required property
+    Documentation: https://docs.specmatic.io/rules#r2001
+    Summary: A required property defined in the specification is missing
+
+    Specification expected mandatory property "wellID" to be present but was missing from the example "GET_F5001"
+
+>> Error loading example named GET_F5001 for GET /forecasts/(forecastId:ForecastId) -> 200.RESPONSE.BODY.wellId
+
+    R2003: Unknown property
+    Documentation: https://docs.specmatic.io/rules#r2003
+    Summary: A property was found that is not defined in the specification
+
+    Property "wellId" in the example "GET_F5001" was not in the specification
+
+>> Error loading example for GET /forecasts/(forecastId:ForecastId) -> 200 from /work/contracts/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-5001.json.RESPONSE.BODY.wellID
+
+    R2001: Missing required property
+    Documentation: https://docs.specmatic.io/rules#r2001
+    Summary: A required property defined in the specification is missing
+
+    Specification expected mandatory property "wellID" to be present but was missing from the example "change-request__get_forecast_F-5001"
+
+>> Error loading example for GET /forecasts/(forecastId:ForecastId) -> 200 from /work/contracts/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-5001.json.RESPONSE.BODY.wellId
+
+    R2003: Unknown property
+    Documentation: https://docs.specmatic.io/rules#r2003
+    Summary: A property was found that is not defined in the specification
+
+    Property "wellId" in the example "change-request__get_forecast_F-5001" was not in the specification
+
+
+Could not load report configuration, coverage will be calculated but no coverage threshold will be enforced
+The Open API coverage report generated is blank.
+This can happen if your open api specification does not have any paths documented.
+Generating CTRF report using coverage report specifications...
+Skipping the CTRF report generation as coverage report specifications list is empty.
+
+
+
+Unsuccessful Scenarios:
+  "Specmatic Test Suite FAILED"
+        Reason:
+    >> Error loading example named CREATE_W001 for POST /forecasts -> 201.RESPONSE.BODY.wellID
+  
+        R2001: Missing required property
+        Documentation: https://docs.specmatic.io/rules#r2001
+        Summary: A required property defined in the specification is missing
+  
+        Specification expected mandatory property "wellID" to be present but was missing from the example "CREATE_W001"
+  
+    >> Error loading example named CREATE_W001 for POST /forecasts -> 201.RESPONSE.BODY.wellId
+  
+        R2003: Unknown property
+        Documentation: https://docs.specmatic.io/rules#r2003
+        Summary: A property was found that is not defined in the specification
+  
+        Property "wellId" in the example "CREATE_W001" was not in the specification
+  
+    >> Error loading example named GET_F5001 for GET /forecasts/(forecastId:ForecastId) -> 200.RESPONSE.BODY.wellID
+  
+        R2001: Missing required property
+        Documentation: https://docs.specmatic.io/rules#r2001
+        Summary: A required property defined in the specification is missing
+  
+        Specification expected mandatory property "wellID" to be present but was missing from the example "GET_F5001"
+  
+    >> Error loading example named GET_F5001 for GET /forecasts/(forecastId:ForecastId) -> 200.RESPONSE.BODY.wellId
+  
+        R2003: Unknown property
+        Documentation: https://docs.specmatic.io/rules#r2003
+        Summary: A property was found that is not defined in the specification
+  
+        Property "wellId" in the example "GET_F5001" was not in the specification
+  
+    >> Error loading example for GET /forecasts/(forecastId:ForecastId) -> 200 from /work/contracts/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-5001.json.RESPONSE.BODY.wellID
+  
+        R2001: Missing required property
+        Documentation: https://docs.specmatic.io/rules#r2001
+        Summary: A required property defined in the specification is missing
+  
+        Specification expected mandatory property "wellID" to be present but was missing from the example "change-request__get_forecast_F-5001"
+  
+    >> Error loading example for GET /forecasts/(forecastId:ForecastId) -> 200 from /work/contracts/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-5001.json.RESPONSE.BODY.wellId
+  
+        R2003: Unknown property
+        Documentation: https://docs.specmatic.io/rules#r2003
+        Summary: A property was found that is not defined in the specification
+  
+        Property "wellId" in the example "change-request__get_forecast_F-5001" was not in the specification
+
+Tests run: 1, Successes: 0, Failures: 1, WIP: 0, Errors: 0
+
+Executed at 2026-10-04T17:16:10.740359402

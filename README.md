@@ -1,6 +1,6 @@
 # Specmatic Prototype — Contract Testing Evaluation
 
-> Status: **Phase 4 complete** (Case 2, intra-app). Later sections are placeholders until their phase runs.
+> Status: **Phase 5 complete** (Case 3, cross-app, compatibility gate, drift). Later sections are placeholders until their phase runs.
 > New readers: start with [docs/APPLICATION-GUIDE.md](docs/APPLICATION-GUIDE.md), a plain-language guide to the design, folders, services and contracts.
 
 ## 0. Master checklist
@@ -36,14 +36,15 @@ Ticked items link to their evidence. Updated at the end of every phase.
 - [x] Break experiments on both consumer and provider sides: 6/6 caught: [results/case2/break/summary.md](results/case2/break/summary.md)
 - [x] Pact comparison: what is covered, what isn't, how examples + `consumers.yaml` close the gap (§5 Phase 4)
 - [x] Application guide (design, folders, services, specs, terms, reasons): [docs/APPLICATION-GUIDE.md](docs/APPLICATION-GUIDE.md)
-- [ ] Commit Phase 4 and push (after scan + approval)
+- [x] Commit Phase 4 and push (after scan + approval)
 
 **Phase 5: Case 3 (cross-app, C3 and C4)**
-- [ ] Provider and consumer tests for C3 and C4, specs taken from the contracts git repo
-- [ ] Backward-compatibility check: one safe change passes, one breaking change fails
-- [ ] T1: record the exit code (fail vs warn); if it only warns, test oasdiff as the gate
-- [ ] Compare against tag `v1` as well as the base branch
-- [ ] Drift scenario: the provider changes but the contract repo does not
+- [x] Provider (5/5, 7/7, dependencies mocked) and consumer (8/8 vs strict stubs) tests for C3 and C4, specs from the contracts **git** repo: [results/case3/](results/case3/)
+- [x] Backward-compatibility check: optional field PASS (exit 0), renamed required field FAIL (exit 1): [results/case3/compat/](results/case3/compat/)
+- [x] T1: the free edition **fails** (exit 1) on a breaking change, so oasdiff is not needed
+- [x] Compared against tags `v1` and `v1.1` as well as `main`
+- [x] Drift both ways: provider drift caught only by the provider test (consumer stays green, real call gives 502); contract drift rejected against the consumer's examples: [results/case3/drift/](results/case3/drift/)
+- [ ] Commit Phase 5 and push (after scan + approval)
 
 **Phase 6: Angular MFE consumer**
 - [ ] Minimal Angular CLI app (ask before npm install)
@@ -87,8 +88,8 @@ Out of scope: production-grade code, a real OAuth2 identity provider, and a full
 | 2 | Contracts (specs, examples, `consumers.yaml`, tag `v1`); services moved under `/v2` with `/liveness` and `/readiness` | ✅ done |
 | 3 | Case 1: a service's own API (provider tests, reports, xUnit for the internal layer, break experiments) | ✅ done |
 | 4 | Case 2: service-to-service within an app, both directions (provider tests + consumer tests against stubs) | ✅ done |
-| 5 | Case 3: cross-application, both directions, specs from the central `contracts/` repo; backward-compatibility check against `v1`; drift | |
-| 6 | **Minimal Angular MFE consumer**: generated TypeScript client from the spec, contract break as a compile error, Playwright against a Specmatic stub via the dev-server proxy | |
+| 5 | Case 3: cross-application, both directions, specs from the central `contracts/` repo; backward-compatibility check against `v1`; drift | ✅ done |
+| 6 | **Minimal Angular MFE consumer**: generated TypeScript client from the spec, contract break as a compile error, Playwright against a Specmatic stub via the dev-server proxy | next |
 | 7 | Pipeline simulation: `run-all.ps1` + sample `azure-pipelines.yml` (**BuildService** stage with unit tests, xUnit `ContractTests` projects and the Angular steps; the deploy stage depends on it) | |
 | 8 | Evaluation: coverage, control points, scorecard (incl. "Angular MFE consumer support"), limitations, recommendation | |
 
@@ -511,6 +512,42 @@ The "empty list" response belongs to interaction C4 (`production-forecast__list_
 
 The remaining gap is **discipline**: examples and `consumers.yaml` are maintained by people, so they need an owner and a PR review rule (see §8 Control points).
 
+### Phase 5 — Case 3: cross-application (C3 and C4), compatibility gate, drift
+
+**New tooling**
+- **Git source (the central contract repo model):** `specmatic/production-forecast.*.yaml` and `specmatic/change-request.*.yaml` use `components.sources.<name>.git.url: file:///work/contracts`. Specmatic **clones** the contract repo (`Cloning /work/contracts into .specmatic/repos`) and reads the specs from that clone, not from a local copy. Pointing at the local repo keeps GitHub credentials out of Specmatic. In a real pipeline, the `url` would be the central repo's URL.
+- **Provider tests with mocked dependencies:** each provider config has a `systemUnderTest` (`type: test`) and `dependencies` (`type: mock`, on fixed ports).
+  - **`specmatic test --config` only tests the system under test.** The dependency mocks must be started separately with **`specmatic mock --config`** (same file), which starts *only* the dependencies.
+  - `scripts/deps.ps1` does that.
+  - This is the realistic pipeline pattern: App A's build cannot run App B's services, so App B is a mock generated from App B's contract.
+- `scripts/compat-check.ps1`: Specmatic `backward-compatibility-check` on a git checkout, with exit code capture. `scripts/case3-drift.ps1`: the drift scenarios.
+- `run-provider-test.ps1` gained `-PublishPorts` and `-ContractsDir` (test against another checkout, e.g. a branch).
+
+**5a. Cross-app provider tests** (dependencies mocked from the git-sourced contracts)
+
+| Provider | Mocked dependencies (what they served) | Tests | API coverage | Evidence |
+|---|---|---|---|---|
+| production-forecast (C3) | well-registry `GET /v2/wells/W-001`; **change-request (App B)** `GET /v2/change-requests?wellId=W-001&status=APPROVED` | **5/5** | 38% | [provider-c3-production-forecast](results/case3/provider-c3-production-forecast/) |
+| change-request (C4) | approval `POST /v2/approvals`; **production-forecast (App A)** `GET /v2/forecasts/F-5001` | **7/7** (including App A's consumer examples `production-forecast__list_approved_*`) | 36% | [provider-c4-change-request](results/case3/provider-c4-change-request/) |
+
+Coverage is lower than well-registry's 100% because these specs have no 400/401 examples yet; the fix is the same as in Phase 3.
+
+**5b. Cross-app consumer tests** vs strict stubs from the git-sourced contracts: **8/8 passed**.
+- **C4** (production-forecast → change-request): approved changes mapped, **empty list** handled (`W-002` → `[]`), unexampled query refused, exact token and query asserted.
+- **C3** (change-request → production-forecast): F-5001 mapped, 404 → null, `FC-1` rejected by the stub (pattern), token asserted.
+
+Evidence: [C4](results/case3/consumer-c4-forecast-vs-changerequest-stub.txt), [C3](results/case3/consumer-c3-changerequest-vs-forecast-stub.txt), stub logs in [results/case3/stub-logs/](results/case3/stub-logs/).
+
+**5c. Backward compatibility, T1 answered:** in the free edition, `backward-compatibility-check` **fails with exit code 1** on a breaking change and passes with **exit 0** on a compatible one. It's a real pipeline gate, so **oasdiff is not needed**. It also works against **tags** (`--base-branch v1`), so a team can gate against the last *released* contract. Details are in §6, Case 3.
+
+**Findings**
+1. **Compatibility gate works in the free edition (T1 closed).** The report names the exact property and line: *"RESPONSE.BODY.wellId (production-forecast-service.yaml:175:9): the old specification expects property "wellId" but it is missing in the new specification"*. It also writes an HTML report ([04-breaking-vs-tag-v1/html](results/case3/compat/04-breaking-vs-tag-v1/html/index.html)). The `--strict` flag (fail even for APIs with no recorded usage) needs Insights, but the default already failed our breaking change.
+2. **The check is driven by git history**, not by two file paths. It looks at the files changed on the current branch versus `--base-branch` (a branch **or tag**). That suits a contract repo where every change is a pull request.
+3. **It also scans files that *mention* a changed spec.** `consumers.yaml` was listed as "Specs referring to the changed specs" and checked (harmlessly, as COMPATIBLE), because it contains the spec's path.
+4. **Git source with a local repo:** `url` must be a valid URI (`file:///work/contracts`). A bare path works at runtime but fails `config validate`. The docs show no way to **pin a tag** in a git source, so a pipeline should check out the contract repo at the wanted tag and use a `filesystem` source, or accept the default branch.
+5. **Windows path-length limit.** Cloning the contracts repo into a deep folder failed with `Filename too long` (consumer example names are long). Use `git config core.longpaths true` on Windows agents, or a short checkout path.
+6. **Line endings:** with `core.autocrlf=true`, a Windows checkout has CRLF endings. Specmatic doesn't mind, but scripts that edit specs must allow for it (`git -c core.autocrlf=false clone` for experiments).
+
 ## 6. Break-experiment results
 
 ### Case 1: well-registry-service (Phase 3)
@@ -553,8 +590,27 @@ Consumer breaks were run against **strict** Specmatic stubs under `/v2`; provide
 
 **What to notice:** each side catches **its own** breaks. A provider break (05, 06) is not seen by the consumer's stub tests, because the stub comes from the *spec*, not from the provider's code. It is caught in the **provider's** pipeline instead. A consumer break (01–04) is caught in the **consumer's** pipeline, without the provider running at all. The contract is the meeting point, and each team only needs its own build.
 
-### Case 3
-_Phase 5._
+### Case 3: cross-app C3/C4, compatibility gate and drift (Phase 5)
+
+**Backward-compatibility check** (`scripts/compat-check.ps1`, run in a throwaway clone of the contracts repo; evidence in [results/case3/compat/](results/case3/compat/))
+
+| # | Branch (change) | Compared with | Verdict | Exit code |
+|---|---|---|---|---|
+| 01 | add **optional** response field `Forecast.notes` | `main` | **PASS** (COMPATIBLE) | **0** |
+| 02 | rename **required** response field `Forecast.wellId` → `wellID` | `main` | **FAIL** (INCOMPATIBLE) | **1** |
+| 03 | optional field (as 01) | tag **`v1.1`** | PASS | 0 |
+| 04 | rename (as 02) | tag **`v1`** | FAIL | 1 |
+
+**Drift: code and contract repo out of step** (`scripts/case3-drift.ps1`; evidence in [results/case3/drift/](results/case3/drift/); original file restored byte-for-byte)
+
+| # | Scenario | Where it was tested | Result |
+|---|---|---|---|
+| D1a | **Provider code drifts** (production-forecast renames `wellId` → `well_id`), contract not updated | provider contract test, dependencies mocked | **FAIL**: 3/5 tests, drift caught in the **provider's** pipeline |
+| D1b | same drift | consumer (change-request) tests vs the stub built from the contract | **PASS** 4/4: the consumer **cannot** see a provider's drift |
+| D1c | same drift, provider deployed anyway | real services end to end (`POST /v2/change-requests` with `forecastId`) | **`502 Bad Gateway`**: the consumer breaks at runtime |
+| D2 | **Contract drifts** (branch renames `wellId` → `wellID`), provider code not updated | provider test against the changed contract branch | **FAIL** before any request: the changed spec contradicts the existing examples, including the **consumer's** `change-request__get_forecast_F-5001` |
+
+**What to notice:** D1 shows why the provider's contract test is the gate that matters. Only the provider's own pipeline can see its own drift (D1a). The consumer's tests stay green (D1b), and the cost of skipping the gate is a production 502 (D1c). D2 shows that consumer-contributed examples also protect the contract repo: a contract change that contradicts what a consumer has documented fails as soon as it is loaded.
 
 ## 7. Coverage
 _Phase 8._
@@ -617,4 +673,21 @@ _Phase 8_ (will include the Angular MFE findings from Phase 6).
    .\scripts\stub.ps1 stop well-registry-service ; .\scripts\stub.ps1 stop approval-service
    .\scripts\case2-break-experiments.ps1        # 6 experiments, about 3 minutes in total
    ```
-8. _Further steps added as phases complete (`scripts/run-all.ps1` in Phase 7)._
+8. Phase 5 (Case 3), from the prototype root:
+   ```powershell
+   # cross-app provider tests with mocked dependencies (specs cloned from the contracts git repo)
+   .\scripts\deps.ps1 start production-forecast -Config specmatic\production-forecast.specmatic.yaml -Ports 9101,9201
+   .\scripts\start-services.ps1 -Only production-forecast-service -NoBuild -Env @{ Downstream__WellRegistryBaseUrl='http://localhost:9101/v2/'; Downstream__ChangeRequestBaseUrl='http://localhost:9201/v2/' }
+   .\scripts\run-provider-test.ps1 -Service production-forecast-service -Out case3\provider-c3-production-forecast -Config specmatic\production-forecast.specmatic.yaml
+   .\scripts\deps.ps1 stop production-forecast ; .\scripts\stop-services.ps1
+   #   (same pattern for change-request: specmatic\change-request.specmatic.yaml, ports 9202,9102)
+   # cross-app consumer tests
+   .\scripts\stub.ps1 start change-request-service 9201 -Strict -Config specmatic\change-request.mock.yaml
+   .\scripts\stub.ps1 start production-forecast-service 9102 -Strict -Config specmatic\production-forecast.mock.yaml
+   dotnet test app-a-production\production-forecast-service.Tests --filter "FullyQualifiedName~ChangeRequestClientStubTests"
+   dotnet test app-b-change-mgmt\change-request-service.Tests --filter "FullyQualifiedName~ProductionForecastClientStubTests"
+   # compatibility gate: in a SHORT-path clone of the contracts repo, on a change branch
+   .\scripts\compat-check.ps1 -RepoDir <clone> -BaseBranch main -Out case3\compat\<name>     # or -BaseBranch v1
+   .\scripts\case3-drift.ps1 -ContractClone <clone on a breaking branch>
+   ```
+9. _Further steps added as phases complete (`scripts/run-all.ps1` in Phase 7)._

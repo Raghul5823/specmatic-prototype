@@ -1,0 +1,11 @@
+{
+  "service": "production-forecast-service",
+  "run": "case3\\drift\\d1a-provider-test",
+  "exitCode": 1,
+  "testsRun": 5,
+  "successes": 2,
+  "failures": 3,
+  "errors": 0,
+  "apiCoveragePct": 38,
+  "coverageOperations": 8
+}

@@ -1,0 +1,99 @@
+Branch under check: feature/breaking-rename-field   Base: main
+Change: Rename required response field Forecast.wellId -> wellID
+Command: docker run --rm -v <contracts-clone>:/repo -w /repo specmatic/specmatic:2.55.0 backward-compatibility-check --repo-dir=/repo --base-branch=main
+
+Specmatic Version: v2.55.0(299682d5)
+
+Checking backward compatibility of the following specs:
+
+  - Specs that have changed: 
+    1. /repo/specs/app-a-production/production-forecast-service.yaml
+
+  - Specs referring to the changed specs: 
+    1. /repo/consumers.yaml
+
+--------------------
+
+Loading newer specification '/repo/specs/app-a-production/production-forecast-service.yaml' from branch 'feature/breaking-rename-field'
+
+API Specification Summary: /repo/specs/app-a-production/production-forecast-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 2
+  Schema components: 6, Security Schemes: [http]
+
+
+Finished loading newer specification '/repo/specs/app-a-production/production-forecast-service.yaml' from branch 'feature/breaking-rename-field'
+
+Test directory /repo/specs/app-a-production/production-forecast-service_examples found
+
+Loading externalised examples from /repo/specs/app-a-production/production-forecast-service_examples: 
+  2 examples(s) found in /repo/specs/app-a-production/production-forecast-service_examples
+
+Loading test file /repo/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-5001.json
+Loading test file /repo/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-9999_not_found.json
+
+Loading older specification '/repo/specs/app-a-production/production-forecast-service.yaml' from branch 'main'
+
+API Specification Summary: /repo/specs/app-a-production/production-forecast-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 2
+  Schema components: 6, Security Schemes: [http]
+
+
+Finished loading older specification '/repo/specs/app-a-production/production-forecast-service.yaml' from branch 'main'
+
+[Compatibility Check] Executing 1 scenarios for POST /forecasts against 4 operations
+  - POST /forecasts -> 201 (requestContentType application/json, responseContentType application/json)
+  - POST /forecasts -> 400 (requestContentType application/json, responseContentType application/problem+json)
+  - POST /forecasts -> 401 (requestContentType application/json, responseContentType application/problem+json)
+  - POST /forecasts -> 502 (requestContentType application/json, responseContentType application/problem+json)
+[Compatibility Check] Verdict: FAIL
+
+[Compatibility Check] Executing 1 scenarios for GET /forecasts/(forecastId:ForecastId) against 4 operations
+  - GET /forecasts/(forecastId:ForecastId) -> 200 (responseContentType application/json)
+  - GET /forecasts/(forecastId:ForecastId) -> 400 (responseContentType application/problem+json)
+  - GET /forecasts/(forecastId:ForecastId) -> 401 (responseContentType application/problem+json)
+  - GET /forecasts/(forecastId:ForecastId) -> 404 (responseContentType application/problem+json)
+[Compatibility Check] Verdict: FAIL
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+Loading newer specification '/repo/consumers.yaml' from branch 'feature/breaking-rename-field'
+
+Finished loading newer specification '/repo/consumers.yaml' from branch 'feature/breaking-rename-field'
+
+Loading older specification '/repo/consumers.yaml' from branch 'main'
+
+Finished loading older specification '/repo/consumers.yaml' from branch 'main'
+
+1. Running the check for /repo/specs/app-a-production/production-forecast-service.yaml:
+  ________________________________________
+  The Incompatibility Report:
+  
+    In scenario "Create a forecast (exponential decline on effective capacity).. Response: Created."
+    API: POST /forecasts -> 201
+    
+      >> RESPONSE.BODY.wellId (specs/app-a-production/production-forecast-service.yaml:175:9)
+    
+          The old specification expects property "wellId" but it is missing in the new specification
+    
+    In scenario "Get one forecast by id.. Response: The forecast."
+    API: GET /forecasts/(forecastId:ForecastId) -> 200
+    
+      >> RESPONSE.BODY.wellId (specs/app-a-production/production-forecast-service.yaml:175:9)
+    
+          The old specification expects property "wellId" but it is missing in the new specification
+
+  --------------------
+  Verdict for spec /repo/specs/app-a-production/production-forecast-service.yaml:
+    (INCOMPATIBLE) The changes to the spec are NOT backward compatible with the corresponding spec from main
+  --------------------
+
+2. Running the check for /repo/consumers.yaml:
+  --------------------
+  Verdict for spec /repo/consumers.yaml:
+    (COMPATIBLE) The spec is backward compatible with the corresponding spec from main
+  --------------------
+
+Generating BCC report for 16 checks and 8 operations...
+Generating HTML report in build/reports/specmatic/backward_compatibility/html/index.html
+Files checked: 2 (Passed: 1, Failed: 1)

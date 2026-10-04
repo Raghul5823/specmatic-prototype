@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="22cffbcc-cf7c-41ff-9db0-1a5a8e6a5260" name="<user>@<machine> 2026-10-04 22:33:22" runUser="<domain>\<user>" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-04T22:33:22.8874812+05:30" queuing="2026-10-04T22:33:22.8874816+05:30" start="2026-10-04T22:33:18.4939005+05:30" finish="2026-10-04T22:33:22.9052266+05:30" />
+  <TestSettings name="default" id="b19c3915-d36d-4f53-996d-7e4f6d91c87d">
+    <Deployment runDeploymentRoot="<user>_<machine>_2026-10-04_22_33_22" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="2e02a994-a50f-41a8-b476-dca107661049" testId="604001eb-319f-2592-a961-bd34830f133e" testName="ProductionForecastService.Tests.ChangeRequestClientStubTests.Empty_list_from_consumer_example_is_handled" computerName="<machine>" duration="00:00:01.4536117" startTime="2026-10-04T22:33:20.6740627+05:30" endTime="2026-10-04T22:33:22.1435809+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2e02a994-a50f-41a8-b476-dca107661049" />
+    <UnitTestResult executionId="a2031000-4e2b-4b05-bb8c-eb29781b0930" testId="f875e281-2d1d-2dc9-eda2-ee3dc08d3823" testName="ProductionForecastService.Tests.ChangeRequestClientStubTests.Query_without_an_example_is_refused_in_strict_mode" computerName="<machine>" duration="00:00:00.1777776" startTime="2026-10-04T22:33:22.5583628+05:30" endTime="2026-10-04T22:33:22.7364462+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a2031000-4e2b-4b05-bb8c-eb29781b0930" />
+    <UnitTestResult executionId="95bffc2d-9442-4bc7-a2d5-ad615ab3057f" testId="416e07f2-cbbe-7751-cca6-c59012855a2b" testName="ProductionForecastService.Tests.ChangeRequestClientStubTests.Approved_changes_for_W001_are_mapped" computerName="<machine>" duration="00:00:00.2564066" startTime="2026-10-04T22:33:22.1609455+05:30" endTime="2026-10-04T22:33:22.4042966+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="95bffc2d-9442-4bc7-a2d5-ad615ab3057f" />
+    <UnitTestResult executionId="3c5d70ea-00e4-461b-ab89-f04a3f72f0d0" testId="7f38650b-ca66-c4a2-884c-99c2e2920ce8" testName="ProductionForecastService.Tests.ChangeRequestClientStubTests.Consumer_sends_token_and_the_exact_query_it_relies_on" computerName="<machine>" duration="00:00:00.1534009" startTime="2026-10-04T22:33:22.4061219+05:30" endTime="2026-10-04T22:33:22.5580932+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3c5d70ea-00e4-461b-ab89-f04a3f72f0d0" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ProductionForecastService.Tests.ChangeRequestClientStubTests.Query_without_an_example_is_refused_in_strict_mode" storage=".\app-a-production\production-forecast-service.tests\bin\debug\net10.0\productionforecastservice.tests.dll" id="f875e281-2d1d-2dc9-eda2-ee3dc08d3823">
+      <Execution id="a2031000-4e2b-4b05-bb8c-eb29781b0930" />
+      <TestMethod codeBase=".\app-a-production\production-forecast-service.Tests\bin\Debug\net10.0\ProductionForecastService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ProductionForecastService.Tests.ChangeRequestClientStubTests" name="Query_without_an_example_is_refused_in_strict_mode" />
+    </UnitTest>
+    <UnitTest name="ProductionForecastService.Tests.ChangeRequestClientStubTests.Empty_list_from_consumer_example_is_handled" storage=".\app-a-production\production-forecast-service.tests\bin\debug\net10.0\productionforecastservice.tests.dll" id="604001eb-319f-2592-a961-bd34830f133e">
+      <Execution id="2e02a994-a50f-41a8-b476-dca107661049" />
+      <TestMethod codeBase=".\app-a-production\production-forecast-service.Tests\bin\Debug\net10.0\ProductionForecastService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ProductionForecastService.Tests.ChangeRequestClientStubTests" name="Empty_list_from_consumer_example_is_handled" />
+    </UnitTest>
+    <UnitTest name="ProductionForecastService.Tests.ChangeRequestClientStubTests.Approved_changes_for_W001_are_mapped" storage=".\app-a-production\production-forecast-service.tests\bin\debug\net10.0\productionforecastservice.tests.dll" id="416e07f2-cbbe-7751-cca6-c59012855a2b">
+      <Execution id="95bffc2d-9442-4bc7-a2d5-ad615ab3057f" />
+      <TestMethod codeBase=".\app-a-production\production-forecast-service.Tests\bin\Debug\net10.0\ProductionForecastService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ProductionForecastService.Tests.ChangeRequestClientStubTests" name="Approved_changes_for_W001_are_mapped" />
+    </UnitTest>
+    <UnitTest name="ProductionForecastService.Tests.ChangeRequestClientStubTests.Consumer_sends_token_and_the_exact_query_it_relies_on" storage=".\app-a-production\production-forecast-service.tests\bin\debug\net10.0\productionforecastservice.tests.dll" id="7f38650b-ca66-c4a2-884c-99c2e2920ce8">
+      <Execution id="3c5d70ea-00e4-461b-ab89-f04a3f72f0d0" />
+      <TestMethod codeBase=".\app-a-production\production-forecast-service.Tests\bin\Debug\net10.0\ProductionForecastService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ProductionForecastService.Tests.ChangeRequestClientStubTests" name="Consumer_sends_token_and_the_exact_query_it_relies_on" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="604001eb-319f-2592-a961-bd34830f133e" executionId="2e02a994-a50f-41a8-b476-dca107661049" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f875e281-2d1d-2dc9-eda2-ee3dc08d3823" executionId="a2031000-4e2b-4b05-bb8c-eb29781b0930" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="416e07f2-cbbe-7751-cca6-c59012855a2b" executionId="95bffc2d-9442-4bc7-a2d5-ad615ab3057f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7f38650b-ca66-c4a2-884c-99c2e2920ce8" executionId="3c5d70ea-00e4-461b-ab89-f04a3f72f0d0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="4" executed="4" passed="4" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.1)&#xD;
+[xUnit.net 00:00:00.23]   Discovering: ProductionForecastService.Tests&#xD;
+[xUnit.net 00:00:00.32]   Discovered:  ProductionForecastService.Tests&#xD;
+[xUnit.net 00:00:00.35]   Starting:    ProductionForecastService.Tests&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[100]&#xD;
+      Start processing HTTP request GET http://localhost:9201/v2/change-requests?*&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[100]&#xD;
+      Sending HTTP request GET http://localhost:9201/v2/change-requests?*&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[101]&#xD;
+      Received HTTP response headers after 369.0571ms - 200&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[101]&#xD;
+      End processing HTTP request after 396.4097ms - 200&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[100]&#xD;
+      Start processing HTTP request GET http://localhost:9201/v2/change-requests?*&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[100]&#xD;
+      Sending HTTP request GET http://localhost:9201/v2/change-requests?*&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[101]&#xD;
+      Received HTTP response headers after 207.3047ms - 200&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[101]&#xD;
+      End processing HTTP request after 207.7654ms - 200&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[100]&#xD;
+      Start processing HTTP request GET http://localhost:9201/v2/change-requests?*&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[100]&#xD;
+      Sending HTTP request GET http://localhost:9201/v2/change-requests?*&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[101]&#xD;
+      Received HTTP response headers after 142.6798ms - 200&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[101]&#xD;
+      End processing HTTP request after 142.8368ms - 200&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[100]&#xD;
+      Start processing HTTP request GET http://localhost:9201/v2/change-requests?*&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[100]&#xD;
+      Sending HTTP request GET http://localhost:9201/v2/change-requests?*&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.ClientHandler[101]&#xD;
+      Received HTTP response headers after 156.2492ms - 400&#xD;
+info: System.Net.Http.HttpClient.IChangeRequestClient.LogicalHandler[101]&#xD;
+      End processing HTTP request after 156.3849ms - 400&#xD;
+[xUnit.net 00:00:02.45]   Finished:    ProductionForecastService.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

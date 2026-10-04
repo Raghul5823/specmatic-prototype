@@ -216,6 +216,8 @@ Tags are annotated and never moved. `v1` is the first contract set, and `v1.1` a
 **`specmatic/*.yaml` (Specmatic config, version 3).** Each one tells Specmatic *what to run and how*:
 - `well-registry.specmatic.yaml`: the **provider test** for well-registry, with the spec taken from the contracts folder and `schemaResiliencyTests: all` (generated positive and negative tests).
 - `well-registry.mock.yaml` and `approval.mock.yaml`: the **stubs** for consumers, with `baseUrl: http://0.0.0.0:9000/v2`, so the stub serves `/v2/...` exactly like the real service.
+- `production-forecast.specmatic.yaml` and `change-request.specmatic.yaml`: **provider test + mocked dependencies** for the cross-app providers. They pull specs from a **git source** (the central contract repo, cloned by Specmatic). `specmatic mock --config` starts the dependencies, and `specmatic test --config` tests the service.
+- `production-forecast.mock.yaml` and `change-request.mock.yaml`: cross-app consumer stubs, also from the git source.
 
 **Why the configs live with the services and not in `contracts/`:** how a team *uses* a contract (test or stub, ports, strictness) is that team's decision. The contract itself is shared.
 
@@ -230,6 +232,9 @@ Tags are annotated and never moved. `v1` is the first contract set, and `v1.1` a
 | `stub.ps1` | starts or stops a Specmatic stub on a fixed port (optionally strict, optionally with a config) and saves its request log |
 | `break-experiment.ps1` | applies one deliberate code change, builds, runs xUnit and Specmatic (or the consumer tests against a stub), records whether each caught it, then restores the exact original bytes |
 | `case1-break-experiments.ps1`, `case2-break-experiments.ps1` | the full experiment lists for Phases 3 and 4, plus summary tables |
+| `deps.ps1` | starts or stops a provider's **dependency mocks** from its config (`specmatic mock --config`) |
+| `compat-check.ps1` | Specmatic **backward-compatibility check** on a git checkout of the contract repo; records the exit code (0 = compatible, 1 = breaking) |
+| `case3-drift.ps1` | the drift scenarios: provider code ahead of the contract, and contract ahead of the provider code |
 
 **Why scripts instead of manual steps:** every result in the README can be reproduced with one command, which is also what the pipeline in Phase 7 will need.
 
@@ -256,8 +261,8 @@ Tags are annotated and never moved. `v1` is the first contract set, and `v1.1` a
 | 2 Contracts | ✅ | 4 specs, examples, `consumers.yaml`, tag `v1`; `/v2` and probes |
 | 3 Case 1 | ✅ | provider tests 40% → 100% coverage, resiliency tests, xUnit, 9 break experiments, tag `v1.1` |
 | 4 Case 2 | ✅ | provider tests for C1 and C2 pass; stubs under `/v2` (T4 solved); 11 consumer tests vs strict stubs pass; 6/6 breaks caught on both sides; Pact comparison |
-| **5 Case 3** | **next** | cross-app C3/C4, backward-compatibility check v1 → v1.1 → breaking, drift |
-| 6 Angular MFE | planned | generated TypeScript client, compile-time contract break, Playwright vs stub |
+| 5 Case 3 | ✅ | cross-app C3/C4 provider tests with mocked dependencies and consumer tests, specs from the git contract repo; compatibility gate fails a breaking change (exit 1); drift shown both ways |
+| **6 Angular MFE** | **next** | generated TypeScript client, compile-time contract break, Playwright vs stub |
 | 7 Pipeline | planned | `run-all.ps1`, xUnit ContractTests projects, sample `azure-pipelines.yml` |
 | 8 Evaluation | planned | coverage, control points, scorecard, recommendation |
 

@@ -1,0 +1,6 @@
+{
+  "d1a_provider_test": "exit=1 tests=5 failures=3",
+  "d1b_consumer_stub_tests": "exit=0 Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 1 s - ChangeRequestService.Tests.dll (net10.0)",
+  "d1c_real_integration": "HTTP/1.1 502 Bad Gateway",
+  "d2_provider_vs_changed_contract": "exit=1 tests=1 failures=1"
+}

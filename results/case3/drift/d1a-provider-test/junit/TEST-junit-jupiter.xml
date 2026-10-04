@@ -1,0 +1,157 @@
+<testsuite errors="0" failures="3" hostname="773ae1550e85" name="Contract Tests" skipped="0" tests="5" time="7.735" timestamp="2026-10-04T17:15:20">
+<properties>
+<property name="CONFIG_FILE_PATH" value="/work/specmatic/production-forecast.specmatic.yaml"/>
+<property name="file.encoding" value="ANSI_X3.4-1968"/>
+<property name="file.separator" value="/"/>
+<property name="java.class.path" value="/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar"/>
+<property name="java.class.version" value="61.0"/>
+<property name="java.home" value="/usr/lib/jvm/java-17-openjdk"/>
+<property name="java.io.tmpdir" value="/tmp"/>
+<property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+<property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+<property name="java.runtime.version" value="17.0.20.1+0-wolfi-r4"/>
+<property name="java.specification.maintenance.version" value="1"/>
+<property name="java.specification.name" value="Java Platform API Specification"/>
+<property name="java.specification.vendor" value="Oracle Corporation"/>
+<property name="java.specification.version" value="17"/>
+<property name="java.vendor" value="wolfi"/>
+<property name="java.vendor.url" value="https://wolfi.dev"/>
+<property name="java.vendor.url.bug" value="https://github.com/wolfi-dev/os/issues"/>
+<property name="java.vendor.version" value="openjdk-17-17.0.20.1-r4"/>
+<property name="java.version" value="17.0.20.1"/>
+<property name="java.version.date" value="2026-08-18"/>
+<property name="java.vm.compressedOopsMode" value="Zero based"/>
+<property name="java.vm.info" value="mixed mode, sharing"/>
+<property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+<property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+<property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+<property name="java.vm.specification.version" value="17"/>
+<property name="java.vm.vendor" value="wolfi"/>
+<property name="java.vm.version" value="17.0.20.1+0-wolfi-r4"/>
+<property name="jdk.debug" value="release"/>
+<property name="line.separator" value="&#10;"/>
+<property name="native.encoding" value="ANSI_X3.4-1968"/>
+<property name="os.arch" value="amd64"/>
+<property name="os.name" value="Linux"/>
+<property name="os.version" value="6.6.87.2-microsoft-standard-WSL2"/>
+<property name="path.separator" value=":"/>
+<property name="picocli.usage.width" value="auto"/>
+<property name="sun.arch.data.model" value="64"/>
+<property name="sun.boot.library.path" value="/usr/lib/jvm/java-17-openjdk/lib"/>
+<property name="sun.cpu.endian" value="little"/>
+<property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+<property name="sun.java.command" value="/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar test --config=/work/specmatic/production-forecast.specmatic.yaml --junitReportDir=/work/results/case3/drift/d1a-provider-test/junit"/>
+<property name="sun.java.launcher" value="SUN_STANDARD"/>
+<property name="sun.jnu.encoding" value="ANSI_X3.4-1968"/>
+<property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+<property name="user.country" value="US"/>
+<property name="user.dir" value="/work/results/case3/drift/d1a-provider-test"/>
+<property name="user.home" value="/root"/>
+<property name="user.language" value="en"/>
+<property name="user.name" value="root"/>
+<property name="user.timezone" value="GMT"/>
+</properties>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /forecasts/(forecastId:ForecastId) -&gt; 404 with the request from the example 'change-request__get_forecast_F-9999_not_found'" time="0.015">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#5]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /forecasts/(forecastId:ForecastId) -> 404 with the request from the example 'change-request__get_forecast_F-9999_not_found'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: POST /forecasts -&gt; 201 with the request from the example 'CREATE_W001'" time="1.864">
+<failure message="Testing scenario &quot;Create a forecast (exponential decline on effective capacity).. Response: Created.&quot;&#10;API: POST /forecasts -&gt; 201&#10;&#10;  &gt;&gt; RESPONSE.BODY.wellId&#10;  &#10;      R2001: Missing required property&#10;      Documentation: https://docs.specmatic.io/rules#r2001&#10;      Summary: A required property defined in the specification is missing&#10;  &#10;      Specification expected mandatory property &quot;wellId&quot; to be present but was missing from the response&#10;  &#10;  &gt;&gt; RESPONSE.BODY.well_id&#10;  &#10;      R2003: Unknown property&#10;      Documentation: https://docs.specmatic.io/rules#r2003&#10;      Summary: A property was found that is not defined in the specification&#10;  &#10;      Property &quot;well_id&quot; in the response was not in the specification" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: Testing scenario "Create a forecast (exponential decline on effective capacity).. Response: Created."
+API: POST /forecasts -> 201
+
+  >> RESPONSE.BODY.wellId
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "wellId" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.well_id
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "well_id" in the response was not in the specification
+	at io.specmatic.test.SpecmaticJUnitSupport.dynamicTestStream$lambda$0$1(SpecmaticJUnitSupport.kt:431)
+	at java.base/java.util.Optional.ifPresent(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+]]></failure>
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#1]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: POST /forecasts -> 201 with the request from the example 'CREATE_W001'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /forecasts/(forecastId:ForecastId) -&gt; 200 with the request from the example 'GET_F5001'" time="0.034">
+<failure message="Testing scenario &quot;Get one forecast by id.. Response: The forecast.&quot;&#10;API: GET /forecasts/(forecastId:ForecastId) -&gt; 200&#10;&#10;  &gt;&gt; RESPONSE.BODY.wellId&#10;  &#10;      R2001: Missing required property&#10;      Documentation: https://docs.specmatic.io/rules#r2001&#10;      Summary: A required property defined in the specification is missing&#10;  &#10;      Specification expected mandatory property &quot;wellId&quot; to be present but was missing from the response&#10;  &#10;  &gt;&gt; RESPONSE.BODY.well_id&#10;  &#10;      R2003: Unknown property&#10;      Documentation: https://docs.specmatic.io/rules#r2003&#10;      Summary: A property was found that is not defined in the specification&#10;  &#10;      Property &quot;well_id&quot; in the response was not in the specification" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: Testing scenario "Get one forecast by id.. Response: The forecast."
+API: GET /forecasts/(forecastId:ForecastId) -> 200
+
+  >> RESPONSE.BODY.wellId
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "wellId" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.well_id
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "well_id" in the response was not in the specification
+	at io.specmatic.test.SpecmaticJUnitSupport.dynamicTestStream$lambda$0$1(SpecmaticJUnitSupport.kt:431)
+	at java.base/java.util.Optional.ifPresent(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+]]></failure>
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#2]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /forecasts/(forecastId:ForecastId) -> 200 with the request from the example 'GET_F5001'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /forecasts/(forecastId:ForecastId) -&gt; 200 with the request from the example 'change-request__get_forecast_F-5001'" time="0.032">
+<failure message="Testing scenario &quot;Get one forecast by id.. Response: The forecast.&quot;&#10;API: GET /forecasts/(forecastId:ForecastId) -&gt; 200&#10;&#10;  &gt;&gt; RESPONSE.BODY.wellId&#10;  &#10;      R2001: Missing required property&#10;      Documentation: https://docs.specmatic.io/rules#r2001&#10;      Summary: A required property defined in the specification is missing&#10;  &#10;      Specification expected mandatory property &quot;wellId&quot; to be present but was missing from the response&#10;  &#10;  &gt;&gt; RESPONSE.BODY.well_id&#10;  &#10;      R2003: Unknown property&#10;      Documentation: https://docs.specmatic.io/rules#r2003&#10;      Summary: A property was found that is not defined in the specification&#10;  &#10;      Property &quot;well_id&quot; in the response was not in the specification" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: Testing scenario "Get one forecast by id.. Response: The forecast."
+API: GET /forecasts/(forecastId:ForecastId) -> 200
+
+  >> RESPONSE.BODY.wellId
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "wellId" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.well_id
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "well_id" in the response was not in the specification
+	at io.specmatic.test.SpecmaticJUnitSupport.dynamicTestStream$lambda$0$1(SpecmaticJUnitSupport.kt:431)
+	at java.base/java.util.Optional.ifPresent(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+]]></failure>
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#3]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /forecasts/(forecastId:ForecastId) -> 200 with the request from the example 'change-request__get_forecast_F-5001'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /forecasts/(forecastId:ForecastId) -&gt; 404 with the request from the example 'UNKNOWN_FORECAST'" time="0.017">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#4]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /forecasts/(forecastId:ForecastId) -> 404 with the request from the example 'UNKNOWN_FORECAST'
+]]></system-out>
+</testcase>
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]
+display-name: Contract Tests
+]]></system-out>
+</testsuite>

@@ -1,0 +1,33 @@
+# Specmatic config (v3) used by CONSUMERS of production-forecast-service (C3: change-request).
+# Central contract repo model: specs are pulled from a GIT source (the local contracts repo,
+# mounted at /work/contracts and cloned by Specmatic), not read from a local copy.
+version: 3
+
+dependencies:
+  services:
+    - service:
+        $ref: "#/components/services/productionForecast"
+        runOptions:
+          $ref: "#/components/runOptions/productionForecastMock"
+
+components:
+  sources:
+    centralContractRepo:
+      git:
+        url: file:///work/contracts
+
+  services:
+    productionForecast:
+      description: production-forecast-service (App A) as a dependency of App B
+      definitions:
+        - definition:
+            source:
+              $ref: "#/components/sources/centralContractRepo"
+            specs:
+              - specs/app-a-production/production-forecast-service.yaml
+
+  runOptions:
+    productionForecastMock:
+      openapi:
+        type: mock
+        baseUrl: "http://0.0.0.0:9000/v2"

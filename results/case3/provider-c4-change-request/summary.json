@@ -1,0 +1,11 @@
+{
+  "service": "change-request-service",
+  "run": "case3\\provider-c4-change-request",
+  "exitCode": 0,
+  "testsRun": 7,
+  "successes": 7,
+  "failures": 0,
+  "errors": 0,
+  "apiCoveragePct": 36,
+  "coverageOperations": 11
+}

@@ -1,0 +1,7 @@
+Test run for .\app-b-change-mgmt\change-request-service.Tests\bin\Debug\net10.0\ChangeRequestService.Tests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 1 s - ChangeRequestService.Tests.dll (net10.0)

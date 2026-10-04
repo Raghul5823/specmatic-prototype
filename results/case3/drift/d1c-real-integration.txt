@@ -1,0 +1,7 @@
+HTTP/1.1 502 Bad Gateway
+Content-Type: application/problem+json
+Date: Sun, 04 Oct 2026 17:14:53 GMT
+Server: Kestrel
+Transfer-Encoding: chunked
+
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.6.3","title":"Upstream service error","status":502,"detail":"production-forecast-service: unexpected status 500","traceId":"00-2938ebb6979cc8b92230d5faf8807c6b-20c75624ad5d73d4-00"}

@@ -1,0 +1,422 @@
+Command: docker run --rm --add-host host.docker.internal:host-gateway -e bearerAuth=test-token-123 -v <prototype-root>:/work -v <prototype-root>\contracts:/work/contracts:ro -w /work/results/case3/drift/d1a-provider-test specmatic/specmatic:2.55.0 test --config=/work/specmatic/production-forecast.specmatic.yaml --junitReportDir=/work/results/case3/drift/d1a-provider-test/junit
+Specmatic Version: v2.55.0(299682d5)
+
+Loading config file /work/specmatic/production-forecast.specmatic.yaml
+Looking for a contract repo checkout at: /work/results/case3/drift/d1a-provider-test/.specmatic/repos/contracts
+Contract repo dir does not exist.
+Cloning file:///work/contracts into .specmatic/repos
+Resetting /work/results/case3/drift/d1a-provider-test/.specmatic/repos/contracts
+No branch specified, using default branch
+API Specification Summary: .specmatic/repos/contracts/specs/app-a-production/production-forecast-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 2
+  Schema components: 6, Security Schemes: [http]
+
+
+Test directory /work/results/case3/drift/d1a-provider-test/.specmatic/repos/contracts/specs/app-a-production/production-forecast-service_examples found
+
+Loading externalised examples from /work/results/case3/drift/d1a-provider-test/.specmatic/repos/contracts/specs/app-a-production/production-forecast-service_examples: 
+  2 examples(s) found in /work/results/case3/drift/d1a-provider-test/.specmatic/repos/contracts/specs/app-a-production/production-forecast-service_examples
+
+Loading test file /work/results/case3/drift/d1a-provider-test/.specmatic/repos/contracts/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-5001.json
+Loading test file /work/results/case3/drift/d1a-provider-test/.specmatic/repos/contracts/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-9999_not_found.json
+
+No application API source was exposed by the application, so cannot calculate actual coverage
+
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+--------------------
+  Request to http://host.docker.internal:5102/v2 at 2026-10-4 5:15:17.151
+    POST /v2/forecasts
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 201
+    Host: host.docker.internal:5102
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "wellId": "W-001",
+        "horizonMonths": 3,
+        "declineRatePct": 5
+    }
+
+  Response at 2026-10-4 5:15:18.700
+    201 Created
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 17:14:23 GMT
+    Server: Kestrel
+    Location: /v2/forecasts/F-5002
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "F-5002",
+        "well_id": "W-001",
+        "wellName": "Eagle-1",
+        "horizonMonths": 3,
+        "declineRatePct": 5,
+        "baseDailyCapacityBbl": 1200,
+        "effectiveDailyCapacityBbl": 1350,
+        "appliedChangeRequestIds": [
+            "CR-1001"
+        ],
+        "monthlyVolumesBbl": [
+            40500,
+            38475,
+            36551.3
+        ],
+        "totalVolumeBbl": 115526.3,
+        "createdAt": "2026-10-04T17:14:24.6938985+00:00"
+    }
+
+Scenario: POST /forecasts -> 201 with the request from the example 'CREATE_W001' has FAILED
+Reason:
+Testing scenario "Create a forecast (exponential decline on effective capacity).. Response: Created."
+API: POST /forecasts -> 201
+
+  >> RESPONSE.BODY.wellId
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "wellId" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.well_id
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "well_id" in the response was not in the specification
+
+
+
+--------------------
+  Skipping Scenario: POST /forecasts -> 400 (requestContentType application/json, responseContentType application/problem+json)
+  - T00004: Generative Disabled
+  Documentation: https://docs.specmatic.io/rules#t00004
+  Summary: This operation was skipped because it requires schema resiliency to be enabled
+  
+  - T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Skipping Scenario: POST /forecasts -> 401 (requestContentType application/json, responseContentType application/problem+json)
+  T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Skipping Scenario: POST /forecasts -> 502 (requestContentType application/json, responseContentType application/problem+json)
+  T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Request to http://host.docker.internal:5102/v2 at 2026-10-4 5:15:18.762
+    GET /v2/forecasts/F-5001
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5102
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 5:15:18.785
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 17:14:24 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "F-5001",
+        "well_id": "W-001",
+        "wellName": "Eagle-1",
+        "horizonMonths": 3,
+        "declineRatePct": 5,
+        "baseDailyCapacityBbl": 1200,
+        "effectiveDailyCapacityBbl": 1350,
+        "appliedChangeRequestIds": [
+            "CR-1001"
+        ],
+        "monthlyVolumesBbl": [
+            40500,
+            38475,
+            36551.3
+        ],
+        "totalVolumeBbl": 115526.3,
+        "createdAt": "2026-09-02T09:00:00+00:00"
+    }
+
+Scenario: GET /forecasts/(forecastId:ForecastId) -> 200 with the request from the example 'GET_F5001' has FAILED
+Reason:
+Testing scenario "Get one forecast by id.. Response: The forecast."
+API: GET /forecasts/(forecastId:ForecastId) -> 200
+
+  >> RESPONSE.BODY.wellId
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "wellId" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.well_id
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "well_id" in the response was not in the specification
+
+
+
+--------------------
+  Request to http://host.docker.internal:5102/v2 at 2026-10-4 5:15:18.807
+    GET /v2/forecasts/F-5001
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5102
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 5:15:18.826
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 17:14:24 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "F-5001",
+        "well_id": "W-001",
+        "wellName": "Eagle-1",
+        "horizonMonths": 3,
+        "declineRatePct": 5,
+        "baseDailyCapacityBbl": 1200,
+        "effectiveDailyCapacityBbl": 1350,
+        "appliedChangeRequestIds": [
+            "CR-1001"
+        ],
+        "monthlyVolumesBbl": [
+            40500,
+            38475,
+            36551.3
+        ],
+        "totalVolumeBbl": 115526.3,
+        "createdAt": "2026-09-02T09:00:00+00:00"
+    }
+
+Scenario: GET /forecasts/(forecastId:ForecastId) -> 200 with the request from the example 'change-request__get_forecast_F-5001' has FAILED
+Reason:
+Testing scenario "Get one forecast by id.. Response: The forecast."
+API: GET /forecasts/(forecastId:ForecastId) -> 200
+
+  >> RESPONSE.BODY.wellId
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "wellId" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.well_id
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "well_id" in the response was not in the specification
+
+
+
+--------------------
+  Skipping Scenario: GET /forecasts/(forecastId:ForecastId) -> 400 (responseContentType application/problem+json)
+  - T00004: Generative Disabled
+  Documentation: https://docs.specmatic.io/rules#t00004
+  Summary: This operation was skipped because it requires schema resiliency to be enabled
+  
+  - T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Skipping Scenario: GET /forecasts/(forecastId:ForecastId) -> 401 (responseContentType application/problem+json)
+  T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Request to http://host.docker.internal:5102/v2 at 2026-10-4 5:15:18.844
+    GET /v2/forecasts/F-9999
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 404
+    Host: host.docker.internal:5102
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 5:15:18.856
+    404 Not Found
+    Content-Type: application/problem+json
+    Date: Sun, 04 Oct 2026 17:14:24 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+        "title": "Not Found",
+        "status": 404,
+        "detail": "Forecast F-9999 does not exist.",
+        "traceId": "00-858e9069abbf82405de93984be265328-afbc2e0b4caf2225-00"
+    }
+
+Scenario: GET /forecasts/(forecastId:ForecastId) -> 404 with the request from the example 'UNKNOWN_FORECAST' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5102/v2 at 2026-10-4 5:15:18.862
+    GET /v2/forecasts/F-9999
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 404
+    Host: host.docker.internal:5102
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 5:15:18.874
+    404 Not Found
+    Content-Type: application/problem+json
+    Date: Sun, 04 Oct 2026 17:14:24 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+        "title": "Not Found",
+        "status": 404,
+        "detail": "Forecast F-9999 does not exist.",
+        "traceId": "00-a86241b13bdc2d797d16ab2b5d58c3fb-c6f83a766342f97a-00"
+    }
+
+Scenario: GET /forecasts/(forecastId:ForecastId) -> 404 with the request from the example 'change-request__get_forecast_F-9999_not_found' has SUCCEEDED
+
+Could not load report configuration, coverage will be calculated but no coverage threshold will be enforced
+
+|------------------------------------------------------------------------------------------------------------------------------|
+| SPECMATIC API COVERAGE SUMMARY                                                                                               |
+|------------------------------------------------------------------------------------------------------------------------------|
+| coverage | path                    | method | requestContentType | response | responseContentType      | remarks    | result |
+|----------|-------------------------|--------|--------------------|----------|--------------------------|------------|--------|
+| 25%      | /forecasts              | POST   | application/json   | 201      | application/json         | covered    | 1f     |
+|          |                         |        |                    | 400      | application/problem+json | not tested |        |
+|          |                         |        |                    | 401      | application/problem+json | not tested |        |
+|          |                         |        |                    | 502      | application/problem+json | not tested |        |
+| 50%      | /forecasts/{forecastId} | GET    | NA                 | 200      | application/json         | covered    | 2f     |
+|          |                         |        |                    | 400      | application/problem+json | not tested |        |
+|          |                         |        |                    | 401      | application/problem+json | not tested |        |
+|          |                         |        |                    | 404      | application/problem+json | covered    | 2p     |
+|------------------------------------------------------------------------------------------------------------------------------|
+| * = Operation not eligible for coverage                                                                                      |
+| ! = Operation excluded from the run due to a filter                                                                          |
+| p = passed tests                                                                                                             |
+| f = failed tests                                                                                                             |
+| w = wip tests                                                                                                                |
+|                                                                                                                              |
+| 38% API Coverage reported from 8 operations eligible for coverage                                                            |
+| 38% Absolute Coverage (includes excluded operations that were not tested)                                                    |
+|------------------------------------------------------------------------------------------------------------------------------|
+
+
+
+Generating CTRF report using coverage report specifications...
+Generating report for 5 tests and 8 coverage operations...
+Using report generation method that accepts coverage report specifications.
+Generating HTML report in build/reports/specmatic/test/html/index.html
+
+
+
+Unsuccessful Scenarios:
+  "Scenario: POST /forecasts -> 201 with the request from the example 'CREATE_W001' FAILED"
+        Reason:
+    Testing scenario "Create a forecast (exponential decline on effective capacity).. Response: Created."
+    API: POST /forecasts -> 201
+  
+      >> RESPONSE.BODY.wellId
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "wellId" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.well_id
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "well_id" in the response was not in the specification
+
+  "Scenario: GET /forecasts/(forecastId:ForecastId) -> 200 with the request from the example 'GET_F5001' FAILED"
+        Reason:
+    Testing scenario "Get one forecast by id.. Response: The forecast."
+    API: GET /forecasts/(forecastId:ForecastId) -> 200
+  
+      >> RESPONSE.BODY.wellId
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "wellId" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.well_id
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "well_id" in the response was not in the specification
+
+  "Scenario: GET /forecasts/(forecastId:ForecastId) -> 200 with the request from the example 'change-request__get_forecast_F-5001' FAILED"
+        Reason:
+    Testing scenario "Get one forecast by id.. Response: The forecast."
+    API: GET /forecasts/(forecastId:ForecastId) -> 200
+  
+      >> RESPONSE.BODY.wellId
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "wellId" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.well_id
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "well_id" in the response was not in the specification
+
+Tests run: 5, Successes: 2, Failures: 3, WIP: 0, Errors: 0
+
+Executed at 2026-10-04T17:15:20.189742032

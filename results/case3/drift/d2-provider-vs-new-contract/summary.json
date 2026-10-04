@@ -1,0 +1,11 @@
+{
+  "service": "production-forecast-service",
+  "run": "case3\\drift\\d2-provider-vs-new-contract",
+  "exitCode": 1,
+  "testsRun": 1,
+  "successes": 0,
+  "failures": 1,
+  "errors": 0,
+  "apiCoveragePct": null,
+  "coverageOperations": null
+}

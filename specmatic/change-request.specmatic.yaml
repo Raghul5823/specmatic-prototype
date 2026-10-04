@@ -1,0 +1,64 @@
+# Specmatic config (v3): PROVIDER test of change-request-service with its dependencies MOCKED.
+#  - approval            (C2) as a mock on :9202/v2
+#  - production-forecast (C3, cross-app) as a mock on :9102/v2
+# All specs come from the central contract repo (git source).
+# Start change-request pointing at the mocks:
+#   Downstream__ApprovalBaseUrl=http://localhost:9202/v2/  Downstream__ProductionForecastBaseUrl=http://localhost:9102/v2/
+version: 3
+
+systemUnderTest:
+  service:
+    $ref: "#/components/services/changeRequest"
+    runOptions:
+      $ref: "#/components/runOptions/changeRequestTest"
+
+dependencies:
+  services:
+    - service:
+        $ref: "#/components/services/approval"
+        runOptions:
+          $ref: "#/components/runOptions/approvalMock"
+    - service:
+        $ref: "#/components/services/productionForecast"
+        runOptions:
+          $ref: "#/components/runOptions/productionForecastMock"
+
+components:
+  sources:
+    centralContractRepo:
+      git:
+        url: file:///work/contracts
+
+  services:
+    changeRequest:
+      description: change-request-service (App B), system under test
+      definitions:
+        - definition:
+            source: { $ref: "#/components/sources/centralContractRepo" }
+            specs: [specs/app-b-change-mgmt/change-request-service.yaml]
+    approval:
+      description: approval-service (App B), dependency
+      definitions:
+        - definition:
+            source: { $ref: "#/components/sources/centralContractRepo" }
+            specs: [specs/app-b-change-mgmt/approval-service.yaml]
+    productionForecast:
+      description: production-forecast-service (App A), cross-app dependency
+      definitions:
+        - definition:
+            source: { $ref: "#/components/sources/centralContractRepo" }
+            specs: [specs/app-a-production/production-forecast-service.yaml]
+
+  runOptions:
+    changeRequestTest:
+      openapi:
+        type: test
+        baseUrl: "{CHANGE_REQUEST_URL:http://host.docker.internal:5201/v2}"
+    approvalMock:
+      openapi:
+        type: mock
+        baseUrl: "http://0.0.0.0:9202/v2"
+    productionForecastMock:
+      openapi:
+        type: mock
+        baseUrl: "http://0.0.0.0:9102/v2"
