@@ -1,0 +1,692 @@
+Command: docker run --rm --add-host host.docker.internal:host-gateway -e bearerAuth=test-token-123 -v <prototype-root>:/work -v <prototype-root>\contracts:/work/contracts:ro -w /work/results/case4-mfe/provider-well-registry-with-mfe-examples specmatic/specmatic:2.55.0 test /work/contracts/specs/app-a-production/well-registry-service.yaml --testBaseURL=http://host.docker.internal:5101/v2 --junitReportDir=/work/results/case4-mfe/provider-well-registry-with-mfe-examples/junit
+Specmatic Version: v2.55.0(299682d5)
+
+Could not find the Specmatic configuration at path /work/results/case4-mfe/provider-well-registry-with-mfe-examples/specmatic.yaml
+Could not find the Specmatic configuration at path /work/results/case4-mfe/provider-well-registry-with-mfe-examples/specmatic.yaml
+API Specification Summary: /work/contracts/specs/app-a-production/well-registry-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 3
+  Schema components: 5, Security Schemes: [http]
+
+
+Test directory /work/contracts/specs/app-a-production/well-registry-service_examples found
+
+Loading externalised examples from /work/contracts/specs/app-a-production/well-registry-service_examples: 
+  12 examples(s) found in /work/contracts/specs/app-a-production/well-registry-service_examples
+
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-001_active.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-003_shut_in.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-999_not_found.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__create_well_invalid_token_401.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__create_well_missing_name_400.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_bad_id_400.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_empty_token_401.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_invalid_token_401.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__list_wells_bad_status_400.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/provider__list_wells_invalid_token_401.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/well-mfe__list_abandoned_empty.json
+Loading test file /work/contracts/specs/app-a-production/well-registry-service_examples/well-mfe__list_all_wells.json
+
+No application API source was exposed by the application, so cannot calculate actual coverage
+
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:34.306
+    POST /v2/wells
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 201
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "name": "Eagle-9",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.7,
+        "longitude": -98.1,
+        "spudDate": "2024-05-01",
+        "dailyCapacityBbl": 650
+    }
+
+  Response at 2026-10-4 8:36:34.493
+    201 Created
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 20:35:39 GMT
+    Server: Kestrel
+    Location: /v2/wells/W-004
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "W-004",
+        "name": "Eagle-9",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.7,
+        "longitude": -98.1,
+        "spudDate": "2024-05-01",
+        "dailyCapacityBbl": 650
+    }
+
+Scenario: POST /wells -> 201 with the request from the example 'CREATE_EAGLE_9' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:34.569
+    POST /v2/wells
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 400
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.7,
+        "longitude": -98.1,
+        "spudDate": "2024-05-01",
+        "dailyCapacityBbl": 650
+    }
+
+  Response at 2026-10-4 8:36:34.588
+    400 Bad Request
+    Content-Type: application/problem+json
+    Date: Sun, 04 Oct 2026 20:35:39 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+            "name": [
+                "name is required (1-100 characters)."
+            ]
+        },
+        "traceId": "00-d068efbd3d0b3fbe0f8de2fd1f48c1da-d04583e266927d36-00"
+    }
+
+Scenario: POST /wells -> 400 with the request from the example 'provider__create_well_missing_name_400' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:34.602
+    POST /v2/wells
+    Authorization: Bearer wrong-token
+    Specmatic-Response-Code: 401
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "name": "Eagle-10",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.8,
+        "longitude": -98.0,
+        "spudDate": "2024-06-01",
+        "dailyCapacityBbl": 500
+    }
+
+  Response at 2026-10-4 8:36:34.620
+    401 Unauthorized
+    Content-Type: application/problem+json
+    Date: Sun, 04 Oct 2026 20:35:39 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    WWW-Authenticate: Bearer
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.2",
+        "title": "Unauthorized",
+        "status": 401,
+        "detail": "Missing or invalid bearer token.",
+        "traceId": "00-20bb27b4810e697a31180034e360a5b8-315243a548d4ecf8-00"
+    }
+
+Scenario: POST /wells -> 401 with the request from the example 'provider__create_well_invalid_token_401' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:34.640
+    GET /v2/wells?status=ACTIVE
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 8:36:34.673
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 20:35:39 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    [
+        {
+            "id": "W-001",
+            "name": "Eagle-1",
+            "field": "Eagle Ford",
+            "status": "ACTIVE",
+            "latitude": 28.5,
+            "longitude": -98.3,
+            "spudDate": "2019-04-12",
+            "dailyCapacityBbl": 1200
+        },
+        {
+            "id": "W-002",
+            "name": "Eagle-2",
+            "field": "Eagle Ford",
+            "status": "ACTIVE",
+            "latitude": 28.6,
+            "longitude": -98.2,
+            "spudDate": "2020-08-01",
+            "dailyCapacityBbl": 800
+        },
+        {
+            "id": "W-004",
+            "name": "Eagle-9",
+            "field": "Eagle Ford",
+            "status": "ACTIVE",
+            "latitude": 28.7,
+            "longitude": -98.1,
+            "spudDate": "2024-05-01",
+            "dailyCapacityBbl": 650
+        }
+    ]
+
+Scenario: GET /wells -> 200 with the request from the example 'LIST_ACTIVE' where REQUEST.PARAMETERS.QUERY contains the param 'status' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:34.688
+    GET /v2/wells?status=SHUT_IN
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 8:36:34.706
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 20:35:39 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    [
+        {
+            "id": "W-003",
+            "name": "Permian-7",
+            "field": "Permian Basin",
+            "status": "SHUT_IN",
+            "latitude": 31.9,
+            "longitude": -102.1,
+            "spudDate": "2015-02-20",
+            "dailyCapacityBbl": 0
+        }
+    ]
+
+Scenario: GET /wells -> 200 with the request from the example 'LIST_SHUT_IN' where REQUEST.PARAMETERS.QUERY contains the param 'status' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:34.717
+    GET /v2/wells?status=ABANDONED
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 8:36:34.733
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 20:35:39 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    []
+
+Scenario: GET /wells -> 200 with the request from the example 'well-mfe__list_abandoned_empty' where REQUEST.PARAMETERS.QUERY contains the param 'status' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:34.741
+    GET /v2/wells
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 8:36:34.756
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 20:35:39 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    [
+        {
+            "id": "W-001",
+            "name": "Eagle-1",
+            "field": "Eagle Ford",
+            "status": "ACTIVE",
+            "latitude": 28.5,
+            "longitude": -98.3,
+            "spudDate": "2019-04-12",
+            "dailyCapacityBbl": 1200
+        },
+        {
+            "id": "W-002",
+            "name": "Eagle-2",
+            "field": "Eagle Ford",
+            "status": "ACTIVE",
+            "latitude": 28.6,
+            "longitude": -98.2,
+            "spudDate": "2020-08-01",
+            "dailyCapacityBbl": 800
+        },
+        {
+            "id": "W-003",
+            "name": "Permian-7",
+            "field": "Permian Basin",
+            "status": "SHUT_IN",
+            "latitude": 31.9,
+            "longitude": -102.1,
+            "spudDate": "2015-02-20",
+            "dailyCapacityBbl": 0
+        },
+        {
+            "id": "W-004",
+            "name": "Eagle-9",
+            "field": "Eagle Ford",
+            "status": "ACTIVE",
+            "latitude": 28.7,
+            "longitude": -98.1,
+            "spudDate": "2024-05-01",
+            "dailyCapacityBbl": 650
+        }
+    ]
+
+Scenario: GET /wells -> 200 with the request from the example 'well-mfe__list_all_wells' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:34.770
+    GET /v2/wells?status=PUMPING
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 400
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 8:36:34.791
+    400 Bad Request
+    Content-Type: application/problem+json
+    Date: Sun, 04 Oct 2026 20:35:39 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+            "status": [
+                "status must be one of ACTIVE, SHUT_IN, ABANDONED."
+            ]
+        },
+        "traceId": "00-d75062965f9e811ace05b85eb38f283f-ce2635d0efb97036-00"
+    }
+
+Scenario: GET /wells -> 400 with the request from the example 'provider__list_wells_bad_status_400' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:34.803
+    GET /v2/wells
+    Authorization: Bearer wrong-token
+    Specmatic-Response-Code: 401
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 8:36:34.826
+    401 Unauthorized
+    Content-Type: application/problem+json
+    Date: Sun, 04 Oct 2026 20:35:39 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    WWW-Authenticate: Bearer
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.2",
+        "title": "Unauthorized",
+        "status": 401,
+        "detail": "Missing or invalid bearer token.",
+        "traceId": "00-c2459d6bbe2901a8715eecb411b378fe-e53d8a8a1ccd10bb-00"
+    }
+
+Scenario: GET /wells -> 401 with the request from the example 'provider__list_wells_invalid_token_401' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:34.839
+    GET /v2/wells/W-001
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 8:36:34.863
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 20:35:39 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "W-001",
+        "name": "Eagle-1",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.5,
+        "longitude": -98.3,
+        "spudDate": "2019-04-12",
+        "dailyCapacityBbl": 1200
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 200 with the request from the example 'GET_W001' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:34.873
+    GET /v2/wells/W-001
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 8:36:34.889
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 20:35:39 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "W-001",
+        "name": "Eagle-1",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.5,
+        "longitude": -98.3,
+        "spudDate": "2019-04-12",
+        "dailyCapacityBbl": 1200
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 200 with the request from the example 'production-forecast__get_well_W-001_active' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:34.898
+    GET /v2/wells/W-003
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 8:36:34.938
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 20:35:40 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "W-003",
+        "name": "Permian-7",
+        "field": "Permian Basin",
+        "status": "SHUT_IN",
+        "latitude": 31.9,
+        "longitude": -102.1,
+        "spudDate": "2015-02-20",
+        "dailyCapacityBbl": 0
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 200 with the request from the example 'production-forecast__get_well_W-003_shut_in' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:34.951
+    GET /v2/wells/WELL-1
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 400
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 8:36:34.971
+    400 Bad Request
+    Content-Type: application/problem+json
+    Date: Sun, 04 Oct 2026 20:35:40 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+            "wellId": [
+                "wellId must match W-000."
+            ]
+        },
+        "traceId": "00-dace8796dd9de2f6719f2d1e2d150783-fcdc8e0fa4ef82d2-00"
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 400 with the request from the example 'provider__get_well_bad_id_400' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:34.984
+    GET /v2/wells/W-001
+    Authorization: Bearer
+    Specmatic-Response-Code: 401
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 8:36:35.9
+    401 Unauthorized
+    Content-Type: application/problem+json
+    Date: Sun, 04 Oct 2026 20:35:40 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    WWW-Authenticate: Bearer
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.2",
+        "title": "Unauthorized",
+        "status": 401,
+        "detail": "Missing or invalid bearer token.",
+        "traceId": "00-ae9007ad67f96717100f4b29d77dd17a-da62e500bde7c45b-00"
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 401 with the request from the example 'provider__get_well_empty_token_401' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:35.19
+    GET /v2/wells/W-001
+    Authorization: Bearer wrong-token
+    Specmatic-Response-Code: 401
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 8:36:35.37
+    401 Unauthorized
+    Content-Type: application/problem+json
+    Date: Sun, 04 Oct 2026 20:35:40 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    WWW-Authenticate: Bearer
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.2",
+        "title": "Unauthorized",
+        "status": 401,
+        "detail": "Missing or invalid bearer token.",
+        "traceId": "00-5988b73fb90c2b4ecb139e40e1be4634-831f5b731138508c-00"
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 401 with the request from the example 'provider__get_well_invalid_token_401' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:35.48
+    GET /v2/wells/W-999
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 404
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 8:36:35.64
+    404 Not Found
+    Content-Type: application/problem+json
+    Date: Sun, 04 Oct 2026 20:35:40 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+        "title": "Not Found",
+        "status": 404,
+        "detail": "Well W-999 does not exist.",
+        "traceId": "00-64e9f67194d8c9b139a832c8f41e9066-e7f1049db822945e-00"
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 404 with the request from the example 'UNKNOWN_WELL' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5101/v2 at 2026-10-4 8:36:35.75
+    GET /v2/wells/W-999
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 404
+    Host: host.docker.internal:5101
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 8:36:35.93
+    404 Not Found
+    Content-Type: application/problem+json
+    Date: Sun, 04 Oct 2026 20:35:40 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+        "title": "Not Found",
+        "status": 404,
+        "detail": "Well W-999 does not exist.",
+        "traceId": "00-286289997f269d73a5500c898498037f-ce21bf00e6de8452-00"
+    }
+
+Scenario: GET /wells/(wellId:WellId) -> 404 with the request from the example 'production-forecast__get_well_W-999_not_found' has SUCCEEDED
+
+Could not load report configuration, coverage will be calculated but no coverage threshold will be enforced
+
+|-------------------------------------------------------------------------------------------------------------------|
+| SPECMATIC API COVERAGE SUMMARY                                                                                    |
+|-------------------------------------------------------------------------------------------------------------------|
+| coverage | path            | method | requestContentType | response | responseContentType      | remarks | result |
+|----------|-----------------|--------|--------------------|----------|--------------------------|---------|--------|
+| 100%     | /wells          | POST   | application/json   | 201      | application/json         | covered | 1p     |
+|          |                 |        |                    | 400      | application/problem+json | covered | 1p     |
+|          |                 |        |                    | 401      | application/problem+json | covered | 1p     |
+|          |                 | GET    | NA                 | 200      | application/json         | covered | 4p     |
+|          |                 |        |                    | 400      | application/problem+json | covered | 1p     |
+|          |                 |        |                    | 401      | application/problem+json | covered | 1p     |
+| 100%     | /wells/{wellId} | GET    | NA                 | 200      | application/json         | covered | 3p     |
+|          |                 |        |                    | 400      | application/problem+json | covered | 1p     |
+|          |                 |        |                    | 401      | application/problem+json | covered | 2p     |
+|          |                 |        |                    | 404      | application/problem+json | covered | 2p     |
+|-------------------------------------------------------------------------------------------------------------------|
+| * = Operation not eligible for coverage                                                                           |
+| ! = Operation excluded from the run due to a filter                                                               |
+| p = passed tests                                                                                                  |
+| f = failed tests                                                                                                  |
+| w = wip tests                                                                                                     |
+|                                                                                                                   |
+| 100% API Coverage reported from 10 operations eligible for coverage                                               |
+| 100% Absolute Coverage (includes excluded operations that were not tested)                                        |
+|-------------------------------------------------------------------------------------------------------------------|
+
+
+
+Generating CTRF report using coverage report specifications...
+Generating report for 17 tests and 10 coverage operations...
+Using report generation method that accepts coverage report specifications.
+Generating HTML report in build/reports/specmatic/test/html/index.html
+
+
+Tests run: 17, Successes: 17, Failures: 0, WIP: 0, Errors: 0
+
+Executed at 2026-10-04T20:36:37.213912696

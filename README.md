@@ -1,6 +1,6 @@
 # Specmatic Prototype — Contract Testing Evaluation
 
-> Status: **Phase 5 complete** (Case 3, cross-app, compatibility gate, drift). Later sections are placeholders until their phase runs.
+> Status: **Phase 6 complete** (Angular MFE consumer, contracts `v1.2`). Later sections are placeholders until their phase runs.
 > New readers: start with [docs/APPLICATION-GUIDE.md](docs/APPLICATION-GUIDE.md), a plain-language guide to the design, folders, services and contracts.
 
 ## 0. Master checklist
@@ -42,17 +42,31 @@ Ticked items link to their evidence. Updated at the end of every phase.
 - [x] Provider (5/5, 7/7, dependencies mocked) and consumer (8/8 vs strict stubs) tests for C3 and C4, specs from the contracts **git** repo: [results/case3/](results/case3/)
 - [x] Backward-compatibility check: optional field PASS (exit 0), renamed required field FAIL (exit 1): [results/case3/compat/](results/case3/compat/)
 - [x] T1: the free edition **fails** (exit 1) on a breaking change, so oasdiff is not needed
+- [x] T1 follow-up: a breaking change on an endpoint with **no consumer examples** also fails (exit 1); "usages" = Insights data: [05-breaking-no-consumer-examples-vs-main](results/case3/compat/05-breaking-no-consumer-examples-vs-main/console.txt)
 - [x] Compared against tags `v1` and `v1.1` as well as `main`
 - [x] Drift both ways: provider drift caught only by the provider test (consumer stays green, real call gives 502); contract drift rejected against the consumer's examples: [results/case3/drift/](results/case3/drift/)
-- [ ] Commit Phase 5 and push (after scan + approval)
+- [x] Commit Phase 5 and push (after scan + approval): root `5f369a3`
+- [x] Throwaway contracts clone deleted after its evidence was saved (incl. [experiment-branches.diff.txt](results/case3/compat/experiment-branches.diff.txt))
+
+**Tracked items (status)**
+| # | Item | Status | Evidence |
+|---|---|---|---|
+| T1 | Compatibility check fails or only warns without Insights? | ✅ **Resolved: fails (exit 1)**, also for endpoints without consumer examples; oasdiff not needed | [results/case3/compat/](results/case3/compat/) |
+| T2 | Bundled OSS licence expires 14 Dec 2027 | ⏳ open risk, goes in the Phase 8 scorecard | [results/phase0/show-license.txt](results/phase0/show-license.txt) |
+| T3 | Never commit to the parent home-folder repo | ✅ held in every phase (both repos are their own git roots) | §2 Repositories |
+| T4 | Stubs under `/v2` like the real services | ✅ **Resolved**: v3 mock config `baseUrl: http://0.0.0.0:9000/v2` (CLI alone serves at the root) | `specmatic/*.mock.yaml`, §5 Phase 4 finding 1 |
+| T5 | Prove the consumer sends the correct token | ✅ **Resolved with a documented workaround**: the stub only checks the `Bearer` format (and skips the check for example matches), so the exact token is asserted by a recording handler in each consumer's tests | [case2 experiment 03](results/case2/break/03-consumer-wrong-auth-scheme/consumer-tests.txt), §5 Phase 4 finding 2 |
 
 **Phase 6: Angular MFE consumer**
-- [ ] Minimal Angular CLI app (ask before npm install)
-- [ ] TypeScript client generated from the well-registry spec
-- [ ] Contract break shows up as a compile error
-- [ ] Playwright against a Specmatic stub via the dev-server proxy: example-driven response plus one rejected request
-- [ ] Why HttpTestingController bypasses the stub; recommended MFE test approach
-- [ ] CORS/proxy findings and effort per MFE
+- [x] Minimal Angular CLI app: Angular **21.2.24/21.2.25** via `npx` (no global install), exact pins, approved installs (423 packages, 223 MB; Chromium reused, 0 MB): [mfe/well-mfe/](mfe/well-mfe/)
+- [x] TypeScript client generated from the well-registry spec (ng-openapi-gen 1.1.0 + a bundling step for external `$ref`s), regenerated on every build/start
+- [x] Contract break shows up as a compile error (`TS2551: Property 'dailyCapacityBbl' does not exist on type 'Well'`): [results/case4-mfe/compile-break/build.txt](results/case4-mfe/compile-break/build.txt)
+- [x] Playwright (4/4) against a strict Specmatic stub via the dev-server proxy: example list, example-driven empty list, documented 400 example, and a contract-violating request rejected by the stub: [results/case4-mfe/e2e/](results/case4-mfe/e2e/)
+- [x] MFE consumer examples (`well-mfe__*`, C5) added to the contract repo and verified by the **provider** tests (17/17): [provider-well-registry-with-mfe-examples](results/case4-mfe/provider-well-registry-with-mfe-examples/); contracts tagged `v1.2`
+- [x] Why HttpTestingController bypasses the stub; recommended MFE test approach (§5 Phase 6)
+- [x] CORS/proxy findings ([cors-check.txt](results/case4-mfe/cors-check.txt)) and effort per MFE (§5 Phase 6)
+- [x] Fixed a v1.1 example that `examples validate` rejected (empty `Authorization` → `Bearer ` with an empty token): [provider-401-bearer-empty](results/case4-mfe/provider-401-bearer-empty/)
+- [ ] Commit Phase 6 and push (after scan + approval)
 
 **Phase 7: Pipeline simulation**
 - [ ] xUnit "ContractTests" project per provider, runnable with `dotnet test`
@@ -89,7 +103,7 @@ Out of scope: production-grade code, a real OAuth2 identity provider, and a full
 | 3 | Case 1: a service's own API (provider tests, reports, xUnit for the internal layer, break experiments) | ✅ done |
 | 4 | Case 2: service-to-service within an app, both directions (provider tests + consumer tests against stubs) | ✅ done |
 | 5 | Case 3: cross-application, both directions, specs from the central `contracts/` repo; backward-compatibility check against `v1`; drift | ✅ done |
-| 6 | **Minimal Angular MFE consumer**: generated TypeScript client from the spec, contract break as a compile error, Playwright against a Specmatic stub via the dev-server proxy | next |
+| 6 | **Minimal Angular MFE consumer**: generated TypeScript client from the spec, contract break as a compile error, Playwright against a Specmatic stub via the dev-server proxy | ✅ done |
 | 7 | Pipeline simulation: `run-all.ps1` + sample `azure-pipelines.yml` (**BuildService** stage with unit tests, xUnit `ContractTests` projects and the Angular steps; the deploy stage depends on it) | |
 | 8 | Evaluation: coverage, control points, scorecard (incl. "Angular MFE consumer support"), limitations, recommendation | |
 
@@ -301,14 +315,14 @@ flowchart LR
 
 ## 5. Phase-by-phase log
 
-### Tracked items (open, from Phase 0)
-| # | Item | Where it will be checked |
-|---|---|---|
-| T1 | Does `backward-compatibility-check` **fail** (non-zero exit code) or only **warn** on a breaking change without Insights? If it only warns, record that and test **oasdiff** (free) as an alternative compatibility gate. | Phase 5 |
-| T2 | The bundled OSS licence expires **14 Dec 2027**. Record it as a maintenance risk. | Phase 8 scorecard |
-| T3 | **Never commit to the git repo in the parent folder.** Only the prototype repo and `contracts/` are committed, each to its own GitHub repo, and pushes happen only after approval. | All phases |
-| T4 | Stub base path: try a mock `basePath`/`baseUrl` so stubs serve under `/v2`, like the real services. | Phase 4 |
-| T5 | Stub auth is weak: a token must be present but any value passes, and example matches skip the check. Decide how consumer tests should prove that the right token is sent. | Phase 4 |
+### Tracked items
+| # | Item | Checked in | Status |
+|---|---|---|---|
+| T1 | Does `backward-compatibility-check` **fail** (non-zero exit code) or only **warn** on a breaking change without Insights? If it only warns, record that and test **oasdiff** (free) as an alternative compatibility gate. | Phase 5 | ✅ fails (exit 1), also without consumer examples; oasdiff not needed |
+| T2 | The bundled OSS licence expires **14 Dec 2027**. Record it as a maintenance risk. | Phase 8 scorecard | ⏳ open |
+| T3 | **Never commit to the git repo in the parent folder.** Only the prototype repo and `contracts/` are committed, each to its own GitHub repo, and pushes happen only after approval. | All phases | ✅ held so far |
+| T4 | Stub base path: try a mock `basePath`/`baseUrl` so stubs serve under `/v2`, like the real services. | Phase 4 | ✅ resolved (mock config `baseUrl`) |
+| T5 | Stub auth is weak: a token must be present but any value passes, and example matches skip the check. Decide how consumer tests should prove that the right token is sent. | Phase 4 | ✅ workaround: recording handler in consumer tests |
 
 ### Phase 0 — Environment check
 - **Done:** read-only checks of the tools, network and proxy, and published Specmatic versions (Docker Hub, Maven Central and GitHub all show 2.55.0 as latest, released 2026-09-24).
@@ -414,7 +428,7 @@ flowchart LR
 1. **Auth in examples (free edition):**
    - An example **without** an `Authorization` header still gets the configured token added (`Bearer test-token-123`). The service then returns 200 and the "expect 401" test **fails**.
    - An example with an **explicit invalid** token (`Bearer wrong-token`) works.
-   - An example with an **empty** header (`"Authorization": ""`) also works and stands in for "no token".
+   - An example with an **empty** header (`"Authorization": ""`) also works and stands in for "no token". *(Correction in Phase 6: `examples validate` and the stub reject an empty header because the scheme requires the `Bearer` prefix. Since v1.2 the example sends `"Bearer "` with an empty token, which is valid everywhere and still gives 401.)*
    - So the free edition can test 401 behaviour, but the example must set the header explicitly.
 2. **Examples are the main lever for coverage.** Adding 7 provider-owned error examples (`provider__*`) took API coverage from **40% to 100%**. Coverage counts *documented responses that were exercised* (10 here), not code.
 3. **Resiliency tests are free and useful, but must be capped.**
@@ -548,6 +562,80 @@ Evidence: [C4](results/case3/consumer-c4-forecast-vs-changerequest-stub.txt), [C
 5. **Windows path-length limit.** Cloning the contracts repo into a deep folder failed with `Filename too long` (consumer example names are long). Use `git config core.longpaths true` on Windows agents, or a short checkout path.
 6. **Line endings:** with `core.autocrlf=true`, a Windows checkout has CRLF endings. Specmatic doesn't mind, but scripts that edit specs must allow for it (`git -c core.autocrlf=false clone` for experiments).
 
+### Phase 6 — Minimal Angular MFE consumer (C5: well-mfe → well-registry)
+
+```
+Browser (Playwright, Chromium)
+   │  http://localhost:4200            Angular dev server (ng serve)
+   │  GET /v2/wells?status=…  ───────► dev-server proxy (proxy.conf.json: /v2 → :9101)
+   │  Authorization: Bearer …                        │
+   │                                                 ▼
+   │                                Specmatic stub of well-registry (strict, baseUrl …/v2)
+   │                                built from contracts/ (same spec the provider is tested against)
+```
+
+**Setup** (every install was approved beforehand; nothing installed globally)
+
+| Step | Command / package | Measured |
+|---|---|---|
+| Scaffold | `npx -y @angular/cli@21.2.24 new well-mfe --directory mfe/well-mfe --skip-install --skip-git --skip-tests --style=css --routing=false --ssr=false` (analytics off: `NG_CLI_ANALYTICS=false`) | 92 s, files only |
+| Dependencies | exact pins in `package.json`; project `.npmrc` with `registry=https://registry.npmjs.org/` and `save-exact=true`; `@angular/*` 21.2.25 (tooling 21.2.24), TypeScript 5.9.3, rxjs 7.8.2, ng-openapi-gen 1.1.0, @playwright/test 1.62.1 | **423 packages, 223 MB, 163 s** |
+| Browser | Playwright 1.62.1 uses Chromium build 1234, **already on this machine** | **0 MB** downloaded |
+| Clean-up | removed `prettier`, `@angular/router`, `@angular/forms` (unused) and the generated `.vscode/mcp.json` (it runs an *unpinned* `npx -y @angular/cli`) | — |
+
+**What the app is.** One page (`src/app/app.ts`, `app.html`) that lists wells through the **generated** client (`Api.invoke(listWells, …)`). It takes an optional `?status=` from the page URL. An HTTP interceptor (`auth.interceptor.ts`) adds `Authorization: Bearer test-token-123`, standing in for the real OAuth library. The client's base URL `/v2` comes from the contract's `servers` entry.
+
+**6.1 Client generated from the contract**
+- `npm run generate:api` bundles the spec and generates the client with ng-openapi-gen, into `src/app/api/`: 5 models, 1 service, typed functions such as `listWells(params: { status?: WellStatus })`.
+- `prebuild`/`prestart` run it automatically, and `src/app/api/` is **git-ignored**, so the client is **always regenerated from the current contract** and can never drift from it.
+- **Finding:** ng-openapi-gen 1.1.0 **does not resolve external `$ref`s** ("Couldn't resolve reference ../../common/common.yaml#/…"). Every one of our specs uses one, for the shared ProblemDetails responses.
+- **Fix:** `scripts/bundle-spec.mjs` (about 50 lines; it uses `js-yaml`, already installed as the generator's dependency, so no new package) copies the shared components into the spec and rewrites the refs before generation. It refuses to overwrite a component name with a different definition.
+
+**6.2 Contract break → compile error** (`scripts/mfe-compile-break.ps1`): the response field `dailyCapacityBbl` is renamed in a *copy* of the spec, the client is generated from it, and the app is built:
+```
+X [ERROR] TS2551: Property 'dailyCapacityBbl' does not exist on type 'Well'. Did you mean 'dailyCapacity'? [plugin angular-compiler]
+```
+The build exits with **1**; regenerating from the real contract builds again with exit **0** ([build.txt](results/case4-mfe/compile-break/build.txt)). The MFE team learns about the break at **build time**, before any test runs. This works because new Angular projects have `strict` and `strictTemplates` on, so template expressions are type-checked as well.
+
+**6.3 Playwright against the stub** (`scripts/mfe-e2e.ps1`: starts the strict stub, runs `npm run test:e2e`, stops the stub, copies the JUnit and HTML reports): **4/4 passed** in about 21 s ([results/case4-mfe/e2e/](results/case4-mfe/e2e/): console, JUnit and stub log; the Playwright **HTML report is kept local only**, because it embeds compressed run data that may contain local paths)
+
+| Test | What it shows |
+|---|---|
+| lists the wells and sends the bearer token | the response comes from the **MFE's own consumer example** (`well-mfe__list_all_wells`); the request is same-origin through the proxy, and carries exactly `Bearer test-token-123` (T5 at browser level) |
+| example-driven empty list | `?status=ABANDONED` → `[]` from `well-mfe__list_abandoned_empty` → "No wells match this filter." |
+| documented 400 from a provider example | `?status=PUMPING` matches the provider's example `provider__list_wells_bad_status_400`, so the stub returns that **documented ProblemDetails 400** |
+| request that breaks the contract is rejected | `?status=DRILLING` (not in the enum, no example): the **strict stub rejects it** with 400 and its reason ("Example expected "PUMPING" but request contained "DRILLING"…"). TypeScript can't stop this, because the value comes from the URL, not typed code |
+
+**6.4 The provider side of C5:** the two `well-mfe__*` examples run in well-registry's provider tests (**17/17**, [evidence](results/case4-mfe/provider-well-registry-with-mfe-examples/)). The frontend's expectations are therefore part of the **backend's** pipeline, which is the same mechanism as for C1–C4.
+
+**6.5 Why Angular unit tests with `HttpTestingController` bypass the stub**
+`provideHttpClientTesting()` replaces Angular's HTTP backend with an **in-memory fake**: no request leaves the test, and the test itself decides the answer (`httpMock.expectOne('/v2/wells').flush([...])`). The test therefore proves the component works *with the data the developer assumed*. No contract, stub or provider is involved, so a renamed field or a new required parameter goes unnoticed, unless the change also alters the generated TypeScript types (then the **compiler** catches it, as in 6.2). Those tests are fast and good for UI logic, but they are not contract tests.
+
+**Recommended test approach for real MFEs**
+
+| Layer | Tool | Catches | Runs in |
+|---|---|---|---|
+| 1. Generated, typed client from the contract (regenerated every build) | ng-openapi-gen (+ bundling) | renamed/removed fields, type changes, changed parameters, **at compile time** | every build |
+| 2. Component/unit tests | `HttpTestingController`, flushing **typed** data (`Well[]`), ideally the contract's example JSON files | UI logic: rendering, empty/error states | every build (fast) |
+| 3. A few browser tests against a **strict** Specmatic stub via the dev-server proxy | Playwright | wrong paths/parameters/headers at **runtime** (values from URLs, forms, config), handling of documented error responses, the token sent | MFE pipeline, no backends needed |
+| 4. MFE consumer examples in the contract repo | `well-mfe__*.json` + `consumers.yaml` | provider changes that would break the MFE, **in the provider's pipeline** | backend pipelines |
+
+**6.6 CORS and proxy findings** ([cors-check.txt](results/case4-mfe/cors-check.txt))
+- **With the dev-server proxy** the browser only talks to its own origin (`http://localhost:4200`), so **no CORS** is involved. The Playwright test asserts that. This matches production, where the MFE and APIs usually sit behind the same ingress.
+- **The Specmatic stub also supports CORS.** A preflight from `http://localhost:4200` asking for `authorization` gets `Access-Control-Allow-Origin: http://localhost:4200`, `Access-Control-Allow-Credentials: true` and `Access-Control-Allow-Headers: Content-Type, authorization`. GET/POST are CORS-safelisted, so a browser could call the stub directly. We still recommend the proxy, because it needs no CORS configuration on the real services and keeps the same `/v2` relative URLs as production.
+
+**6.7 Effort per MFE (estimate from this prototype)**
+- **First MFE (tooling and decisions):** about 1–2 days. That covers choosing the generator, the bundling step, the proxy and Playwright setup, and the CI wiring.
+- **Each additional MFE:** about half a day to copy the pattern: `bundle-spec.mjs`, the `generate:api`/`prebuild` scripts, `proxy.conf.json`, `playwright.config.ts`, and the auth interceptor (which already exists in real MFEs). Then, per API interaction, 1–2 consumer examples (about 15 min each) and 1–3 Playwright tests (about 30 min each).
+- **Pipeline cost per run:** `npm ci` about 2–3 min (cacheable), generate + build about 45 s, stub + Playwright about 40 s.
+
+**Findings**
+1. **Node version gate.** The latest Angular (22.x) needs Node ≥ 22.22.3, and this machine has 22.19.0. **Angular 21.2.x** (supported until about mid-2027) works with Node ≥ 22.12. Real MFE repos must align Node versions on developer machines **and** pipeline agents.
+2. **The generator doesn't follow external `$ref`s**, so a bundling step is needed (6.1). The contract repo's shared `common.yaml` is good design, but every tool in the chain has to cope with it.
+3. **The stub serves documented error examples.** A request that matches a provider's 4xx example gets that **documented** response (ProblemDetails). Only requests with **no** matching example get the stub's own plain-text rejection.
+4. **A v1.1 example was invalid for `examples validate` and the stub.** `"Authorization": ""` worked in provider tests, but the validator and the stub require the `Bearer` prefix. It was fixed in **v1.2** with `"Bearer "` (empty token), which passes validation and still yields 401 ([evidence](results/case4-mfe/provider-401-bearer-empty/)). Lesson: run `examples validate` on **every** contract change (Phase 7 gate).
+5. **Generated scaffolding can carry unpinned tool calls.** Angular 21's `ng new` writes a `.vscode/mcp.json` that runs `npx -y @angular/cli` without a version. We removed it.
+
 ## 6. Break-experiment results
 
 ### Case 1: well-registry-service (Phase 3)
@@ -600,6 +688,15 @@ Consumer breaks were run against **strict** Specmatic stubs under `/v2`; provide
 | 02 | rename **required** response field `Forecast.wellId` → `wellID` | `main` | **FAIL** (INCOMPATIBLE) | **1** |
 | 03 | optional field (as 01) | tag **`v1.1`** | PASS | 0 |
 | 04 | rename (as 02) | tag **`v1`** | FAIL | 1 |
+| 05 | new **required request** field `CreateWellRequest.operator` on `POST /wells`, an endpoint with **no consumer examples** | `main` | **FAIL** (INCOMPATIBLE) | **1** |
+
+The exact spec changes of all branches are in [experiment-branches.diff.txt](results/case3/compat/experiment-branches.diff.txt).
+
+**T1 and "usages":** the Phase 0 help text says that without Insights, breaking changes to APIs "that have no usages" only produce warnings. We checked this two ways:
+- **02 / 04:** the renamed field `wellId` is in the `Forecast` schema returned by **two** operations. `GET /forecasts/{id}` **has** a consumer example (`change-request__get_forecast_F-5001`). `POST /forecasts` has **none**, only the provider's inline `CREATE_W001`. The report gave **FAIL for both operations**.
+- **05**, a breaking change confined to an endpoint **no consumer example touches**, also **failed with exit 1**.
+
+So "usages" means usage data recorded by **Specmatic Insights** (the paid product), not our examples. Without Insights there is no usage data, and **every breaking change fails the gate**, which is the safe default. The paid `--strict` flag only matters when Insights would otherwise downgrade unused APIs to warnings.
 
 **Drift: code and contract repo out of step** (`scripts/case3-drift.ps1`; evidence in [results/case3/drift/](results/case3/drift/); original file restored byte-for-byte)
 
@@ -623,7 +720,19 @@ _Phase 8._ Pre-recorded:
 _Phase 8._ Rows will include **"Angular MFE consumer support"** (Phase 6). Pre-recorded risk: **T2**, the bundled OSS licence expires 14 Dec 2027.
 
 ## 10. Limitations and recommendation
-_Phase 8_ (will include the Angular MFE findings from Phase 6).
+_Phase 8_ (will include the Angular MFE findings from Phase 6). Pre-recorded limitations so far:
+
+**Windows / local-machine findings**
+
+| Limitation | Seen in | Impact | Workaround | On Linux pipeline agents |
+|---|---|---|---|---|
+| **260-character path limit.** Cloning the contract repo into a deep folder failed with `Filename too long`, because consumer example file names are long (e.g. `production-forecast__get_well_W-003_shut_in.json` under `specs/app-a-production/well-registry-service_examples/`). | Phase 5 | Clone/checkout fails | `git config --system core.longpaths true` (or per repo), or a short checkout path; keep example names reasonably short | **Not an issue**: Linux has no 260-char path limit |
+| **Git sources need a URI.** A bare path like `/work/contracts` works at runtime but fails `specmatic config validate` ("must be a valid RFC 3986 URI"). | Phase 5 | Config marked invalid | Use `file:///work/contracts` for a local repo, or the real `https://…` URL of the central repo | Same rule (not Windows-specific) |
+| **`specmatic test --config` does not start the `dependencies` mocks** declared in the same config; the service under test then gets 502s from its downstream calls. | Phase 5 | Provider tests with mocked dependencies fail | Start them separately with `specmatic mock --config <same file>` (`scripts/deps.ps1`), then run `specmatic test --config` | Same behaviour (not Windows-specific); in a pipeline the mock runs as a background step or service container |
+| **Docker Desktop DNS latency.** Resolving `host.docker.internal` took up to 3.7 s; one slow request hit the 6 s default timeout and the uncapped resiliency run collapsed. | Phase 3 | Spurious "errors" | `--add-host host.docker.internal:host-gateway`, `--timeout-in-ms` | Typically not an issue: on a Linux agent the service and Specmatic run on the same Docker network or host |
+| **PowerShell 5.1 + native stderr.** A failing `dotnet test` under `ErrorActionPreference=Stop` aborts the script. | Phase 3 | Script stops early | Use `Continue` and check `$LASTEXITCODE` | Pipelines use YAML tasks; not applicable |
+| **CRLF line endings** (`core.autocrlf=true`) change spec files on checkout. | Phase 5 | Scripted spec edits miss | `-c core.autocrlf=false` for automation, or `.gitattributes` with `* text=auto eol=lf` in the contract repo | Linux checkouts use LF |
+| **Test result files contain personal data.** TRX files include `DOMAIN\user` and local paths; Specmatic HTML/console output contains host paths. | Phases 3–4 | A leak risk for public repos or shared artefacts | Sanitise before publishing (done here); in a pipeline, artefacts stay inside the organisation | Paths are agent paths, still worth reviewing |
 
 ## 11. How to rerun everything from scratch
 1. Prerequisites: .NET SDK 10.0.101, Docker Desktop (engine running), git.
@@ -690,4 +799,12 @@ _Phase 8_ (will include the Angular MFE findings from Phase 6).
    .\scripts\compat-check.ps1 -RepoDir <clone> -BaseBranch main -Out case3\compat\<name>     # or -BaseBranch v1
    .\scripts\case3-drift.ps1 -ContractClone <clone on a breaking branch>
    ```
-9. _Further steps added as phases complete (`scripts/run-all.ps1` in Phase 7)._
+9. Phase 6 (Angular MFE), from the prototype root (needs Node ≥ 22.12):
+   ```powershell
+   cd mfe\well-mfe ; npm ci ; cd ..\..           # exact versions from package-lock.json
+   #   Playwright 1.62.1 needs Chromium build 1234; if it is not on the machine: npx playwright install --only-shell chromium
+   cd mfe\well-mfe ; npm run build ; cd ..\..    # prebuild: bundle spec + generate client from contracts/
+   .\scripts\mfe-e2e.ps1 -Out case4-mfe\e2e     # strict stub + Playwright (4 tests)
+   .\scripts\mfe-compile-break.ps1              # contract break -> TS2551 compile error, then a clean build
+   ```
+10. _Further steps added as phases complete (`scripts/run-all.ps1` in Phase 7)._

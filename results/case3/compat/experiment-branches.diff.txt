@@ -1,0 +1,62 @@
+===== feature/compatible-add-optional-field  (vs main)
+diff --git a/specs/app-a-production/production-forecast-service.yaml b/specs/app-a-production/production-forecast-service.yaml
+index 701349a..a737046 100644
+--- a/specs/app-a-production/production-forecast-service.yaml
++++ b/specs/app-a-production/production-forecast-service.yaml
+@@ -208,3 +208,6 @@ components:
+         createdAt:
+           type: string
+           format: date-time
++        notes:
++          type: string
++          description: Optional planner notes (new in this change).
+===== feature/breaking-rename-field  (vs main)
+diff --git a/specs/app-a-production/production-forecast-service.yaml b/specs/app-a-production/production-forecast-service.yaml
+index 701349a..620b38d 100644
+--- a/specs/app-a-production/production-forecast-service.yaml
++++ b/specs/app-a-production/production-forecast-service.yaml
+@@ -159,7 +159,7 @@ components:
+       type: object
+       required:
+         - id
+-        - wellId
++        - wellID
+         - wellName
+         - horizonMonths
+         - declineRatePct
+@@ -172,7 +172,7 @@ components:
+       properties:
+         id:
+           $ref: '#/components/schemas/ForecastId'
+-        wellId:
++        wellID:
+           $ref: '#/components/schemas/WellId'
+         wellName:
+           type: string
+===== feature/breaking-no-consumer-examples  (vs main)
+diff --git a/specs/app-a-production/well-registry-service.yaml b/specs/app-a-production/well-registry-service.yaml
+index 5cc7e36..a38deac 100644
+--- a/specs/app-a-production/well-registry-service.yaml
++++ b/specs/app-a-production/well-registry-service.yaml
+@@ -64,7 +64,7 @@ paths:
+               $ref: '#/components/schemas/CreateWellRequest'
+             examples:
+               CREATE_EAGLE_9:
+-                value: { name: Eagle-9, field: Eagle Ford, status: ACTIVE, latitude: 28.7, longitude: -98.1, spudDate: '2024-05-01', dailyCapacityBbl: 650 }
++                value: { name: Eagle-9, field: Eagle Ford, status: ACTIVE, latitude: 28.7, longitude: -98.1, spudDate: '2024-05-01', dailyCapacityBbl: 650, operator: Ops-Team-1 }
+       responses:
+         '201':
+           description: Created.
+@@ -182,8 +182,11 @@ components:
+           description: Nameplate capacity in barrels per day.
+     CreateWellRequest:
+       type: object
+-      required: [name, field, status, latitude, longitude, spudDate, dailyCapacityBbl]
++      required: [name, field, status, latitude, longitude, spudDate, dailyCapacityBbl, operator]
+       properties:
++        operator:
++          type: string
++          minLength: 1
+         name:
+           type: string
+           minLength: 1

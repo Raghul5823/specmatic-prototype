@@ -1,0 +1,31 @@
+<main>
+  <h1>Wells</h1>
+  <p class="filter">Filter: <span data-testid="filter">{{ status ?? 'all' }}</span></p>
+
+  @if (error(); as message) {
+    <p class="error" role="alert" data-testid="error">{{ message }}</p>
+  } @else if (wells(); as list) {
+    @if (list.length === 0) {
+      <p data-testid="empty">No wells match this filter.</p>
+    } @else {
+      <table data-testid="wells">
+        <thead>
+          <tr><th>Id</th><th>Name</th><th>Field</th><th>Status</th><th>Capacity</th></tr>
+        </thead>
+        <tbody>
+          @for (well of list; track well.id) {
+            <tr>
+              <td>{{ well.id }}</td>
+              <td>{{ well.name }}</td>
+              <td>{{ well.field }}</td>
+              <td>{{ well.status }}</td>
+              <td>{{ capacity(well) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  } @else {
+    <p data-testid="loading">Loading…</p>
+  }
+</main>

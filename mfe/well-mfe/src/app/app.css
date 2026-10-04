@@ -1,0 +1,5 @@
+main { font-family: system-ui, sans-serif; max-width: 48rem; margin: 2rem auto; padding: 0 1rem; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid #ddd; }
+.error { color: #b00020; font-weight: 600; }
+.filter { color: #555; }

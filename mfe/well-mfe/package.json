@@ -1,0 +1,31 @@
+{
+  "name": "well-mfe",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "npm@10.9.3",
+  "scripts": {
+    "ng": "ng",
+    "generate:api": "node scripts/bundle-spec.mjs ../../contracts/specs/app-a-production/well-registry-service.yaml .generated/well-registry-service.json && ng-openapi-gen --input .generated/well-registry-service.json --output src/app/api --ignoreUnusedModels false",
+    "prestart": "npm run generate:api",
+    "start": "ng serve --proxy-config proxy.conf.json",
+    "prebuild": "npm run generate:api",
+    "build": "ng build",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@angular/common": "21.2.25",
+    "@angular/compiler": "21.2.25",
+    "@angular/core": "21.2.25",
+    "@angular/platform-browser": "21.2.25",
+    "rxjs": "7.8.2",
+    "tslib": "2.8.1"
+  },
+  "devDependencies": {
+    "@angular/build": "21.2.24",
+    "@angular/cli": "21.2.24",
+    "@angular/compiler-cli": "21.2.25",
+    "@playwright/test": "1.62.1",
+    "ng-openapi-gen": "1.1.0",
+    "typescript": "5.9.3"
+  }
+}

@@ -114,6 +114,7 @@ Specmatic Prototype/                      ← prototype git repo (public)
 │   ├─ change-request-service/            consumer (C2, C3) and provider (C4)
 │   ├─ change-request-service.Tests/      consumer contract tests vs the approval STUB
 │   └─ approval-service/                  provider (C2)
+├─ mfe/well-mfe/                          Angular 21 micro-frontend (consumer C5): generated client, Playwright tests
 ├─ specmatic/                             Specmatic config files (v3) owned by the services
 ├─ scripts/                               PowerShell automation (start/stop, tests, stubs, experiments)
 ├─ results/                               evidence of every run (reports, logs, summaries)
@@ -262,8 +263,8 @@ Tags are annotated and never moved. `v1` is the first contract set, and `v1.1` a
 | 3 Case 1 | ✅ | provider tests 40% → 100% coverage, resiliency tests, xUnit, 9 break experiments, tag `v1.1` |
 | 4 Case 2 | ✅ | provider tests for C1 and C2 pass; stubs under `/v2` (T4 solved); 11 consumer tests vs strict stubs pass; 6/6 breaks caught on both sides; Pact comparison |
 | 5 Case 3 | ✅ | cross-app C3/C4 provider tests with mocked dependencies and consumer tests, specs from the git contract repo; compatibility gate fails a breaking change (exit 1); drift shown both ways |
-| **6 Angular MFE** | **next** | generated TypeScript client, compile-time contract break, Playwright vs stub |
-| 7 Pipeline | planned | `run-all.ps1`, xUnit ContractTests projects, sample `azure-pipelines.yml` |
+| 6 Angular MFE | ✅ | Angular 21 page listing wells via a client **generated from the contract** (a contract break becomes a compile error); Playwright 4/4 against a strict stub through the dev-server proxy; MFE examples verified by the provider (contracts `v1.2`) |
+| **7 Pipeline** | **next** | `run-all.ps1`, xUnit ContractTests projects, sample `azure-pipelines.yml` (incl. the Angular steps) |
 | 8 Evaluation | planned | coverage, control points, scorecard, recommendation |
 
 The README section "0. Master checklist" is the up-to-date, item-by-item status, with links to the evidence for every ticked item.

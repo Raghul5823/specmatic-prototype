@@ -1,0 +1,11 @@
+{
+  "service": "well-registry-service",
+  "run": "case4-mfe\\provider-well-registry-with-mfe-examples",
+  "exitCode": 0,
+  "testsRun": 17,
+  "successes": 17,
+  "failures": 0,
+  "errors": 0,
+  "apiCoveragePct": 100,
+  "coverageOperations": 10
+}

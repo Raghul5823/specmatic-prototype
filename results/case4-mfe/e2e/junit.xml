@@ -1,0 +1,12 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="20.945558999999996">
+<testsuite name="wells.spec.ts" timestamp="2026-10-04T20:33:26.986Z" hostname="chromium" tests="4" failures="0" skipped="0" time="5.549" errors="0">
+<testcase name="well-mfe against the Specmatic stub › lists the wells from the consumer example and sends the bearer token" classname="wells.spec.ts" time="3.027">
+</testcase>
+<testcase name="well-mfe against the Specmatic stub › shows the example-driven empty list" classname="wells.spec.ts" time="0.767">
+</testcase>
+<testcase name="well-mfe against the Specmatic stub › a documented error response is served from the provider example (400 ProblemDetails)" classname="wells.spec.ts" time="0.84">
+</testcase>
+<testcase name="well-mfe against the Specmatic stub › a request that breaks the contract is rejected by the stub" classname="wells.spec.ts" time="0.915">
+</testcase>
+</testsuite>
+</testsuites>

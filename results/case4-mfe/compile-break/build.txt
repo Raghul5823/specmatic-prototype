@@ -1,0 +1,31 @@
+### Contract change: Well.dailyCapacityBbl renamed to dailyCapacity
+
+Bundled .\mfe\well-mfe\.generated\break\specs\app-a-production\well-registry-service.yaml -> .generated/break.json (3 external component(s) inlined)
+Generation from .generated/break.json finished with 5 models and 1 services.
+
+### npx ng build  (client generated from the BROKEN contract)
+> Building...
+√ Building...
+Application bundle generation failed. [5.540 seconds] - 2026-10-04T20:34:27.129Z
+
+X [ERROR] TS2551: Property 'dailyCapacityBbl' does not exist on type 'Well'. Did you mean 'dailyCapacity'? [plugin angular-compiler]
+
+    src/app/app.ts:38:19:
+      38 │     return `${well.dailyCapacityBbl.toLocaleString('en-US')} bbl/d`;
+         ╵                    ~~~~~~~~~~~~~~~~
+
+  'dailyCapacity' is declared here.
+
+    src/app/api/models/well.ts:11:2:
+      11 │   dailyCapacity: number;
+         ╵   ~~~~~~~~~~~~~
+
+
+exit=1
+
+### npm run build  (prebuild regenerates the client from the REAL contract)
+Bundled ../../contracts/specs/app-a-production/well-registry-service.yaml -> .generated/well-registry-service.json (3 external component(s) inlined)
+Generation from .generated/well-registry-service.json finished with 5 models and 1 services.
+                    | Initial total | 137.53 kB |                39.88 kB
+Application bundle generation complete. [8.180 seconds] - 2026-10-04T20:34:41.954Z
+exit=0

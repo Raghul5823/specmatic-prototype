@@ -1,0 +1,8 @@
+{
+  "/v2": {
+    "target": "http://localhost:9101",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "info"
+  }
+}

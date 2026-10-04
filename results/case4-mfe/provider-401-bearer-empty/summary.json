@@ -1,0 +1,11 @@
+{
+  "service": "well-registry-service",
+  "run": "case4-mfe\\provider-401-bearer-empty",
+  "exitCode": 0,
+  "testsRun": 4,
+  "successes": 4,
+  "failures": 0,
+  "errors": 0,
+  "apiCoveragePct": 100,
+  "coverageOperations": 3
+}

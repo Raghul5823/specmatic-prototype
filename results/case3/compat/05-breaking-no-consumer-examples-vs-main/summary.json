@@ -1,0 +1,6 @@
+{
+  "branch": "feature/breaking-no-consumer-examples",
+  "base": "main",
+  "exitCode": 1,
+  "verdict": "FAIL (exit 1)"
+}
