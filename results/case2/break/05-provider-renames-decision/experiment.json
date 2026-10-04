@@ -1,0 +1,12 @@
+{
+  "name": "Provider renames response field decision -> outcome",
+  "expected": "caught by provider test",
+  "compiled": true,
+  "xunitFailed": null,
+  "specmaticFailures": 5,
+  "specmaticExit": 1,
+  "specmaticTests": 6,
+  "mode": "Provider",
+  "specmaticCaught": true,
+  "changes": "app-b-change-mgmt\\approval-service\\Models.cs: '    Decision Decision,' -> '    [property: System.Text.Json.Serialization.JsonPropertyName(\"outcome\")] Decision Decision,'"
+}

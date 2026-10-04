@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="c1c5acd6-ade5-439c-aded-fa4b8370e5b2" name="<user>@<machine> 2026-10-04 22:19:39" runUser="<domain>\<user>" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-04T22:19:39.5070338+05:30" queuing="2026-10-04T22:19:39.5070343+05:30" start="2026-10-04T22:19:36.8999299+05:30" finish="2026-10-04T22:19:40.0288419+05:30" />
+  <TestSettings name="default" id="2e958ce6-8543-4159-a4d3-fe7fc3331ad2">
+    <Deployment runDeploymentRoot="<user>_<machine>_2026-10-04_22_19_39" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="a1372c3a-950e-4c27-9f59-d04069276b09" testId="80047f3f-1120-4973-fa27-aa51f1075e5e" testName="ChangeRequestService.Tests.ApprovalClientStubTests.Consumer_posts_json_with_the_configured_token_to_the_v2_path" computerName="<machine>" duration="00:00:00.1586789" startTime="2026-10-04T22:19:39.7458734+05:30" endTime="2026-10-04T22:19:39.9047971+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a1372c3a-950e-4c27-9f59-d04069276b09" />
+    <UnitTestResult executionId="45dacdbe-c9be-49a4-8721-2aadd5e1e263" testId="1d9e7bfb-c950-4d9c-a1cb-26ac12d67386" testName="ChangeRequestService.Tests.ApprovalClientStubTests.Interaction_without_an_example_is_refused_in_strict_mode" computerName="<machine>" duration="00:00:00.9053592" startTime="2026-10-04T22:19:38.2142463+05:30" endTime="2026-10-04T22:19:39.1321051+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="45dacdbe-c9be-49a4-8721-2aadd5e1e263" />
+    <UnitTestResult executionId="59aee513-2f10-4ee0-8e05-de41226674f4" testId="ab577226-a27f-c638-c1d4-03e15431d3c8" testName="ChangeRequestService.Tests.ApprovalClientStubTests.Small_change_is_approved_per_consumer_example" computerName="<machine>" duration="00:00:00.2645111" startTime="2026-10-04T22:19:39.1475083+05:30" endTime="2026-10-04T22:19:39.3997550+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="59aee513-2f10-4ee0-8e05-de41226674f4" />
+    <UnitTestResult executionId="5000a395-fa23-4916-9a50-012ba53cca62" testId="2e1f6894-47f5-224b-7996-0f52e0767e2f" testName="ChangeRequestService.Tests.ApprovalClientStubTests.Request_that_breaks_the_contract_is_rejected_by_the_stub" computerName="<machine>" duration="00:00:00.1750333" startTime="2026-10-04T22:19:39.5700379+05:30" endTime="2026-10-04T22:19:39.7455910+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5000a395-fa23-4916-9a50-012ba53cca62" />
+    <UnitTestResult executionId="8157e7d8-b6e6-4b4b-9e01-fc9f4a854e6c" testId="dea384cd-9c1b-a44f-0ea5-81eca2b87da8" testName="ChangeRequestService.Tests.ApprovalClientStubTests.Large_change_is_rejected_per_consumer_example" computerName="<machine>" duration="00:00:00.1693145" startTime="2026-10-04T22:19:39.4419742+05:30" endTime="2026-10-04T22:19:39.5695736+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8157e7d8-b6e6-4b4b-9e01-fc9f4a854e6c" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ChangeRequestService.Tests.ApprovalClientStubTests.Small_change_is_approved_per_consumer_example" storage=".\app-b-change-mgmt\change-request-service.tests\bin\debug\net10.0\changerequestservice.tests.dll" id="ab577226-a27f-c638-c1d4-03e15431d3c8">
+      <Execution id="59aee513-2f10-4ee0-8e05-de41226674f4" />
+      <TestMethod codeBase=".\app-b-change-mgmt\change-request-service.Tests\bin\Debug\net10.0\ChangeRequestService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ChangeRequestService.Tests.ApprovalClientStubTests" name="Small_change_is_approved_per_consumer_example" />
+    </UnitTest>
+    <UnitTest name="ChangeRequestService.Tests.ApprovalClientStubTests.Request_that_breaks_the_contract_is_rejected_by_the_stub" storage=".\app-b-change-mgmt\change-request-service.tests\bin\debug\net10.0\changerequestservice.tests.dll" id="2e1f6894-47f5-224b-7996-0f52e0767e2f">
+      <Execution id="5000a395-fa23-4916-9a50-012ba53cca62" />
+      <TestMethod codeBase=".\app-b-change-mgmt\change-request-service.Tests\bin\Debug\net10.0\ChangeRequestService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ChangeRequestService.Tests.ApprovalClientStubTests" name="Request_that_breaks_the_contract_is_rejected_by_the_stub" />
+    </UnitTest>
+    <UnitTest name="ChangeRequestService.Tests.ApprovalClientStubTests.Large_change_is_rejected_per_consumer_example" storage=".\app-b-change-mgmt\change-request-service.tests\bin\debug\net10.0\changerequestservice.tests.dll" id="dea384cd-9c1b-a44f-0ea5-81eca2b87da8">
+      <Execution id="8157e7d8-b6e6-4b4b-9e01-fc9f4a854e6c" />
+      <TestMethod codeBase=".\app-b-change-mgmt\change-request-service.Tests\bin\Debug\net10.0\ChangeRequestService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ChangeRequestService.Tests.ApprovalClientStubTests" name="Large_change_is_rejected_per_consumer_example" />
+    </UnitTest>
+    <UnitTest name="ChangeRequestService.Tests.ApprovalClientStubTests.Consumer_posts_json_with_the_configured_token_to_the_v2_path" storage=".\app-b-change-mgmt\change-request-service.tests\bin\debug\net10.0\changerequestservice.tests.dll" id="80047f3f-1120-4973-fa27-aa51f1075e5e">
+      <Execution id="a1372c3a-950e-4c27-9f59-d04069276b09" />
+      <TestMethod codeBase=".\app-b-change-mgmt\change-request-service.Tests\bin\Debug\net10.0\ChangeRequestService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ChangeRequestService.Tests.ApprovalClientStubTests" name="Consumer_posts_json_with_the_configured_token_to_the_v2_path" />
+    </UnitTest>
+    <UnitTest name="ChangeRequestService.Tests.ApprovalClientStubTests.Interaction_without_an_example_is_refused_in_strict_mode" storage=".\app-b-change-mgmt\change-request-service.tests\bin\debug\net10.0\changerequestservice.tests.dll" id="1d9e7bfb-c950-4d9c-a1cb-26ac12d67386">
+      <Execution id="45dacdbe-c9be-49a4-8721-2aadd5e1e263" />
+      <TestMethod codeBase=".\app-b-change-mgmt\change-request-service.Tests\bin\Debug\net10.0\ChangeRequestService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ChangeRequestService.Tests.ApprovalClientStubTests" name="Interaction_without_an_example_is_refused_in_strict_mode" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="80047f3f-1120-4973-fa27-aa51f1075e5e" executionId="a1372c3a-950e-4c27-9f59-d04069276b09" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d9e7bfb-c950-4d9c-a1cb-26ac12d67386" executionId="45dacdbe-c9be-49a4-8721-2aadd5e1e263" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ab577226-a27f-c638-c1d4-03e15431d3c8" executionId="59aee513-2f10-4ee0-8e05-de41226674f4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2e1f6894-47f5-224b-7996-0f52e0767e2f" executionId="5000a395-fa23-4916-9a50-012ba53cca62" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dea384cd-9c1b-a44f-0ea5-81eca2b87da8" executionId="8157e7d8-b6e6-4b4b-9e01-fc9f4a854e6c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="5" executed="5" passed="5" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.1)&#xD;
+[xUnit.net 00:00:00.14]   Discovering: ChangeRequestService.Tests&#xD;
+[xUnit.net 00:00:00.20]   Discovered:  ChangeRequestService.Tests&#xD;
+[xUnit.net 00:00:00.23]   Starting:    ChangeRequestService.Tests&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[100]&#xD;
+      Start processing HTTP request POST http://localhost:9202/v2/approvals&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[100]&#xD;
+      Sending HTTP request POST http://localhost:9202/v2/approvals&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[101]&#xD;
+      Received HTTP response headers after 718.9184ms - 400&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[101]&#xD;
+      End processing HTTP request after 733.565ms - 400&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[100]&#xD;
+      Start processing HTTP request POST http://localhost:9202/v2/approvals&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[100]&#xD;
+      Sending HTTP request POST http://localhost:9202/v2/approvals&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[101]&#xD;
+      Received HTTP response headers after 227.4007ms - 201&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[101]&#xD;
+      End processing HTTP request after 227.6407ms - 201&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[100]&#xD;
+      Start processing HTTP request POST http://localhost:9202/v2/approvals&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[100]&#xD;
+      Sending HTTP request POST http://localhost:9202/v2/approvals&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[101]&#xD;
+      Received HTTP response headers after 160.6623ms - 201&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[101]&#xD;
+      End processing HTTP request after 160.8027ms - 201&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[100]&#xD;
+      Start processing HTTP request POST http://localhost:9202/v2/approvals&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[100]&#xD;
+      Sending HTTP request POST http://localhost:9202/v2/approvals&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[101]&#xD;
+      Received HTTP response headers after 158.3189ms - 400&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[101]&#xD;
+      End processing HTTP request after 158.4597ms - 400&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[100]&#xD;
+      Start processing HTTP request POST http://localhost:9202/v2/approvals&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[100]&#xD;
+      Sending HTTP request POST http://localhost:9202/v2/approvals&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[101]&#xD;
+      Received HTTP response headers after 147.9305ms - 201&#xD;
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[101]&#xD;
+      End processing HTTP request after 148.346ms - 201&#xD;
+[xUnit.net 00:00:01.97]   Finished:    ChangeRequestService.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

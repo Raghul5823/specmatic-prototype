@@ -1,0 +1,501 @@
+Command: docker run --rm --add-host host.docker.internal:host-gateway -e bearerAuth=test-token-123 -v <prototype-root>:/work -v <prototype-root>\contracts:/work/contracts:ro -w /work/results/case2/break/05-provider-renames-decision/specmatic specmatic/specmatic:2.55.0 test /work/contracts/specs/app-b-change-mgmt/approval-service.yaml --testBaseURL=http://host.docker.internal:5202/v2 --junitReportDir=/work/results/case2/break/05-provider-renames-decision/specmatic/junit
+Specmatic Version: v2.55.0(299682d5)
+
+Could not find the Specmatic configuration at path /work/results/case2/break/05-provider-renames-decision/specmatic/specmatic.yaml
+Could not find the Specmatic configuration at path /work/results/case2/break/05-provider-renames-decision/specmatic/specmatic.yaml
+API Specification Summary: /work/contracts/specs/app-b-change-mgmt/approval-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 2
+  Schema components: 7, Security Schemes: [http]
+
+
+Test directory /work/contracts/specs/app-b-change-mgmt/approval-service_examples found
+
+Loading externalised examples from /work/contracts/specs/app-b-change-mgmt/approval-service_examples: 
+  2 examples(s) found in /work/contracts/specs/app-b-change-mgmt/approval-service_examples
+
+Loading test file /work/contracts/specs/app-b-change-mgmt/approval-service_examples/change-request__approve_small_change.json
+Loading test file /work/contracts/specs/app-b-change-mgmt/approval-service_examples/change-request__reject_large_change.json
+
+No application API source was exposed by the application, so cannot calculate actual coverage
+
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+--------------------
+  Request to http://host.docker.internal:5202/v2 at 2026-10-4 4:55:19.523
+    POST /v2/approvals
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 201
+    Host: host.docker.internal:5202
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "changeRequestId": "CR-1003",
+        "type": "CHOKE_CHANGE",
+        "capacityDeltaBbl": 50
+    }
+
+  Response at 2026-10-4 4:55:19.628
+    201 Created
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 16:54:25 GMT
+    Server: Kestrel
+    Location: /v2/approvals/A-7003
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "A-7003",
+        "changeRequestId": "CR-1003",
+        "outcome": "APPROVED",
+        "reason": "Within delegated authority (<= 500 bbl/d).",
+        "decidedAt": "2026-10-04T16:54:25.7770011+00:00"
+    }
+
+Scenario: POST /approvals -> 201 with the request from the example 'APPROVE_SMALL_CHANGE' has FAILED
+Reason:
+Testing scenario "Request a decision for a change request.. Response: Decision recorded."
+API: POST /approvals -> 201
+
+  >> RESPONSE.BODY.decision
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "decision" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.outcome
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "outcome" in the response was not in the specification
+
+
+
+--------------------
+  Request to http://host.docker.internal:5202/v2 at 2026-10-4 4:55:19.805
+    POST /v2/approvals
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 201
+    Host: host.docker.internal:5202
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "changeRequestId": "CR-1004",
+        "type": "WORKOVER",
+        "capacityDeltaBbl": 900
+    }
+
+  Response at 2026-10-4 4:55:19.830
+    201 Created
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 16:54:25 GMT
+    Server: Kestrel
+    Location: /v2/approvals/A-7004
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "A-7004",
+        "changeRequestId": "CR-1004",
+        "outcome": "REJECTED",
+        "reason": "Exceeds delegated authority (> 500 bbl/d); needs manual review.",
+        "decidedAt": "2026-10-04T16:54:26.0409262+00:00"
+    }
+
+Scenario: POST /approvals -> 201 with the request from the example 'REJECT_LARGE_CHANGE' has FAILED
+Reason:
+Testing scenario "Request a decision for a change request.. Response: Decision recorded."
+API: POST /approvals -> 201
+
+  >> RESPONSE.BODY.decision
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "decision" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.outcome
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "outcome" in the response was not in the specification
+
+
+
+--------------------
+  Request to http://host.docker.internal:5202/v2 at 2026-10-4 4:55:19.856
+    POST /v2/approvals
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 201
+    Host: host.docker.internal:5202
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "changeRequestId": "CR-1003",
+        "type": "CHOKE_CHANGE",
+        "capacityDeltaBbl": 50
+    }
+
+  Response at 2026-10-4 4:55:19.880
+    201 Created
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 16:54:25 GMT
+    Server: Kestrel
+    Location: /v2/approvals/A-7005
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "A-7005",
+        "changeRequestId": "CR-1003",
+        "outcome": "APPROVED",
+        "reason": "Within delegated authority (<= 500 bbl/d).",
+        "decidedAt": "2026-10-04T16:54:26.0958867+00:00"
+    }
+
+Scenario: POST /approvals -> 201 with the request from the example 'change-request__approve_small_change' has FAILED
+Reason:
+Testing scenario "Request a decision for a change request.. Response: Decision recorded."
+API: POST /approvals -> 201
+
+  >> RESPONSE.BODY.decision
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "decision" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.outcome
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "outcome" in the response was not in the specification
+
+
+
+--------------------
+  Request to http://host.docker.internal:5202/v2 at 2026-10-4 4:55:19.895
+    POST /v2/approvals
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 201
+    Host: host.docker.internal:5202
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "changeRequestId": "CR-1004",
+        "type": "WORKOVER",
+        "capacityDeltaBbl": 900
+    }
+
+  Response at 2026-10-4 4:55:19.929
+    201 Created
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 16:54:25 GMT
+    Server: Kestrel
+    Location: /v2/approvals/A-7006
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "A-7006",
+        "changeRequestId": "CR-1004",
+        "outcome": "REJECTED",
+        "reason": "Exceeds delegated authority (> 500 bbl/d); needs manual review.",
+        "decidedAt": "2026-10-04T16:54:26.1504057+00:00"
+    }
+
+Scenario: POST /approvals -> 201 with the request from the example 'change-request__reject_large_change' has FAILED
+Reason:
+Testing scenario "Request a decision for a change request.. Response: Decision recorded."
+API: POST /approvals -> 201
+
+  >> RESPONSE.BODY.decision
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "decision" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.outcome
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "outcome" in the response was not in the specification
+
+
+
+--------------------
+  Skipping Scenario: POST /approvals -> 400 (requestContentType application/json, responseContentType application/problem+json)
+  - T00004: Generative Disabled
+  Documentation: https://docs.specmatic.io/rules#t00004
+  Summary: This operation was skipped because it requires schema resiliency to be enabled
+  
+  - T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Skipping Scenario: POST /approvals -> 401 (requestContentType application/json, responseContentType application/problem+json)
+  T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Request to http://host.docker.internal:5202/v2 at 2026-10-4 4:55:19.951
+    GET /v2/approvals/A-7001
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5202
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 4:55:19.975
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 16:54:25 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "A-7001",
+        "changeRequestId": "CR-1001",
+        "outcome": "APPROVED",
+        "reason": "Within delegated authority (<= 500 bbl/d).",
+        "decidedAt": "2026-09-01T08:00:01+00:00"
+    }
+
+Scenario: GET /approvals/(approvalId:ApprovalId) -> 200 with the request from the example 'GET_A7001' has FAILED
+Reason:
+Testing scenario "Get one decision by id.. Response: The decision."
+API: GET /approvals/(approvalId:ApprovalId) -> 200
+
+  >> RESPONSE.BODY.decision
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "decision" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.outcome
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "outcome" in the response was not in the specification
+
+
+
+--------------------
+  Skipping Scenario: GET /approvals/(approvalId:ApprovalId) -> 400 (responseContentType application/problem+json)
+  - T00004: Generative Disabled
+  Documentation: https://docs.specmatic.io/rules#t00004
+  Summary: This operation was skipped because it requires schema resiliency to be enabled
+  
+  - T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Skipping Scenario: GET /approvals/(approvalId:ApprovalId) -> 401 (responseContentType application/problem+json)
+  T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Request to http://host.docker.internal:5202/v2 at 2026-10-4 4:55:19.993
+    GET /v2/approvals/A-9999
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 404
+    Host: host.docker.internal:5202
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 4:55:20.13
+    404 Not Found
+    Content-Type: application/problem+json
+    Date: Sun, 04 Oct 2026 16:54:25 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+        "title": "Not Found",
+        "status": 404,
+        "detail": "Approval A-9999 does not exist.",
+        "traceId": "00-ea6b7e1596c0103ea10154e51d0206f0-79451fb21737120c-00"
+    }
+
+Scenario: GET /approvals/(approvalId:ApprovalId) -> 404 with the request from the example 'UNKNOWN_APPROVAL' has SUCCEEDED
+
+Could not load report configuration, coverage will be calculated but no coverage threshold will be enforced
+
+|------------------------------------------------------------------------------------------------------------------------------|
+| SPECMATIC API COVERAGE SUMMARY                                                                                               |
+|------------------------------------------------------------------------------------------------------------------------------|
+| coverage | path                    | method | requestContentType | response | responseContentType      | remarks    | result |
+|----------|-------------------------|--------|--------------------|----------|--------------------------|------------|--------|
+| 33%      | /approvals              | POST   | application/json   | 201      | application/json         | covered    | 4f     |
+|          |                         |        |                    | 400      | application/problem+json | not tested |        |
+|          |                         |        |                    | 401      | application/problem+json | not tested |        |
+| 50%      | /approvals/{approvalId} | GET    | NA                 | 200      | application/json         | covered    | 1f     |
+|          |                         |        |                    | 400      | application/problem+json | not tested |        |
+|          |                         |        |                    | 401      | application/problem+json | not tested |        |
+|          |                         |        |                    | 404      | application/problem+json | covered    | 1p     |
+|------------------------------------------------------------------------------------------------------------------------------|
+| * = Operation not eligible for coverage                                                                                      |
+| ! = Operation excluded from the run due to a filter                                                                          |
+| p = passed tests                                                                                                             |
+| f = failed tests                                                                                                             |
+| w = wip tests                                                                                                                |
+|                                                                                                                              |
+| 43% API Coverage reported from 7 operations eligible for coverage                                                            |
+| 43% Absolute Coverage (includes excluded operations that were not tested)                                                    |
+|------------------------------------------------------------------------------------------------------------------------------|
+
+
+
+Generating CTRF report using coverage report specifications...
+Generating report for 6 tests and 7 coverage operations...
+Using report generation method that accepts coverage report specifications.
+Generating HTML report in build/reports/specmatic/test/html/index.html
+
+
+
+Unsuccessful Scenarios:
+  "Scenario: POST /approvals -> 201 with the request from the example 'APPROVE_SMALL_CHANGE' FAILED"
+        Reason:
+    Testing scenario "Request a decision for a change request.. Response: Decision recorded."
+    API: POST /approvals -> 201
+  
+      >> RESPONSE.BODY.decision
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "decision" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.outcome
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "outcome" in the response was not in the specification
+
+  "Scenario: POST /approvals -> 201 with the request from the example 'REJECT_LARGE_CHANGE' FAILED"
+        Reason:
+    Testing scenario "Request a decision for a change request.. Response: Decision recorded."
+    API: POST /approvals -> 201
+  
+      >> RESPONSE.BODY.decision
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "decision" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.outcome
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "outcome" in the response was not in the specification
+
+  "Scenario: POST /approvals -> 201 with the request from the example 'change-request__approve_small_change' FAILED"
+        Reason:
+    Testing scenario "Request a decision for a change request.. Response: Decision recorded."
+    API: POST /approvals -> 201
+  
+      >> RESPONSE.BODY.decision
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "decision" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.outcome
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "outcome" in the response was not in the specification
+
+  "Scenario: POST /approvals -> 201 with the request from the example 'change-request__reject_large_change' FAILED"
+        Reason:
+    Testing scenario "Request a decision for a change request.. Response: Decision recorded."
+    API: POST /approvals -> 201
+  
+      >> RESPONSE.BODY.decision
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "decision" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.outcome
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "outcome" in the response was not in the specification
+
+  "Scenario: GET /approvals/(approvalId:ApprovalId) -> 200 with the request from the example 'GET_A7001' FAILED"
+        Reason:
+    Testing scenario "Get one decision by id.. Response: The decision."
+    API: GET /approvals/(approvalId:ApprovalId) -> 200
+  
+      >> RESPONSE.BODY.decision
+  
+          R2001: Missing required property
+          Documentation: https://docs.specmatic.io/rules#r2001
+          Summary: A required property defined in the specification is missing
+  
+          Specification expected mandatory property "decision" to be present but was missing from the response
+  
+      >> RESPONSE.BODY.outcome
+  
+          R2003: Unknown property
+          Documentation: https://docs.specmatic.io/rules#r2003
+          Summary: A property was found that is not defined in the specification
+  
+          Property "outcome" in the response was not in the specification
+
+Tests run: 6, Successes: 1, Failures: 5, WIP: 0, Errors: 0
+
+Executed at 2026-10-04T16:55:23.599347997

@@ -1,0 +1,6 @@
+SAME     app-a-production\production-forecast-service\Clients.cs
+SAME     app-a-production\production-forecast-service\Models.cs
+SAME     shared\Prototype.ServiceDefaults\ServiceDefaults.cs
+SAME     app-b-change-mgmt\change-request-service\Models.cs
+SAME     app-b-change-mgmt\approval-service\Models.cs
+SAME     app-b-change-mgmt\approval-service\ApprovalEndpoints.cs

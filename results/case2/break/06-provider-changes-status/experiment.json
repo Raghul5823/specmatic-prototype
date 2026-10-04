@@ -1,0 +1,12 @@
+{
+  "name": "Provider returns 200 instead of 201 for POST /approvals",
+  "expected": "caught by provider test",
+  "compiled": true,
+  "xunitFailed": null,
+  "specmaticFailures": 4,
+  "specmaticExit": 1,
+  "specmaticTests": 6,
+  "mode": "Provider",
+  "specmaticCaught": true,
+  "changes": "app-b-change-mgmt\\approval-service\\ApprovalEndpoints.cs: 'return Results.Created($\"/v2/approvals/{approval.Id}\", approval);' -> 'return Results.Ok(approval);'"
+}

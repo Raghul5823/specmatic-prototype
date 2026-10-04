@@ -1,0 +1,70 @@
+Test run for .\app-a-production\production-forecast-service.Tests\bin\Debug\net10.0\ProductionForecastService.Tests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.01] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.1)
+[xUnit.net 00:00:00.27]   Discovering: ProductionForecastService.Tests
+[xUnit.net 00:00:00.38]   Discovered:  ProductionForecastService.Tests
+[xUnit.net 00:00:00.42]   Starting:    ProductionForecastService.Tests
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[100]
+      Start processing HTTP request GET http://localhost:9101/v2/wells/W-999
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[100]
+      Sending HTTP request GET http://localhost:9101/v2/wells/W-999
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[101]
+      Received HTTP response headers after 867.6948ms - 404
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[101]
+      End processing HTTP request after 899.0614ms - 404
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[100]
+      Start processing HTTP request GET http://localhost:9101/v2/wells/WELL-1
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[100]
+      Sending HTTP request GET http://localhost:9101/v2/wells/WELL-1
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[101]
+      Received HTTP response headers after 161.9462ms - 400
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[101]
+      End processing HTTP request after 162.2819ms - 400
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[100]
+      Start processing HTTP request GET http://localhost:9101/v2/wells/W-001
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[100]
+      Sending HTTP request GET http://localhost:9101/v2/wells/W-001
+  Passed ProductionForecastService.Tests.WellRegistryClientStubTests.Unknown_well_404_from_consumer_example_becomes_null [2 s]
+  Passed ProductionForecastService.Tests.WellRegistryClientStubTests.Request_that_breaks_the_contract_is_rejected_by_the_stub [211 ms]
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[101]
+      Received HTTP response headers after 212.7976ms - 200
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[101]
+      End processing HTTP request after 212.9644ms - 200
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[100]
+      Start processing HTTP request GET http://localhost:9101/v2/wells/W-555
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[100]
+      Sending HTTP request GET http://localhost:9101/v2/wells/W-555
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[101]
+      Received HTTP response headers after 242.6238ms - 400
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[101]
+      End processing HTTP request after 242.8469ms - 400
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[100]
+      Start processing HTTP request GET http://localhost:9101/v2/wells/W-003
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[100]
+      Sending HTTP request GET http://localhost:9101/v2/wells/W-003
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[101]
+      Received HTTP response headers after 187.2432ms - 200
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[101]
+      End processing HTTP request after 187.4911ms - 200
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[100]
+      Start processing HTTP request GET http://localhost:9101/v2/wells/W-001
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[100]
+      Sending HTTP request GET http://localhost:9101/v2/wells/W-001
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[101]
+      Received HTTP response headers after 231.4142ms - 200
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[101]
+      End processing HTTP request after 231.5887ms - 200
+[xUnit.net 00:00:03.87]   Finished:    ProductionForecastService.Tests
+  Passed ProductionForecastService.Tests.WellRegistryClientStubTests.Active_well_from_consumer_example_is_mapped [289 ms]
+  Passed ProductionForecastService.Tests.WellRegistryClientStubTests.Interaction_without_an_example_is_refused_in_strict_mode [265 ms]
+  Passed ProductionForecastService.Tests.WellRegistryClientStubTests.Shut_in_well_from_consumer_example_is_mapped [204 ms]
+  Passed ProductionForecastService.Tests.WellRegistryClientStubTests.Consumer_sends_the_configured_bearer_token_and_v2_path [244 ms]
+
+Test Run Successful.
+Total tests: 6
+     Passed: 6
+ Total time: 4.9217 Seconds
+Results File: .\results\case2\consumer-c1-forecast-vs-wellregistry-stub.trx

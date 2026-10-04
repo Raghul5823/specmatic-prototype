@@ -1,6 +1,7 @@
 # Specmatic Prototype — Contract Testing Evaluation
 
-> Status: **Phase 3 complete** (Case 1, contracts `v1.1`). Later sections are placeholders until their phase runs.
+> Status: **Phase 4 complete** (Case 2, intra-app). Later sections are placeholders until their phase runs.
+> New readers: start with [docs/APPLICATION-GUIDE.md](docs/APPLICATION-GUIDE.md), a plain-language guide to the design, folders, services and contracts.
 
 ## 0. Master checklist
 Ticked items link to their evidence. Updated at the end of every phase.
@@ -22,18 +23,20 @@ Ticked items link to their evidence. Updated at the end of every phase.
 - [x] Break experiments 01–07, one at a time, rerun, recorded, reverted (checksums identical): [results/case1/break/summary.md](results/case1/break/summary.md)
 - [x] Extra experiments 08 (new field, closed schema → caught) and 09 (`additionalProperties: true` → not caught)
 - [x] Results table in README §6
-- [ ] Commit Phase 3 (including `results/demo` and `contracts/.gitignore`); contracts tagged `v1.1` (examples added, backward compatible)
+- [x] Commit Phase 3 (including `results/demo` and `contracts/.gitignore`); contracts tagged `v1.1` (examples added, backward compatible); pushed
 
 **Phase 4: Case 2 (intra-app, C1 and C2)**
-- [ ] Provider tests for well-registry and approval
-- [ ] Stubs on 9101 / 9202; consumer xUnit tests against the stubs
-- [ ] Stub rejects contract-violating consumer requests
-- [ ] Example-driven stub responses: happy path, 404, empty list
-- [ ] T4: stubs served under `/v2` (basePath/baseUrl), or document the workaround
-- [ ] T5: a reliable way to prove the consumer sends the correct token
-- [ ] Mitigation for random stub data (an example for every consumer scenario)
-- [ ] Break experiments on both consumer and provider sides
-- [ ] Pact comparison: what is covered, what isn't, how examples + `consumers.yaml` close the gap
+- [x] Provider tests for well-registry (15/15, 100%) and approval (6/6, 43%): [results/case2/provider-c1-well-registry/](results/case2/provider-c1-well-registry/), [provider-c2-approval](results/case2/provider-c2-approval/)
+- [x] Stubs on 9101 / 9202 (strict, under `/v2`); 11 consumer xUnit tests against the stubs pass: [results/case2/](results/case2/)
+- [x] Stub rejects contract-violating consumer requests (bad id pattern, bad enum, wrong path, renamed request field)
+- [x] Example-driven stub responses: happy path, SHUT_IN, 404, approve/reject (the empty list is a C4 example, exercised in Phase 5)
+- [x] T4: stubs served under `/v2` via mock config `baseUrl` (§5 Phase 4, finding 1)
+- [x] T5: exact token asserted in consumer tests with a recording handler; the stub only checks format (experiment 03)
+- [x] Mitigation for random stub data: strict stubs + an example for every consumer scenario
+- [x] Break experiments on both consumer and provider sides: 6/6 caught: [results/case2/break/summary.md](results/case2/break/summary.md)
+- [x] Pact comparison: what is covered, what isn't, how examples + `consumers.yaml` close the gap (§5 Phase 4)
+- [x] Application guide (design, folders, services, specs, terms, reasons): [docs/APPLICATION-GUIDE.md](docs/APPLICATION-GUIDE.md)
+- [ ] Commit Phase 4 and push (after scan + approval)
 
 **Phase 5: Case 3 (cross-app, C3 and C4)**
 - [ ] Provider and consumer tests for C3 and C4, specs taken from the contracts git repo
@@ -83,7 +86,7 @@ Out of scope: production-grade code, a real OAuth2 identity provider, and a full
 | 1 | Project structure and design | ✅ done |
 | 2 | Contracts (specs, examples, `consumers.yaml`, tag `v1`); services moved under `/v2` with `/liveness` and `/readiness` | ✅ done |
 | 3 | Case 1: a service's own API (provider tests, reports, xUnit for the internal layer, break experiments) | ✅ done |
-| 4 | Case 2: service-to-service within an app, both directions (provider tests + consumer tests against stubs) | next |
+| 4 | Case 2: service-to-service within an app, both directions (provider tests + consumer tests against stubs) | ✅ done |
 | 5 | Case 3: cross-application, both directions, specs from the central `contracts/` repo; backward-compatibility check against `v1`; drift | |
 | 6 | **Minimal Angular MFE consumer**: generated TypeScript client from the spec, contract break as a compile error, Playwright against a Specmatic stub via the dev-server proxy | |
 | 7 | Pipeline simulation: `run-all.ps1` + sample `azure-pipelines.yml` (**BuildService** stage with unit tests, xUnit `ContractTests` projects and the Angular steps; the deploy stage depends on it) | |
@@ -440,6 +443,74 @@ flowchart LR
 
   Those belong to xUnit, which the developers own. The two layers complement each other: Specmatic proves the **promise to consumers**, and xUnit proves the **internal behaviour behind it**.
 
+### Phase 4 — Case 2: service-to-service within the same app (C1 and C2)
+
+**New tooling**
+- `scripts/stub.ps1 start|stop <service> <port> [-Strict] [-Config <mock.yaml>] [-SaveLogTo <folder>]` runs a Specmatic stub in Docker (`stub-<service>`), with `contracts/` mounted read-only. On stop it can save the stub's request log.
+- `specmatic/well-registry.mock.yaml` and `specmatic/approval.mock.yaml` are v3 mock configs with `baseUrl: http://0.0.0.0:9000/v2`.
+- Two consumer test projects (same pinned packages, no new downloads):
+  - `production-forecast-service.Tests` (C1, 6 tests);
+  - `change-request-service.Tests` (C2, 5 tests).
+
+  They use the consumer's **real** typed client, registered with the same `AddDownstreamClient` call as in `Program.cs`, pointed at the stub.
+- `break-experiment.ps1` gained a **consumer mode**: start a strict stub, then run the consumer tests.
+- Docker after the laptop restart: a container starts in **2.4 s** (it was 1–2 minutes), and all 6 experiments took about 3 minutes.
+
+**4a. Provider side** (Specmatic against the real providers)
+
+| Provider | Tests | Result | API coverage | Evidence |
+|---|---|---|---|---|
+| well-registry (C1) | 15 | 15 passed | 100% | [results/case2/provider-c1-well-registry/](results/case2/provider-c1-well-registry/) |
+| approval (C2) | 6 | 6 passed | **43%** (no 400/401 examples yet, the same gap well-registry had before Phase 3) | [results/case2/provider-c2-approval/](results/case2/provider-c2-approval/) |
+
+**4b. Consumer side** (consumer tests vs **strict** stubs under `/v2`): **11/11 passed**: [C1 output](results/case2/consumer-c1-forecast-vs-wellregistry-stub.txt), [C2 output](results/case2/consumer-c2-changerequest-vs-approval-stub.txt), TRX files in `results/case2/`, stub request logs in [results/case2/stub-logs/](results/case2/stub-logs/).
+
+| Test | What it shows |
+|---|---|
+| Active / SHUT_IN well, approve / reject | **Example-driven responses**: the stub returns exactly the consumer's examples (happy path, SHUT_IN, approve, reject) and the consumer maps them correctly |
+| Unknown well → `null` | example-driven **404** (`production-forecast__get_well_W-999_not_found`) |
+| Request that breaks the contract | the **stub rejects** `WELL-1` (pattern) and type `BOGUS` (enum) with 400; the client raises |
+| Interaction without an example | **strict mode** refuses a valid but unexampled request (`W-555`, `CR-1999`) with 400 instead of random data |
+| Token and `/v2` path | a recording handler proves the consumer sends `Bearer test-token-123` to `/v2/...` (T5) |
+
+The "empty list" response belongs to interaction C4 (`production-forecast__list_approved_W-002_empty`) and is exercised in Phase 5.
+
+**Findings**
+1. **T4 solved: stubs under `/v2`.** A v3 mock config with `baseUrl: "http://0.0.0.0:9000/v2"` makes the stub serve `/v2/wells/W-003` (200) and reject `/wells/W-003` (400), the same paths as the real service. Consumers point at `http://localhost:9101/v2/` with no special-casing. (The CLI alone, without a config, serves at the root.)
+2. **T5: the stub proves a token is present, not that it is right.**
+   - Requests that match an example are served without an auth check.
+   - Other requests need an `Authorization: Bearer …` header with **any** value.
+   - Experiment 03 proved it: a consumer sending `Token …` passed every stub interaction, and only the **token-recording test** in the consumer's xUnit project caught it.
+   - Decision: assert the exact token in consumer tests (a recording `DelegatingHandler`, 15 lines, no packages), and keep tokens **out of** the contract examples so the contract doesn't depend on one environment's test token.
+3. **Random stub data is avoided with strict mode.** With `--strict` the stub answers only requests that match an example; everything else gets 400. That turns the examples into a **complete record of what the consumer actually calls**: a consumer cannot add a new call without adding an example, or its tests fail.
+4. **Stub mode is stricter than test mode when loading examples.** The stub refused to load `provider__get_well_empty_token_401.json` ("Authorization header must be prefixed with Bearer"), while provider tests run it fine. That's harmless (only that example is skipped in the stub), but it shows that **stubs check the token's format, not its value**.
+5. **Test logging:** the `junit` logger for `dotnet test` needs an extra NuGet package (not approved). The built-in **TRX** logger works, and Azure DevOps publishes TRX natively, so consumer tests produce `.trx` and Specmatic produces JUnit XML.
+
+**Comparison with Pact (consumer-driven contracts)**
+
+| | Pact | Specmatic (open source), as used here |
+|---|---|---|
+| Source of truth | the **consumer's tests**: interactions are recorded into a pact file | the **OpenAPI spec** in a central repo (contract-first) |
+| What the provider verifies | only the interactions some consumer recorded | **every** operation and response in the spec, plus consumer examples, plus generated negative tests |
+| Consumer side | Pact mock server inside the consumer's unit test | Specmatic stub generated from the spec (strict mode recommended) |
+| Who uses which field | **automatic**: derived from the consumer's interactions | **manual**: consumer examples + `consumers.yaml` |
+| Value checking | matchers can pin values | shape and types only (Phase 3, experiment 07) |
+| Versions and "can I deploy?" | Pact Broker / PactFlow with a version matrix | git tags (`v1`, `v1.1`) + backward-compatibility check (Phase 5); no deployment matrix in the free edition |
+| Extra infrastructure | a broker (hosted or self-run) | none: a git repo and a Docker image |
+| Same artefact for docs, stubs, tests and code generation | no | **yes** (the spec also generates the Angular client in Phase 6) |
+
+**What Specmatic covers that Pact doesn't:** full conformance of the provider to its documented API (not just the parts someone recorded), generated negative and resiliency tests, backward-compatibility checks on the spec itself, and one file that doubles as documentation and the client-generation source.
+
+**What it doesn't cover:** the automatic, always-up-to-date record of exactly what each consumer uses, and a deployment matrix ("is consumer v5 compatible with provider v8 in PROD?").
+
+**How we close the gap:**
+1. **Consumer-contributed examples** in the contract repo play the role of pact interactions. The provider runs them in its own tests (e.g. `production-forecast__get_well_W-003_shut_in` runs in well-registry's provider tests), so a provider change that breaks a consumer fails the **provider's** build.
+2. **Strict stubs** keep those examples honest: a consumer call without an example fails the consumer's tests, so the examples cannot silently fall behind the consumer's code.
+3. **`consumers.yaml`** records who uses which fields, so a provider can see who to talk to before changing something.
+4. **Git tags + the backward-compatibility gate** (Phase 5) replace the broker's versioning.
+
+The remaining gap is **discipline**: examples and `consumers.yaml` are maintained by people, so they need an owner and a PR review rule (see §8 Control points).
+
 ## 6. Break-experiment results
 
 ### Case 1: well-registry-service (Phase 3)
@@ -468,8 +539,22 @@ Each change was applied on its own, then the solution was rebuilt and both layer
 - **One failing endpoint fails several tests:** a broken `Well` shape (01–03, 08) failed 6 tests at once, because every operation returning a `Well`, plus the consumer examples, failed together. The report shows which consumer examples break (`production-forecast__…`), which tells you **who is affected**.
 - **Experiments 04 and 05 only show up because of examples:** the 201 and 404 checks fail only because examples exercise those responses. Without the 404 examples, a broken error format would go unnoticed.
 
-### Cases 2–3
-_Phases 4–5._
+### Case 2: intra-app interactions C1 and C2, both sides (Phase 4)
+Consumer breaks were run against **strict** Specmatic stubs under `/v2`; provider breaks were run with Specmatic provider tests. Checksums before and after are identical ([before](results/case2/break/checksums-before.txt), [after](results/case2/break/checksums-after.txt)). Script: `scripts/case2-break-experiments.ps1` (about 3 minutes for all 6). Summary: [results/case2/break/summary.md](results/case2/break/summary.md).
+
+| # | Side | Change | Caught? | By which test |
+|---|---|---|---|---|
+| 01 | consumer C1 | Calls `/v2/well/{id}` instead of `/v2/wells/{id}` | **YES** (4/6 consumer tests failed) | strict stub: no such path → 400 |
+| 02 | consumer C1 | Starts relying on a field the contract doesn't have (`WellSummary.Operator`) | **YES** (3/6) | stub responses (from examples) lack the field → deserialisation fails |
+| 03 | consumer C1 | Sends `Authorization: Token …` instead of `Bearer …` | **YES** (1/6) | **only** the token-recording test; the stub still served example matches (T5) |
+| 04 | consumer C2 | Sends `capacityDelta` instead of the required `capacityDeltaBbl` | **YES** (3/5) | strict stub: request breaks the contract → 400 |
+| 05 | provider C2 | Renames response field `decision` → `outcome` | **YES** (5/6 provider tests failed) | Specmatic provider test |
+| 06 | provider C2 | Returns 200 instead of 201 for `POST /approvals` | **YES** (4/6) | Specmatic provider test |
+
+**What to notice:** each side catches **its own** breaks. A provider break (05, 06) is not seen by the consumer's stub tests, because the stub comes from the *spec*, not from the provider's code. It is caught in the **provider's** pipeline instead. A consumer break (01–04) is caught in the **consumer's** pipeline, without the provider running at all. The contract is the meeting point, and each team only needs its own build.
+
+### Case 3
+_Phase 5._
 
 ## 7. Coverage
 _Phase 8._
@@ -516,4 +601,20 @@ _Phase 8_ (will include the Angular MFE findings from Phase 6).
    dotnet test app-a-production\well-registry-service.Tests\WellRegistryService.Tests.csproj           # 13 xUnit tests
    .\scripts\case1-break-experiments.ps1        # all 9 break experiments, about 4-5 min each; -From <n> resumes
    ```
-7. _Further steps added as phases complete (`scripts/run-all.ps1` in Phase 7)._
+7. Phase 4 (Case 2), from the prototype root:
+   ```powershell
+   dotnet build SpecmaticPrototype.sln
+   # provider side
+   .\scripts\start-services.ps1 -Only well-registry-service,approval-service -NoBuild
+   .\scripts\run-provider-test.ps1 -Service well-registry-service -Out case2\provider-c1-well-registry
+   .\scripts\run-provider-test.ps1 -Service approval-service -Out case2\provider-c2-approval
+   .\scripts\stop-services.ps1
+   # consumer side: strict stubs under /v2, then the consumer tests
+   .\scripts\stub.ps1 start well-registry-service 9101 -Strict -Config specmatic\well-registry.mock.yaml
+   .\scripts\stub.ps1 start approval-service 9202 -Strict -Config specmatic\approval.mock.yaml
+   dotnet test app-a-production\production-forecast-service.Tests\ProductionForecastService.Tests.csproj   # 6 tests
+   dotnet test app-b-change-mgmt\change-request-service.Tests\ChangeRequestService.Tests.csproj            # 5 tests
+   .\scripts\stub.ps1 stop well-registry-service ; .\scripts\stub.ps1 stop approval-service
+   .\scripts\case2-break-experiments.ps1        # 6 experiments, about 3 minutes in total
+   ```
+8. _Further steps added as phases complete (`scripts/run-all.ps1` in Phase 7)._

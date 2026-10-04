@@ -1,0 +1,31 @@
+# Specmatic config (v3) used by CONSUMERS of approval-service: runs the provider's spec as a mock under /v2.
+version: 3
+
+dependencies:
+  services:
+    - service:
+        $ref: "#/components/services/approval"
+        runOptions:
+          $ref: "#/components/runOptions/approvalMock"
+
+components:
+  sources:
+    centralContracts:
+      filesystem:
+        directory: /work/contracts
+
+  services:
+    approval:
+      description: approval-service (App B) as a dependency
+      definitions:
+        - definition:
+            source:
+              $ref: "#/components/sources/centralContracts"
+            specs:
+              - specs/app-b-change-mgmt/approval-service.yaml
+
+  runOptions:
+    approvalMock:
+      openapi:
+        type: mock
+        baseUrl: "http://0.0.0.0:9000/v2"

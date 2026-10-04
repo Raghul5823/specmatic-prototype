@@ -1,0 +1,33 @@
+# Specmatic config (v3) used by CONSUMERS of well-registry-service: runs the provider's spec as a mock.
+# T4: baseUrl includes /v2 so the stub serves the same paths as the real service (/v2/wells/...).
+# Paths are as seen inside the Specmatic container (scripts mount the prototype root at /work).
+version: 3
+
+dependencies:
+  services:
+    - service:
+        $ref: "#/components/services/wellRegistry"
+        runOptions:
+          $ref: "#/components/runOptions/wellRegistryMock"
+
+components:
+  sources:
+    centralContracts:
+      filesystem:
+        directory: /work/contracts
+
+  services:
+    wellRegistry:
+      description: well-registry-service (App A) as a dependency
+      definitions:
+        - definition:
+            source:
+              $ref: "#/components/sources/centralContracts"
+            specs:
+              - specs/app-a-production/well-registry-service.yaml
+
+  runOptions:
+    wellRegistryMock:
+      openapi:
+        type: mock
+        baseUrl: "http://0.0.0.0:9000/v2"

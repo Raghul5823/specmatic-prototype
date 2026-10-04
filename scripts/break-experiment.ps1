@@ -13,7 +13,13 @@ param(
     [Parameter(Mandatory)] [hashtable[]]$Changes,   # each: @{ File; Find; Replace } (literal text, must match exactly once)
     [string]$Service = 'well-registry-service',
     [string]$TestProject = 'app-a-production\well-registry-service.Tests\WellRegistryService.Tests.csproj',
-    [string]$Expected = ''
+    [string]$Expected = '',
+    # Consumer mode: no provider test; the TestProject (consumer stub tests) runs against a STRICT
+    # Specmatic stub of StubService started on StubPort with StubConfig.
+    [ValidateSet('Provider', 'Consumer')] [string]$Mode = 'Provider',
+    [string]$StubService,
+    [int]$StubPort,
+    [string]$StubConfig
 )
 # 'Continue', not 'Stop': in PowerShell 5.1 a failing `dotnet test` writes to stderr, which
 # 'Stop' turns into a terminating error and aborts the experiment (seen in Phase 3).
@@ -47,11 +53,21 @@ try {
     $result.compiled = ($LASTEXITCODE -eq 0)
     $build | Set-Content -Encoding utf8 (Join-Path $outDir 'build.txt')
 
-    if ($result.compiled) {
-        # 3. xUnit (in-process, internal layers).
+    if ($result.compiled -and $Mode -eq 'Consumer') {
+        # 3c. Consumer side: the (broken) consumer's tests against a strict stub of the provider.
+        & "$PSScriptRoot\stub.ps1" start $StubService $StubPort -Strict -Config $StubConfig | Out-Null
         $xunit = dotnet test (Join-Path $Root $TestProject) --no-build -nologo -v q 2>&1 | ForEach-Object { "$_".Replace($Root, '.') }
         $result.xunitFailed = ($LASTEXITCODE -ne 0)
-        $xunit | Set-Content -Encoding utf8 (Join-Path $outDir 'xunit.txt')
+        $xunit | Set-Content -Encoding utf8 (Join-Path $outDir 'consumer-tests.txt')
+        & "$PSScriptRoot\stub.ps1" stop $StubService -SaveLogTo $Out | Out-Null
+    }
+    elseif ($result.compiled) {
+        # 3. xUnit (in-process, internal layers), if the service has a unit-test project.
+        if ($TestProject) {
+            $xunit = dotnet test (Join-Path $Root $TestProject) --no-build -nologo -v q 2>&1 | ForEach-Object { "$_".Replace($Root, '.') }
+            $result.xunitFailed = ($LASTEXITCODE -ne 0)
+            $xunit | Set-Content -Encoding utf8 (Join-Path $outDir 'xunit.txt')
+        }
 
         # 4. Specmatic against the running (broken) service, examples only (deterministic, fast).
         & "$PSScriptRoot\start-services.ps1" -Only $Service -NoBuild | Out-Null
@@ -69,6 +85,7 @@ finally {
     dotnet build (Join-Path $Root 'SpecmaticPrototype.sln') -nologo -v q | Out-Null
 }
 
+$result.mode = $Mode
 $result.specmaticCaught = ($result.specmaticExit -ne $null -and $result.specmaticExit -ne 0)
 $result.changes = $Changes | ForEach-Object { "$($_.File): '$($_.Find)' -> '$($_.Replace)'" }
 $result | ConvertTo-Json -Depth 4 | Set-Content -Encoding utf8 (Join-Path $outDir 'experiment.json')

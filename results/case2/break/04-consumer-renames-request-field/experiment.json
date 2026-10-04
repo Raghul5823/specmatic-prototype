@@ -1,0 +1,11 @@
+{
+  "name": "Consumer sends capacityDelta instead of required capacityDeltaBbl",
+  "expected": "caught by stub",
+  "compiled": true,
+  "xunitFailed": true,
+  "specmaticFailures": null,
+  "specmaticExit": null,
+  "mode": "Consumer",
+  "specmaticCaught": false,
+  "changes": "app-b-change-mgmt\\change-request-service\\Models.cs: 'public sealed record ApprovalRequest(string ChangeRequestId, string Type, double CapacityDeltaBbl);' -> 'public sealed record ApprovalRequest(string ChangeRequestId, string Type, double CapacityDelta);'"
+}

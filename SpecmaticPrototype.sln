@@ -31,6 +31,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "well-registry-service.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WellRegistryService.Tests", "app-a-production\well-registry-service.Tests\WellRegistryService.Tests.csproj", "{07F14331-C8C5-4764-9DBD-3CC7BB9A705B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "production-forecast-service.Tests", "production-forecast-service.Tests", "{6CAD5D2F-DC7E-36D3-951B-124757AAD14D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductionForecastService.Tests", "app-a-production\production-forecast-service.Tests\ProductionForecastService.Tests.csproj", "{70C21370-E93F-43CB-8369-57D94B040777}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "change-request-service.Tests", "change-request-service.Tests", "{2012C63A-6AE9-602D-AC5B-C1393C423034}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChangeRequestService.Tests", "app-b-change-mgmt\change-request-service.Tests\ChangeRequestService.Tests.csproj", "{420412A6-A6B3-4B87-93B1-58C4100791C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +121,30 @@ Global
 		{07F14331-C8C5-4764-9DBD-3CC7BB9A705B}.Release|x64.Build.0 = Release|Any CPU
 		{07F14331-C8C5-4764-9DBD-3CC7BB9A705B}.Release|x86.ActiveCfg = Release|Any CPU
 		{07F14331-C8C5-4764-9DBD-3CC7BB9A705B}.Release|x86.Build.0 = Release|Any CPU
+		{70C21370-E93F-43CB-8369-57D94B040777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70C21370-E93F-43CB-8369-57D94B040777}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70C21370-E93F-43CB-8369-57D94B040777}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{70C21370-E93F-43CB-8369-57D94B040777}.Debug|x64.Build.0 = Debug|Any CPU
+		{70C21370-E93F-43CB-8369-57D94B040777}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{70C21370-E93F-43CB-8369-57D94B040777}.Debug|x86.Build.0 = Debug|Any CPU
+		{70C21370-E93F-43CB-8369-57D94B040777}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70C21370-E93F-43CB-8369-57D94B040777}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70C21370-E93F-43CB-8369-57D94B040777}.Release|x64.ActiveCfg = Release|Any CPU
+		{70C21370-E93F-43CB-8369-57D94B040777}.Release|x64.Build.0 = Release|Any CPU
+		{70C21370-E93F-43CB-8369-57D94B040777}.Release|x86.ActiveCfg = Release|Any CPU
+		{70C21370-E93F-43CB-8369-57D94B040777}.Release|x86.Build.0 = Release|Any CPU
+		{420412A6-A6B3-4B87-93B1-58C4100791C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{420412A6-A6B3-4B87-93B1-58C4100791C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{420412A6-A6B3-4B87-93B1-58C4100791C9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{420412A6-A6B3-4B87-93B1-58C4100791C9}.Debug|x64.Build.0 = Debug|Any CPU
+		{420412A6-A6B3-4B87-93B1-58C4100791C9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{420412A6-A6B3-4B87-93B1-58C4100791C9}.Debug|x86.Build.0 = Debug|Any CPU
+		{420412A6-A6B3-4B87-93B1-58C4100791C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{420412A6-A6B3-4B87-93B1-58C4100791C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{420412A6-A6B3-4B87-93B1-58C4100791C9}.Release|x64.ActiveCfg = Release|Any CPU
+		{420412A6-A6B3-4B87-93B1-58C4100791C9}.Release|x64.Build.0 = Release|Any CPU
+		{420412A6-A6B3-4B87-93B1-58C4100791C9}.Release|x86.ActiveCfg = Release|Any CPU
+		{420412A6-A6B3-4B87-93B1-58C4100791C9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -129,5 +161,9 @@ Global
 		{F482189C-B4A6-487D-B77E-9C0934B30049} = {22258B35-2415-8428-D055-2A3A6A6E7042}
 		{6E92DD88-25F9-EB77-E4D4-20C5E1F9B59B} = {4590FF39-90EA-C426-9874-EBAD2CDD91FF}
 		{07F14331-C8C5-4764-9DBD-3CC7BB9A705B} = {6E92DD88-25F9-EB77-E4D4-20C5E1F9B59B}
+		{6CAD5D2F-DC7E-36D3-951B-124757AAD14D} = {4590FF39-90EA-C426-9874-EBAD2CDD91FF}
+		{70C21370-E93F-43CB-8369-57D94B040777} = {6CAD5D2F-DC7E-36D3-951B-124757AAD14D}
+		{2012C63A-6AE9-602D-AC5B-C1393C423034} = {9FD232BA-4648-37E9-0F08-4A33EC36067F}
+		{420412A6-A6B3-4B87-93B1-58C4100791C9} = {2012C63A-6AE9-602D-AC5B-C1393C423034}
 	EndGlobalSection
 EndGlobal

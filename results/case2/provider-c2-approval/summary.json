@@ -1,0 +1,11 @@
+{
+  "service": "approval-service",
+  "run": "case2\\provider-c2-approval",
+  "exitCode": 0,
+  "testsRun": 6,
+  "successes": 6,
+  "failures": 0,
+  "errors": 0,
+  "apiCoveragePct": 43,
+  "coverageOperations": 7
+}

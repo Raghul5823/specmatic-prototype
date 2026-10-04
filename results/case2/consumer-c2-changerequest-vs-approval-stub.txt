@@ -1,0 +1,61 @@
+Test run for .\app-b-change-mgmt\change-request-service.Tests\bin\Debug\net10.0\ChangeRequestService.Tests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.1)
+[xUnit.net 00:00:00.14]   Discovering: ChangeRequestService.Tests
+[xUnit.net 00:00:00.20]   Discovered:  ChangeRequestService.Tests
+[xUnit.net 00:00:00.23]   Starting:    ChangeRequestService.Tests
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[100]
+      Start processing HTTP request POST http://localhost:9202/v2/approvals
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[100]
+      Sending HTTP request POST http://localhost:9202/v2/approvals
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[101]
+      Received HTTP response headers after 718.9184ms - 400
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[101]
+      End processing HTTP request after 733.565ms - 400
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[100]
+      Start processing HTTP request POST http://localhost:9202/v2/approvals
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[100]
+      Sending HTTP request POST http://localhost:9202/v2/approvals
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[101]
+      Received HTTP response headers after 227.4007ms - 201
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[101]
+      End processing HTTP request after 227.6407ms - 201
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[100]
+      Start processing HTTP request POST http://localhost:9202/v2/approvals
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[100]
+      Sending HTTP request POST http://localhost:9202/v2/approvals
+  Passed ChangeRequestService.Tests.ApprovalClientStubTests.Interaction_without_an_example_is_refused_in_strict_mode [905 ms]
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[101]
+      Received HTTP response headers after 160.6623ms - 201
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[101]
+      End processing HTTP request after 160.8027ms - 201
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[100]
+      Start processing HTTP request POST http://localhost:9202/v2/approvals
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[100]
+      Sending HTTP request POST http://localhost:9202/v2/approvals
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[101]
+      Received HTTP response headers after 158.3189ms - 400
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[101]
+      End processing HTTP request after 158.4597ms - 400
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[100]
+      Start processing HTTP request POST http://localhost:9202/v2/approvals
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[100]
+      Sending HTTP request POST http://localhost:9202/v2/approvals
+info: System.Net.Http.HttpClient.IApprovalClient.ClientHandler[101]
+      Received HTTP response headers after 147.9305ms - 201
+info: System.Net.Http.HttpClient.IApprovalClient.LogicalHandler[101]
+      End processing HTTP request after 148.346ms - 201
+[xUnit.net 00:00:01.97]   Finished:    ChangeRequestService.Tests
+  Passed ChangeRequestService.Tests.ApprovalClientStubTests.Small_change_is_approved_per_consumer_example [264 ms]
+  Passed ChangeRequestService.Tests.ApprovalClientStubTests.Large_change_is_rejected_per_consumer_example [169 ms]
+  Passed ChangeRequestService.Tests.ApprovalClientStubTests.Request_that_breaks_the_contract_is_rejected_by_the_stub [175 ms]
+  Passed ChangeRequestService.Tests.ApprovalClientStubTests.Consumer_posts_json_with_the_configured_token_to_the_v2_path [158 ms]
+
+Test Run Successful.
+Total tests: 5
+     Passed: 5
+ Total time: 3.0978 Seconds
+Results File: .\results\case2\consumer-c2-changerequest-vs-approval-stub.trx

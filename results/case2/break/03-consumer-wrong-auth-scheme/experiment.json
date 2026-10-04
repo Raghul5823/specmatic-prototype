@@ -1,0 +1,11 @@
+{
+  "name": "Consumer sends \"Authorization: Token ...\" instead of \"Bearer ...\"",
+  "expected": "only the token-recording test (T5)",
+  "compiled": true,
+  "xunitFailed": true,
+  "specmaticFailures": null,
+  "specmaticExit": null,
+  "mode": "Consumer",
+  "specmaticCaught": false,
+  "changes": "shared\\Prototype.ServiceDefaults\\ServiceDefaults.cs: 'new AuthenticationHeaderValue(\"Bearer\", token)' -> 'new AuthenticationHeaderValue(\"Token\", token)'"
+}

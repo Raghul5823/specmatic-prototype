@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="df684870-c90c-414d-ae89-bd36c03df406" name="<user>@<machine> 2026-10-04 22:19:33" runUser="<domain>\<user>" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-04T22:19:33.6935689+05:30" queuing="2026-10-04T22:19:33.6935694+05:30" start="2026-10-04T22:19:29.6927293+05:30" finish="2026-10-04T22:19:34.6488129+05:30" />
+  <TestSettings name="default" id="e9e8495a-5ae1-4ca5-88ad-082e5003b3f7">
+    <Deployment runDeploymentRoot="<user>_<machine>_2026-10-04_22_19_33" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="1eb7ff38-ac53-4c2d-ad6d-2a558addb696" testId="1cf03480-aaf7-a66b-30b5-eaa637d01d92" testName="ProductionForecastService.Tests.WellRegistryClientStubTests.Interaction_without_an_example_is_refused_in_strict_mode" computerName="<machine>" duration="00:00:00.2653035" startTime="2026-10-04T22:19:33.8116282+05:30" endTime="2026-10-04T22:19:34.0779642+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1eb7ff38-ac53-4c2d-ad6d-2a558addb696" />
+    <UnitTestResult executionId="a45fa170-4b2c-42ed-af51-d415d50a0a13" testId="af21ac9c-acec-5c1a-414b-a12e90dfb30b" testName="ProductionForecastService.Tests.WellRegistryClientStubTests.Active_well_from_consumer_example_is_mapped" computerName="<machine>" duration="00:00:00.2891059" startTime="2026-10-04T22:19:33.5242180+05:30" endTime="2026-10-04T22:19:33.8113109+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a45fa170-4b2c-42ed-af51-d415d50a0a13" />
+    <UnitTestResult executionId="6e075064-58ff-4e68-85bf-983e1d1fa649" testId="28f97cb2-1a4c-5863-5139-62dd476bac39" testName="ProductionForecastService.Tests.WellRegistryClientStubTests.Consumer_sends_the_configured_bearer_token_and_v2_path" computerName="<machine>" duration="00:00:00.2444528" startTime="2026-10-04T22:19:34.2838222+05:30" endTime="2026-10-04T22:19:34.5287101+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6e075064-58ff-4e68-85bf-983e1d1fa649" />
+    <UnitTestResult executionId="aef6b517-57c2-4712-aaa0-8dc2821e8e9d" testId="d22e5a03-2686-c3d1-5c7d-e861e9891cd5" testName="ProductionForecastService.Tests.WellRegistryClientStubTests.Unknown_well_404_from_consumer_example_becomes_null" computerName="<machine>" duration="00:00:02.1662805" startTime="2026-10-04T22:19:31.1236552+05:30" endTime="2026-10-04T22:19:33.3049143+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aef6b517-57c2-4712-aaa0-8dc2821e8e9d" />
+    <UnitTestResult executionId="84faa0f8-0214-4ee8-9407-bd4d927bc758" testId="adf94038-8638-4d83-fba4-b685724c1a02" testName="ProductionForecastService.Tests.WellRegistryClientStubTests.Shut_in_well_from_consumer_example_is_mapped" computerName="<machine>" duration="00:00:00.2041864" startTime="2026-10-04T22:19:34.0787646+05:30" endTime="2026-10-04T22:19:34.2831772+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="84faa0f8-0214-4ee8-9407-bd4d927bc758" />
+    <UnitTestResult executionId="e0352132-88d5-4d80-a75a-50d6c984f1b3" testId="500915f4-f0fe-db62-c9da-3267751e8606" testName="ProductionForecastService.Tests.WellRegistryClientStubTests.Request_that_breaks_the_contract_is_rejected_by_the_stub" computerName="<machine>" duration="00:00:00.2116887" startTime="2026-10-04T22:19:33.3253794+05:30" endTime="2026-10-04T22:19:33.5217717+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e0352132-88d5-4d80-a75a-50d6c984f1b3" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ProductionForecastService.Tests.WellRegistryClientStubTests.Active_well_from_consumer_example_is_mapped" storage=".\app-a-production\production-forecast-service.tests\bin\debug\net10.0\productionforecastservice.tests.dll" id="af21ac9c-acec-5c1a-414b-a12e90dfb30b">
+      <Execution id="a45fa170-4b2c-42ed-af51-d415d50a0a13" />
+      <TestMethod codeBase=".\app-a-production\production-forecast-service.Tests\bin\Debug\net10.0\ProductionForecastService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ProductionForecastService.Tests.WellRegistryClientStubTests" name="Active_well_from_consumer_example_is_mapped" />
+    </UnitTest>
+    <UnitTest name="ProductionForecastService.Tests.WellRegistryClientStubTests.Interaction_without_an_example_is_refused_in_strict_mode" storage=".\app-a-production\production-forecast-service.tests\bin\debug\net10.0\productionforecastservice.tests.dll" id="1cf03480-aaf7-a66b-30b5-eaa637d01d92">
+      <Execution id="1eb7ff38-ac53-4c2d-ad6d-2a558addb696" />
+      <TestMethod codeBase=".\app-a-production\production-forecast-service.Tests\bin\Debug\net10.0\ProductionForecastService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ProductionForecastService.Tests.WellRegistryClientStubTests" name="Interaction_without_an_example_is_refused_in_strict_mode" />
+    </UnitTest>
+    <UnitTest name="ProductionForecastService.Tests.WellRegistryClientStubTests.Consumer_sends_the_configured_bearer_token_and_v2_path" storage=".\app-a-production\production-forecast-service.tests\bin\debug\net10.0\productionforecastservice.tests.dll" id="28f97cb2-1a4c-5863-5139-62dd476bac39">
+      <Execution id="6e075064-58ff-4e68-85bf-983e1d1fa649" />
+      <TestMethod codeBase=".\app-a-production\production-forecast-service.Tests\bin\Debug\net10.0\ProductionForecastService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ProductionForecastService.Tests.WellRegistryClientStubTests" name="Consumer_sends_the_configured_bearer_token_and_v2_path" />
+    </UnitTest>
+    <UnitTest name="ProductionForecastService.Tests.WellRegistryClientStubTests.Unknown_well_404_from_consumer_example_becomes_null" storage=".\app-a-production\production-forecast-service.tests\bin\debug\net10.0\productionforecastservice.tests.dll" id="d22e5a03-2686-c3d1-5c7d-e861e9891cd5">
+      <Execution id="aef6b517-57c2-4712-aaa0-8dc2821e8e9d" />
+      <TestMethod codeBase=".\app-a-production\production-forecast-service.Tests\bin\Debug\net10.0\ProductionForecastService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ProductionForecastService.Tests.WellRegistryClientStubTests" name="Unknown_well_404_from_consumer_example_becomes_null" />
+    </UnitTest>
+    <UnitTest name="ProductionForecastService.Tests.WellRegistryClientStubTests.Request_that_breaks_the_contract_is_rejected_by_the_stub" storage=".\app-a-production\production-forecast-service.tests\bin\debug\net10.0\productionforecastservice.tests.dll" id="500915f4-f0fe-db62-c9da-3267751e8606">
+      <Execution id="e0352132-88d5-4d80-a75a-50d6c984f1b3" />
+      <TestMethod codeBase=".\app-a-production\production-forecast-service.Tests\bin\Debug\net10.0\ProductionForecastService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ProductionForecastService.Tests.WellRegistryClientStubTests" name="Request_that_breaks_the_contract_is_rejected_by_the_stub" />
+    </UnitTest>
+    <UnitTest name="ProductionForecastService.Tests.WellRegistryClientStubTests.Shut_in_well_from_consumer_example_is_mapped" storage=".\app-a-production\production-forecast-service.tests\bin\debug\net10.0\productionforecastservice.tests.dll" id="adf94038-8638-4d83-fba4-b685724c1a02">
+      <Execution id="84faa0f8-0214-4ee8-9407-bd4d927bc758" />
+      <TestMethod codeBase=".\app-a-production\production-forecast-service.Tests\bin\Debug\net10.0\ProductionForecastService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ProductionForecastService.Tests.WellRegistryClientStubTests" name="Shut_in_well_from_consumer_example_is_mapped" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="1cf03480-aaf7-a66b-30b5-eaa637d01d92" executionId="1eb7ff38-ac53-4c2d-ad6d-2a558addb696" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="af21ac9c-acec-5c1a-414b-a12e90dfb30b" executionId="a45fa170-4b2c-42ed-af51-d415d50a0a13" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="28f97cb2-1a4c-5863-5139-62dd476bac39" executionId="6e075064-58ff-4e68-85bf-983e1d1fa649" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d22e5a03-2686-c3d1-5c7d-e861e9891cd5" executionId="aef6b517-57c2-4712-aaa0-8dc2821e8e9d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="adf94038-8638-4d83-fba4-b685724c1a02" executionId="84faa0f8-0214-4ee8-9407-bd4d927bc758" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="500915f4-f0fe-db62-c9da-3267751e8606" executionId="e0352132-88d5-4d80-a75a-50d6c984f1b3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="6" executed="6" passed="6" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.01] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.1)&#xD;
+[xUnit.net 00:00:00.27]   Discovering: ProductionForecastService.Tests&#xD;
+[xUnit.net 00:00:00.38]   Discovered:  ProductionForecastService.Tests&#xD;
+[xUnit.net 00:00:00.42]   Starting:    ProductionForecastService.Tests&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[100]&#xD;
+      Start processing HTTP request GET http://localhost:9101/v2/wells/W-999&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[100]&#xD;
+      Sending HTTP request GET http://localhost:9101/v2/wells/W-999&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[101]&#xD;
+      Received HTTP response headers after 867.6948ms - 404&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[101]&#xD;
+      End processing HTTP request after 899.0614ms - 404&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[100]&#xD;
+      Start processing HTTP request GET http://localhost:9101/v2/wells/WELL-1&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[100]&#xD;
+      Sending HTTP request GET http://localhost:9101/v2/wells/WELL-1&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[101]&#xD;
+      Received HTTP response headers after 161.9462ms - 400&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[101]&#xD;
+      End processing HTTP request after 162.2819ms - 400&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[100]&#xD;
+      Start processing HTTP request GET http://localhost:9101/v2/wells/W-001&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[100]&#xD;
+      Sending HTTP request GET http://localhost:9101/v2/wells/W-001&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[101]&#xD;
+      Received HTTP response headers after 212.7976ms - 200&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[101]&#xD;
+      End processing HTTP request after 212.9644ms - 200&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[100]&#xD;
+      Start processing HTTP request GET http://localhost:9101/v2/wells/W-555&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[100]&#xD;
+      Sending HTTP request GET http://localhost:9101/v2/wells/W-555&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[101]&#xD;
+      Received HTTP response headers after 242.6238ms - 400&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[101]&#xD;
+      End processing HTTP request after 242.8469ms - 400&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[100]&#xD;
+      Start processing HTTP request GET http://localhost:9101/v2/wells/W-003&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[100]&#xD;
+      Sending HTTP request GET http://localhost:9101/v2/wells/W-003&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[101]&#xD;
+      Received HTTP response headers after 187.2432ms - 200&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[101]&#xD;
+      End processing HTTP request after 187.4911ms - 200&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[100]&#xD;
+      Start processing HTTP request GET http://localhost:9101/v2/wells/W-001&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[100]&#xD;
+      Sending HTTP request GET http://localhost:9101/v2/wells/W-001&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.ClientHandler[101]&#xD;
+      Received HTTP response headers after 231.4142ms - 200&#xD;
+info: System.Net.Http.HttpClient.IWellRegistryClient.LogicalHandler[101]&#xD;
+      End processing HTTP request after 231.5887ms - 200&#xD;
+[xUnit.net 00:00:03.87]   Finished:    ProductionForecastService.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

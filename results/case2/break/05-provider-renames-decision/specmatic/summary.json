@@ -1,0 +1,11 @@
+{
+  "service": "approval-service",
+  "run": "case2\\break\\05-provider-renames-decision\\specmatic",
+  "exitCode": 1,
+  "testsRun": 6,
+  "successes": 1,
+  "failures": 5,
+  "errors": 0,
+  "apiCoveragePct": 43,
+  "coverageOperations": 7
+}

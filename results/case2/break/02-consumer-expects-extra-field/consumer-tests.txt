@@ -1,0 +1,10 @@
+Test run for .\app-a-production\production-forecast-service.Tests\bin\Debug\net10.0\ProductionForecastService.Tests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.96]     ProductionForecastService.Tests.WellRegistryClientStubTests.Active_well_from_consumer_example_is_mapped [FAIL]
+[xUnit.net 00:00:02.35]     ProductionForecastService.Tests.WellRegistryClientStubTests.Shut_in_well_from_consumer_example_is_mapped [FAIL]
+[xUnit.net 00:00:02.63]     ProductionForecastService.Tests.WellRegistryClientStubTests.Consumer_sends_the_configured_bearer_token_and_v2_path [FAIL]
+
+Failed!  - Failed:     3, Passed:     3, Skipped:     0, Total:     6, Duration: 2 s - ProductionForecastService.Tests.dll (net10.0)

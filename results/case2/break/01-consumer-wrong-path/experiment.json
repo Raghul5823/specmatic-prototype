@@ -1,0 +1,11 @@
+{
+  "name": "Consumer calls GET /v2/well/{id} instead of /v2/wells/{id}",
+  "expected": "caught by stub",
+  "compiled": true,
+  "xunitFailed": true,
+  "specmaticFailures": null,
+  "specmaticExit": null,
+  "mode": "Consumer",
+  "specmaticCaught": false,
+  "changes": "app-a-production\\production-forecast-service\\Clients.cs: '$\"wells/{Uri.EscapeDataString(wellId)}\"' -> '$\"well/{Uri.EscapeDataString(wellId)}\"'"
+}

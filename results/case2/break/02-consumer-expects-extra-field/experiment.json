@@ -1,0 +1,11 @@
+{
+  "name": "Consumer starts relying on a field the contract does not have (WellSummary.Operator)",
+  "expected": "caught (field not in contract)",
+  "compiled": true,
+  "xunitFailed": true,
+  "specmaticFailures": null,
+  "specmaticExit": null,
+  "mode": "Consumer",
+  "specmaticCaught": false,
+  "changes": "app-a-production\\production-forecast-service\\Models.cs: 'public sealed record WellSummary(string Id, string Name, string Status, double DailyCapacityBbl);' -> 'public sealed record WellSummary(string Id, string Name, string Status, double DailyCapacityBbl, string Operator);'"
+}
