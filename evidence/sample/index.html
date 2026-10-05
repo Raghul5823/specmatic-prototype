@@ -91,6 +91,10 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: v
 .history li { margin: 3px 0; }
 footer { color: var(--muted); font-size: 12.5px; padding: 10px 0 30px; }
 body.failonly details.check.PASS, body.failonly tr.ok { display: none; }
+/* "Show failures only": say what is hidden, so a table never just looks empty. */
+.failnote, #filterbar { display: none; }
+body.failonly .failnote { display: block; margin: 6px 18px 14px; padding: 8px 12px; border-radius: 8px; background: var(--pass-bg); color: var(--pass); font-size: 13.5px; }
+body.failonly #filterbar { display: block; margin: 12px 0 0; }
 @media (max-width: 720px) {
   nav.toc { position: static; }
   details.check > summary { grid-template-columns: 18px 1fr auto; }
@@ -3768,7 +3772,7 @@ body.failonly details.check.PASS, body.failonly tr.ok { display: none; }
                    "demosAsExpected":  27,
                    "demosCaught":  22
                }
-},"view":{"rawBase":"","historyBase":"","sample":true,"current":"2026-10-05_1403","generated":"2026-10-05 14:34","history":{}}};</script>
+},"view":{"rawBase":"","historyBase":"","sample":true,"current":"2026-10-05_1403","generated":"2026-10-05 15:03","history":{}}};</script>
 <script>
 (function () {
   'use strict';
@@ -3824,7 +3828,7 @@ body.failonly details.check.PASS, body.failonly tr.ok { display: none; }
     '<div class="tile ' + (t.failed ? 'fail' : '') + '"><div class="n">' + esc(t.failed) + '</div><div class="l">Failed</div></div>',
     '<div class="tile ' + (t.skipped ? 'skip' : '') + '"><div class="n">' + esc(t.skipped) + '</div><div class="l">Skipped</div></div>',
     '<div class="tile ' + (t.demos ? (t.demosAsExpected === t.demos ? 'pass' : 'fail') : 'skip') + '"><div class="n">' + (t.demos ? esc(t.demosAsExpected) + '/' + esc(t.demos) : '–') + '</div><div class="l">' + (t.demos ? 'Break demos as expected · ' + esc(t.demosCaught) + ' caught' : 'Break demos not run (-IncludeBreakDemos)') + '</div></div>',
-    '</div><div class="under">' + esc(t.testCases) + ' test cases in total. A <b>check</b> is one executed step: a Specmatic run, an xUnit project, a Playwright run, a build or a pipeline gate.</div>');
+    '</div><div class="under">' + esc(t.testCases) + ' test cases in total. A <b>check</b> is one executed step: a Specmatic run, an xUnit project, a Playwright run, a build or a pipeline gate.</div><div id="filterbar" class="note"></div>');
 
   // ---------------------------------------------------------------- sections
   var renderCheck = function (k) {
@@ -3880,6 +3884,13 @@ body.failonly details.check.PASS, body.failonly tr.ok { display: none; }
       Object.keys(v).forEach(function (key) { if (v[key]) h.push('<tr><td>' + esc(labels[key] || key) + '</td><td class="mono">' + esc(v[key]) + '</td></tr>'); });
       h.push('</table></div>');
     }
+    var nPass = checks.filter(function (k) { return k.status === 'PASS'; }).length;
+    if (checks.length && nPass === checks.length) {
+      // The break-demo batches can all pass while a demo inside them did not behave as expected (shown in the matrix).
+      var demoFail = s.id === 'breaks' && t.demosAsExpected !== t.demos;
+      h.push('<p class="failnote">' + (demoFail ? 'Every demo batch ran; the demo that did not behave as expected is listed in the matrix below.'
+        : 'Nothing failed in this section: its ' + nPass + ' passing check' + (nPass === 1 ? ' is' : 's are') + ' hidden by "Show failures only".') + '</p>');
+    }
     h.push('<div class="checks">' + checks.map(renderCheck).join('') + '</div></section>');
     if (s.id === 'breaks' && arr(E.breakDemos).length) {
       h.push('<section class="card" id="matrix"><div class="card-h"><h2>Break-demo matrix</h2>' + pill(t.demosAsExpected === t.demos ? 'PASS' : 'FAIL') + '<span class="t">' + esc(t.demosAsExpected) + '/' + esc(t.demos) + ' as expected · ' + esc(t.demosCaught) + ' caught</span></div>');
@@ -3889,7 +3900,9 @@ body.failonly details.check.PASS, body.failonly tr.ok { display: none; }
         var caught = d.caught == null ? '<span class="na">n/a</span>' : (d.caught ? '<span class="yes">yes</span>' : '<span class="na">no</span>') + (d.gate ? '' : ' <span class="na">(runtime)</span>');
         h.push('<tr class="' + (d.asExpected ? 'ok' : '') + '"><td class="mono nowrap">' + esc(d.id) + '</td><td>' + esc(d.phase) + '</td><td>' + esc(d.change) + '</td><td>' + esc(d.layer) + '</td><td>' + esc(d.expected) + '</td><td>' + esc(d.actual) + '</td><td>' + caught + '</td><td>' + (d.asExpected ? '<span class="yes">✔ yes</span>' : '<span class="no">✘ no</span>') + '</td><td class="num">' + dur(d.seconds) + '</td><td><div class="links">' + arr(d.raw).map(rawLink).join('') + '</div></td></tr>');
       });
-      h.push('</table></div></section>');
+      h.push('</table></div>');
+      if (t.demosAsExpected === t.demos) h.push('<p class="failnote">All ' + esc(t.demos) + ' demos behaved as expected, so every row is hidden by "Show failures only". Untick it to see them.</p>');
+      h.push('</section>');
     }
   });
 
@@ -3922,7 +3935,19 @@ body.failonly details.check.PASS, body.failonly tr.ok { display: none; }
 
   document.getElementById('app').innerHTML = h.join('');
   var box = document.getElementById('failonly');
-  box.addEventListener('change', function () { document.body.classList.toggle('failonly', box.checked); });
+  var bar = document.getElementById('filterbar');
+  var setFilter = function (on) {
+    box.checked = on;
+    document.body.classList.toggle('failonly', on);
+    if (on) {
+      var hc = document.querySelectorAll('details.check.PASS').length, hr = document.querySelectorAll('tr.ok').length;
+      bar.innerHTML = 'Showing <b>failures only</b>: ' + hc + ' passing check' + (hc === 1 ? '' : 's') + ' and ' + hr + ' passing row' + (hr === 1 ? '' : 's') + ' are hidden. <a href="#" id="showall">Show everything</a>';
+      document.getElementById('showall').addEventListener('click', function (e) { e.preventDefault(); setFilter(false); });
+    }
+  };
+  box.addEventListener('change', function () { setFilter(box.checked); });
+  // Browsers restore a ticked checkbox on reload; always start with everything visible.
+  setFilter(false);
   // Open the checks that failed, so problems are visible at first glance.
   Array.prototype.forEach.call(document.querySelectorAll('details.check.FAIL'), function (d) { d.open = true; });
 })();
