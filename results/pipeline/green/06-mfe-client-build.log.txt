@@ -1,0 +1,27 @@
+
+> well-mfe@0.0.0 prebuild
+> npm run generate:api
+
+
+> well-mfe@0.0.0 generate:api
+> node scripts/bundle-spec.mjs ../../contracts/specs/app-a-production/well-registry-service.yaml .generated/well-registry-service.json && ng-openapi-gen --input .generated/well-registry-service.json --output src/app/api --ignoreUnusedModels false
+
+Bundled ../../contracts/specs/app-a-production/well-registry-service.yaml -> .generated/well-registry-service.json (3 external component(s) inlined)
+Using OpenAPI specification version: 3.0.3
+Generation from .generated/well-registry-service.json finished with 5 models and 1 services.
+
+> well-mfe@0.0.0 build
+> ng build
+
+> Building...
+√ Building...
+Initial chunk files | Names         |  Raw size | Estimated transfer size
+main-YIRL3PWA.js    | main          | 137.53 kB |                39.88 kB
+styles-5INURTSO.css | styles        |   0 bytes |                 0 bytes
+
+                    | Initial total | 137.53 kB |                39.88 kB
+
+Application bundle generation complete. [7.270 seconds] - 2026-10-05T06:16:01.181Z
+
+Output location: .\mfe\well-mfe\dist\well-mfe
+

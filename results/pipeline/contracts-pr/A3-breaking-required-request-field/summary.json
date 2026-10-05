@@ -1,0 +1,26 @@
+{
+  "pipeline": "contracts-pr",
+  "run": "A3-breaking-required-request-field",
+  "branch": "pr/A3-breaking-required-request-field",
+  "base": "main",
+  "change": "Make new request field CreateWellRequest.operator REQUIRED",
+  "gates": [
+    {
+      "gate": "Validate specs + examples",
+      "status": "FAILED",
+      "seconds": 46.0
+    },
+    {
+      "gate": "Bundle check",
+      "status": "SKIPPED",
+      "seconds": 0
+    },
+    {
+      "gate": "Backward compatibility vs main",
+      "status": "SKIPPED",
+      "seconds": 0
+    }
+  ],
+  "stoppedAt": "Validate specs + examples",
+  "merge": "BLOCKED by gate 'Validate specs + examples'"
+}

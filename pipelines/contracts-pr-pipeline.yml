@@ -1,0 +1,67 @@
+# =====================================================================================
+# SAMPLE pull-request pipeline for the CONTRACTS repo (NOT executed in this prototype;
+# simulated by scripts/contracts-pr-check.ps1).
+#
+# Register it as a BUILD VALIDATION branch policy on main: any failing gate blocks the merge.
+# There is no deploy stage: contracts are released by tagging (v1.2, v1.3, v2 ...).
+# Replace every <placeholder>.
+# =====================================================================================
+
+trigger: none
+pr:
+  branches:
+    include: [main]
+
+variables:
+  specmaticImage: 'specmatic/specmatic:2.55.0'
+  nodeVersion: '22.19.0'
+  # refs/heads/main -> main
+  targetBranch: $[replace(variables['System.PullRequest.TargetBranch'], 'refs/heads/', '')]
+
+stages:
+  - stage: ValidateContracts
+    displayName: 'Contract gates (merge is blocked on any failure)'
+    jobs:
+      - job: gates
+        pool:
+          name: '<your agent pool>'
+        steps:
+          - checkout: self
+            fetchDepth: 0                  # the compatibility check compares against the base branch history
+          - script: git fetch origin $(targetBranch)
+            displayName: 'Fetch base branch'
+          - script: docker pull $(specmaticImage)
+            displayName: 'Pull pinned Specmatic image'
+
+          # Gate 1: every spec loads and every example (inline + external) matches it
+          - bash: |
+              set -euo pipefail
+              find specs -name '*.yaml' -not -path '*_examples*' | sort | while read -r spec; do
+                echo "--- $spec"
+                docker run --rm -v "$PWD:/repo:ro" -w /repo $(specmaticImage) \
+                  examples validate --spec-file "$spec" --examples-to-validate BOTH
+              done
+            displayName: 'Gate 1: validate specs + examples'
+
+          # Gate 2: every spec bundles into one document (external $refs resolve, no name clashes),
+          # which is what client generators such as ng-openapi-gen need.
+          - task: NodeTool@0
+            inputs: { versionSpec: '$(nodeVersion)' }
+          - bash: |
+              set -euo pipefail
+              npm ci --prefix tools                       # tools/package.json pins js-yaml exactly
+              find specs -name '*.yaml' -not -path '*_examples*' | while read -r spec; do
+                node tools/bundle-spec.mjs "$spec" "out/$(basename "$spec" .yaml).json"
+              done
+            displayName: 'Gate 2: bundle check'
+
+          # Gate 3: backward compatibility of the changed specs against the target branch.
+          # Exits 1 on any breaking change (the free edition has no usage data, so EVERY breaking
+          # change fails; see README: deprecating an endpoint needs a major version).
+          - bash: |
+              docker run --rm -v "$PWD:/repo" -w /repo $(specmaticImage) \
+                backward-compatibility-check --repo-dir=/repo --base-branch=origin/$(targetBranch)
+            displayName: 'Gate 3: backward compatibility vs $(targetBranch)'
+
+          # JAR route (agents without Docker): replace each `docker run ... $(specmaticImage)` with
+          #   java -jar specmatic.jar <same arguments>      (Java 17+, same pinned Specmatic version)

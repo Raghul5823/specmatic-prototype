@@ -1,0 +1,4 @@
+    Bundled <contracts-checkout>\specs\app-a-production\production-forecast-service.yaml -> .\results\pipeline\contracts-pr\A5-breaking-examples-updated\bundled\production-forecast-service.json (4 external component(s) inlined)
+    Bundled <contracts-checkout>\specs\app-a-production\well-registry-service.yaml -> .\results\pipeline\contracts-pr\A5-breaking-examples-updated\bundled\well-registry-service.json (3 external component(s) inlined)
+    Bundled <contracts-checkout>\specs\app-b-change-mgmt\approval-service.yaml -> .\results\pipeline\contracts-pr\A5-breaking-examples-updated\bundled\approval-service.json (3 external component(s) inlined)
+    Bundled <contracts-checkout>\specs\app-b-change-mgmt\change-request-service.yaml -> .\results\pipeline\contracts-pr\A5-breaking-examples-updated\bundled\change-request-service.json (4 external component(s) inlined)

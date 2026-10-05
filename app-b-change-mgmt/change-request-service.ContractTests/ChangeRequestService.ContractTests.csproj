@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Provider contract tests: starts ChangeRequestService and runs Specmatic against its contract.
+       Run with:  dotnet test app-b-change-mgmt/change-request-service.ContractTests  (Docker must be running) -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <!-- Same pinned set as the other test projects (.NET SDK 10.0.101 xunit template). -->
+  <ItemGroup>
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\shared\Prototype.ContractTesting\Prototype.ContractTesting.csproj" />
+    <!-- Build order only: the test runs the service's own build output as a separate process. -->
+    <ProjectReference Include="..\change-request-service\ChangeRequestService.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,44 @@
+[
+  {
+    "Run": 1,
+    "Project": "production-forecast-service.ContractTests",
+    "Exit": 0,
+    "Seconds": 44.0,
+    "Summary": "Total tests: 1"
+  },
+  {
+    "Run": 1,
+    "Project": "change-request-service.ContractTests",
+    "Exit": 0,
+    "Seconds": 39.0,
+    "Summary": "Total tests: 1"
+  },
+  {
+    "Run": 2,
+    "Project": "production-forecast-service.ContractTests",
+    "Exit": 0,
+    "Seconds": 42.0,
+    "Summary": "Total tests: 1"
+  },
+  {
+    "Run": 2,
+    "Project": "change-request-service.ContractTests",
+    "Exit": 0,
+    "Seconds": 47.0,
+    "Summary": "Total tests: 1"
+  },
+  {
+    "Run": 3,
+    "Project": "production-forecast-service.ContractTests",
+    "Exit": 0,
+    "Seconds": 45.0,
+    "Summary": "Total tests: 1"
+  },
+  {
+    "Run": 3,
+    "Project": "change-request-service.ContractTests",
+    "Exit": 0,
+    "Seconds": 41.0,
+    "Summary": "Total tests: 1"
+  }
+]

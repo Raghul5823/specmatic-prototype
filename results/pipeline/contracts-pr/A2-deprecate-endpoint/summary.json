@@ -1,0 +1,26 @@
+{
+  "pipeline": "contracts-pr",
+  "run": "A2-deprecate-endpoint",
+  "branch": "pr/A2-deprecate-endpoint",
+  "base": "main",
+  "change": "Mark GET /wells (listWells) as deprecated",
+  "gates": [
+    {
+      "gate": "Validate specs + examples",
+      "status": "PASSED",
+      "seconds": 72.0
+    },
+    {
+      "gate": "Bundle check",
+      "status": "PASSED",
+      "seconds": 2.0
+    },
+    {
+      "gate": "Backward compatibility vs main",
+      "status": "PASSED",
+      "seconds": 72.0
+    }
+  ],
+  "stoppedAt": null,
+  "merge": "ALLOWED"
+}

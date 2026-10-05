@@ -1,0 +1,22 @@
+diff --git a/specs/app-a-production/production-forecast-service.yaml b/specs/app-a-production/production-forecast-service.yaml
+index 701349a..620b38d 100644
+--- a/specs/app-a-production/production-forecast-service.yaml
++++ b/specs/app-a-production/production-forecast-service.yaml
+@@ -159,7 +159,7 @@ components:
+       type: object
+       required:
+         - id
+-        - wellId
++        - wellID
+         - wellName
+         - horizonMonths
+         - declineRatePct
+@@ -172,7 +172,7 @@ components:
+       properties:
+         id:
+           $ref: '#/components/schemas/ForecastId'
+-        wellId:
++        wellID:
+           $ref: '#/components/schemas/WellId'
+         wellName:
+           type: string

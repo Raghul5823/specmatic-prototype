@@ -1,0 +1,1 @@
+.NET SDK: 10.0.101 (global.json 10.0.101)   Node: 22.19.0 (.nvmrc 22.19.0)   specmatic/specmatic:2.55.0 present: True

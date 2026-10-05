@@ -1,0 +1,8 @@
+Test run for .\app-a-production\well-registry-service.Tests\bin\Debug\net10.0\WellRegistryService.Tests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+Results File: .\results\pipeline\green\test-results\unit-well-registry.trx
+
+Passed!  - Failed:     0, Passed:    13, Skipped:     0, Total:    13, Duration: 490 ms - WellRegistryService.Tests.dll (net10.0)

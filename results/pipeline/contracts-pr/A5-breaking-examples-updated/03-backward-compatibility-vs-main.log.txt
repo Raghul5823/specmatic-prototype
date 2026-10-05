@@ -1,0 +1,19 @@
+    1. /repo/specs/app-a-production/well-registry-service_examples/provider__create_well_invalid_token_401.json
+    - Specs that have changed:
+    1. /repo/specs/app-a-production/well-registry-service.yaml
+    1. /repo/consumers.yaml
+    1. /repo/specs/app-a-production/well-registry-service.yaml
+    [Compatibility Check] Verdict: FAIL
+    [Compatibility Check] Verdict: PASS
+    [Compatibility Check] Verdict: PASS
+    >> REQUEST.BODY.operator (specs/app-a-production/well-registry-service.yaml:187:9)
+    New specification expects property "operator" in the request but it is missing from the old specification
+    >> REQUEST.BODY.operator (specs/app-a-production/well-registry-service.yaml:187:9)
+    New specification expects property "operator" in the request but it is missing from the old specification
+    >> REQUEST.BODY.operator (specs/app-a-production/well-registry-service.yaml:187:9)
+    New specification expects property "operator" in the request but it is missing from the old specification
+    Verdict for spec /repo/specs/app-a-production/well-registry-service.yaml:
+    (INCOMPATIBLE) The changes to the spec are NOT backward compatible with the corresponding spec from main
+    Verdict for spec /repo/consumers.yaml:
+    (COMPATIBLE) The spec is backward compatible with the corresponding spec from main
+    Files checked: 2 (Passed: 1, Failed: 1)

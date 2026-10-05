@@ -1,0 +1,93 @@
+<testsuite errors="0" failures="0" hostname="0b1cb03b2e2a" name="Contract Tests" skipped="0" tests="6" time="8.643" timestamp="2026-10-04T21:23:35">
+<properties>
+<property name="file.encoding" value="ANSI_X3.4-1968"/>
+<property name="file.separator" value="/"/>
+<property name="java.class.path" value="/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar"/>
+<property name="java.class.version" value="61.0"/>
+<property name="java.home" value="/usr/lib/jvm/java-17-openjdk"/>
+<property name="java.io.tmpdir" value="/tmp"/>
+<property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+<property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+<property name="java.runtime.version" value="17.0.20.1+0-wolfi-r4"/>
+<property name="java.specification.maintenance.version" value="1"/>
+<property name="java.specification.name" value="Java Platform API Specification"/>
+<property name="java.specification.vendor" value="Oracle Corporation"/>
+<property name="java.specification.version" value="17"/>
+<property name="java.vendor" value="wolfi"/>
+<property name="java.vendor.url" value="https://wolfi.dev"/>
+<property name="java.vendor.url.bug" value="https://github.com/wolfi-dev/os/issues"/>
+<property name="java.vendor.version" value="openjdk-17-17.0.20.1-r4"/>
+<property name="java.version" value="17.0.20.1"/>
+<property name="java.version.date" value="2026-08-18"/>
+<property name="java.vm.compressedOopsMode" value="Zero based"/>
+<property name="java.vm.info" value="mixed mode, sharing"/>
+<property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+<property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+<property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+<property name="java.vm.specification.version" value="17"/>
+<property name="java.vm.vendor" value="wolfi"/>
+<property name="java.vm.version" value="17.0.20.1+0-wolfi-r4"/>
+<property name="jdk.debug" value="release"/>
+<property name="line.separator" value="&#10;"/>
+<property name="native.encoding" value="ANSI_X3.4-1968"/>
+<property name="os.arch" value="amd64"/>
+<property name="os.name" value="Linux"/>
+<property name="os.version" value="6.6.87.2-microsoft-standard-WSL2"/>
+<property name="path.separator" value=":"/>
+<property name="picocli.usage.width" value="auto"/>
+<property name="sun.arch.data.model" value="64"/>
+<property name="sun.boot.library.path" value="/usr/lib/jvm/java-17-openjdk/lib"/>
+<property name="sun.cpu.endian" value="little"/>
+<property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+<property name="sun.java.command" value="/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar test /work/contracts/specs/app-b-change-mgmt/approval-service.yaml --testBaseURL=http://host.docker.internal:5202/v2 --junitReportDir=/work/results/pipeline/fail-mfe/contract-tests/approval-service/junit"/>
+<property name="sun.java.launcher" value="SUN_STANDARD"/>
+<property name="sun.jnu.encoding" value="ANSI_X3.4-1968"/>
+<property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+<property name="user.country" value="US"/>
+<property name="user.dir" value="/work/results/pipeline/fail-mfe/contract-tests/approval-service"/>
+<property name="user.home" value="/root"/>
+<property name="user.language" value="en"/>
+<property name="user.name" value="root"/>
+<property name="user.timezone" value="GMT"/>
+</properties>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /approvals/(approvalId:ApprovalId) -&gt; 200 with the request from the example 'GET_A7001'" time="0.05">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#5]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /approvals/(approvalId:ApprovalId) -> 200 with the request from the example 'GET_A7001'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /approvals/(approvalId:ApprovalId) -&gt; 404 with the request from the example 'UNKNOWN_APPROVAL'" time="0.025">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#6]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /approvals/(approvalId:ApprovalId) -> 404 with the request from the example 'UNKNOWN_APPROVAL'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: POST /approvals -&gt; 201 with the request from the example 'APPROVE_SMALL_CHANGE'" time="0.402">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#1]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: POST /approvals -> 201 with the request from the example 'APPROVE_SMALL_CHANGE'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: POST /approvals -&gt; 201 with the request from the example 'REJECT_LARGE_CHANGE'" time="0.037">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#2]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: POST /approvals -> 201 with the request from the example 'REJECT_LARGE_CHANGE'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: POST /approvals -&gt; 201 with the request from the example 'change-request__approve_small_change'" time="0.033">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#3]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: POST /approvals -> 201 with the request from the example 'change-request__approve_small_change'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: POST /approvals -&gt; 201 with the request from the example 'change-request__reject_large_change'" time="0.033">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#4]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: POST /approvals -> 201 with the request from the example 'change-request__reject_large_change'
+]]></system-out>
+</testcase>
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]
+display-name: Contract Tests
+]]></system-out>
+</testsuite>

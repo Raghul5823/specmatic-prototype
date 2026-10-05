@@ -1,0 +1,20 @@
+--- specs/app-a-production/production-forecast-service.yaml  (exit 0)
+    =============== Inline Example Validation Summary ===============
+    All 3 example(s) are valid.
+    =============== Example File Validation Summary ===============
+    All 2 example(s) are valid.
+--- specs/app-a-production/well-registry-service.yaml  (exit 0)
+    =============== Inline Example Validation Summary ===============
+    All 5 example(s) are valid.
+    =============== Example File Validation Summary ===============
+    All 12 example(s) are valid.
+--- specs/app-b-change-mgmt/approval-service.yaml  (exit 0)
+    =============== Inline Example Validation Summary ===============
+    All 4 example(s) are valid.
+    =============== Example File Validation Summary ===============
+    All 2 example(s) are valid.
+--- specs/app-b-change-mgmt/change-request-service.yaml  (exit 0)
+    =============== Inline Example Validation Summary ===============
+    All 5 example(s) are valid.
+    =============== Example File Validation Summary ===============
+    All 2 example(s) are valid.

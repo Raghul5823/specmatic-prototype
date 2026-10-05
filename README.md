@@ -66,14 +66,16 @@ Ticked items link to their evidence. Updated at the end of every phase.
 - [x] Why HttpTestingController bypasses the stub; recommended MFE test approach (§5 Phase 6)
 - [x] CORS/proxy findings ([cors-check.txt](results/case4-mfe/cors-check.txt)) and effort per MFE (§5 Phase 6)
 - [x] Fixed a v1.1 example that `examples validate` rejected (empty `Authorization` → `Bearer ` with an empty token): [provider-401-bearer-empty](results/case4-mfe/provider-401-bearer-empty/)
-- [ ] Commit Phase 6 and push (after scan + approval)
+- [x] Commit Phase 6 and push (after scan + approval): root `e6c0e17`, contracts `26a7894` + tag `v1.2`
 
-**Phase 7: Pipeline simulation**
-- [ ] xUnit "ContractTests" project per provider, runnable with `dotnet test`
-- [ ] `run-all.ps1`: build → unit → compatibility → provider → consumer → Angular, stopping with a non-zero exit at the first failure
-- [ ] Demonstrate one deliberate failure blocking the run
-- [ ] Sample `azure-pipelines.yml`: one BuildService stage, JUnit published, deploy depends on it
-- [ ] Note how the same steps run with the JAR instead of Docker (JAR sources to check, after approval: docs download page, GitHub releases, `specmatic` npm package)
+**Phase 7: Pipeline simulation (two pipelines)**
+- [x] xUnit "ContractTests" project per provider (4), each starting its service (+ dependency mocks) and running Specmatic; plain `dotnet test`
+- [x] Contracts PR pipeline: `scripts/contracts-pr-check.ps1` + [pipelines/contracts-pr-pipeline.yml](pipelines/contracts-pr-pipeline.yml): validate specs + examples → bundle check → compatibility vs `main`; merge blocked on any failure; no deploy
+- [x] Service pipeline: `scripts/run-all.ps1` + [pipelines/azure-pipelines.yml](pipelines/azure-pipelines.yml): one BuildService stage (7 gates incl. the Angular steps), DeployDev `dependsOn: BuildService`; green run in 4.3 min: [results/pipeline/green/](results/pipeline/green/)
+- [x] A deliberate failure for each gate type, with the gate that stopped it: [results/pipeline/failure-demos.md](results/pipeline/failure-demos.md)
+- [x] Generic sample YAML (placeholders only); pinned .NET SDK (`global.json`) and Node (`.nvmrc`) versions
+- [x] README notes: version pinning, deprecating an endpoint, JAR route for agents without Docker (§5 Phase 7)
+- [ ] Commit Phase 7 and push (after scan + approval)
 
 **Phase 8: Evaluation**
 - [ ] Coverage section (API coverage is not code coverage)
@@ -636,6 +638,114 @@ The build exits with **1**; regenerating from the real contract builds again wit
 4. **A v1.1 example was invalid for `examples validate` and the stub.** `"Authorization": ""` worked in provider tests, but the validator and the stub require the `Bearer` prefix. It was fixed in **v1.2** with `"Bearer "` (empty token), which passes validation and still yields 401 ([evidence](results/case4-mfe/provider-401-bearer-empty/)). Lesson: run `examples validate` on **every** contract change (Phase 7 gate).
 5. **Generated scaffolding can carry unpinned tool calls.** Angular 21's `ng new` writes a `.vscode/mcp.json` that runs `npx -y @angular/cli` without a version. We removed it.
 
+### Phase 7 — Pipeline simulation (two pipelines)
+
+```
+ Contracts repo PR ──► CONTRACTS PR PIPELINE (blocks the merge; no deploy)          tag v1.x on merge
+                        1 validate specs + examples ─► 2 bundle check ─► 3 compatibility vs main
+                                                                                      │ (tag)
+ Service repo push ──► SERVICE PIPELINE                                               ▼
+   Stage BuildService:  1 toolchain pinned ─► 2 build ─► 3 unit ─► 4 provider ContractTests
+                        ─► 5 consumer tests vs stubs ─► 6 MFE client + build ─► 7 MFE Playwright vs stub
+   Stage DeployDev:     dependsOn: BuildService, condition: succeeded('BuildService')
+```
+
+**What was built**
+- **`*.ContractTests` projects (4), one per provider**, all with the same pinned xUnit packages.
+  - A test starts the provider's **own build output** as a separate process on its fixed port (`ServiceProcess`), waits for `/readiness`, and runs `specmatic test` in Docker.
+  - For cross-app providers it first starts the dependency mocks with `specmatic mock --config`.
+  - The test fails if Specmatic exits non-zero, and the assertion message carries Specmatic's summary.
+  - Shared helpers are in `shared/Prototype.ContractTesting/`, with no NuGet packages. Each project is about 20 lines: `dotnet test app-a-production/well-registry-service.ContractTests`. Reports go to `results/<CONTRACT_TEST_RESULTS>/<service>/`.
+- **Contracts PR pipeline**: [scripts/contracts-pr-check.ps1](scripts/contracts-pr-check.ps1) (simulation) and [pipelines/contracts-pr-pipeline.yml](pipelines/contracts-pr-pipeline.yml) (sample). Three gates; any failure gives exit 1 and **MERGE BLOCKED**. There is no deploy stage, because contracts are released by tagging.
+- **Service pipeline**: [scripts/run-all.ps1](scripts/run-all.ps1) (simulation) and [pipelines/azure-pipelines.yml](pipelines/azure-pipelines.yml) (sample).
+  - **One BuildService stage with 7 gates**, including the Angular steps (bundle, generate client, build, Playwright vs stub).
+  - **DeployDev** declares `dependsOn: BuildService` and `condition: succeeded('BuildService')`.
+  - The script stops at the first failing gate (exit 1) and writes one log per gate plus `summary.json`.
+- **Version pins:** `global.json` (.NET SDK 10.0.101, `latestPatch`), `mfe/well-mfe/.nvmrc` (Node 22.19.0), and the Specmatic image tag. Gate 1 fails if the machine or agent differs.
+- The sample YAML uses **placeholders only** (`<your agent pool>`, `<your project>/<your contracts repo>`, `<your DEV environment>`, `<your deployment template>`).
+
+**Green run** ([results/pipeline/green/](results/pipeline/green/)): **all 7 gates passed, DeployDev ran (simulated), 4.3 min in total.** This is the final run, after the flaky-gate fixes in item 5 below.
+
+| Gate | Time |
+|---|---|
+| 1 Toolchain pinned | 1 s |
+| 2 Build (.NET) | 7 s |
+| 3 Unit tests | 2 s |
+| 4 Provider contract tests (4 ContractTests projects: 38 s, 13 s, 13 s, 42 s) | 129 s |
+| 5 Consumer contract tests vs 4 strict stubs | 63 s |
+| 6 MFE: client + build | 24 s |
+| 7 MFE: Playwright vs stub | 33 s |
+
+Gate 4 is the slowest: each ContractTests project starts its service, and the two cross-app ones also start a Specmatic mock container. (An earlier green run took 8.9 min because the contracts-PR demo was running at the same time.) On an agent the gates can run as **parallel jobs**, because each uses its own ports.
+
+**Deliberate failures, one per gate type** ([results/pipeline/failure-demos.md](results/pipeline/failure-demos.md); code restored byte-for-byte, contract changes made only in a throwaway clone)
+
+| Demo | Pipeline | Change | Stopped at | Outcome |
+|---|---|---|---|---|
+| A1 | contracts PR | add optional response field `Forecast.notes` | – | **MERGE ALLOWED** |
+| A2 | contracts PR | mark `GET /wells` as `deprecated: true` | – | **MERGE ALLOWED** (deprecation is not a breaking change) |
+| A3 | contracts PR | make new request field `CreateWellRequest.operator` required | gate 1 **validate examples** | MERGE BLOCKED: the provider's own example `provider__create_well_invalid_token_401` lacks the new field |
+| A4 | contracts PR | rename required response field `Forecast.wellId` → `wellID` | gate 1 **validate examples** | MERGE BLOCKED: the inline and the **consumer's** examples no longer match |
+| A5 | contracts PR | same breaking change as A3, **with every example updated** | gate 3 **backward compatibility** | MERGE BLOCKED: *"New specification expects property "operator" in the request but it is missing from the old specification"* |
+| B | service | well-registry **code** renames `dailyCapacityBbl` → `dailyCapacity` (contract unchanged) | gate 4 **provider contract tests** (only `WellRegistryService.ContractTests` failed; unit tests passed) | DeployDev **BLOCKED**, 3.8 min |
+| C | service | MFE code reads `well.dailyCapacity`, a field the contract doesn't have | gate 6 **MFE: client + build** (`TS2551`) | DeployDev **BLOCKED** |
+
+**What to notice**
+1. **Each kind of break is stopped by a different gate, as early as possible:**
+   - contract changes stop in the **contracts PR**, before any service is touched;
+   - provider code drift stops in the **provider's** build;
+   - frontend drift stops at the **MFE compile**.
+
+   A consumer's pipeline stays green when a provider breaks (in demo B, production-forecast's ContractTests still passed against well-registry's **mock**), so the failure is reported to the team that caused it.
+2. **Examples are the first line of defence in the contracts PR.** Two of the three breaking PRs (A3, A4) were stopped by `examples validate` before the compatibility check even ran, because the existing examples, including a consumer's, no longer matched. The compatibility gate is the backstop for a PR that updates every example (A5).
+3. **`deprecated: true` passes every gate (A2).** Deprecation can be announced in a MINOR version; only the actual removal is breaking (see "Deprecating an endpoint" below).
+4. **ContractTests run with plain `dotnet test`.** No PowerShell is needed in the pipeline, so the same projects run locally, in the IDE and on an agent.
+5. **A flaky gate was found and fixed, in three rounds.** Every failure below was timing or housekeeping, not a contract problem: the same tests passed in other runs.
+   - **Round 1:** the first run of demo C stopped at gate 4 instead of gate 6. `ChangeRequestService.ContractTests` failed with **502 "production-forecast-service: unreachable or timed out"**, although its mock *did* serve the request ([first-run log](results/pipeline/fail-mfe-first-attempt/)). The **first** call to a freshly started Specmatic mock took longer than the service's 5 s downstream timeout.
+     - Fix: `Downstream:TimeoutSeconds` is now configurable (default still 5 s), and the ContractTests set 30 s for a service whose dependencies are mocks.
+     - Fix: the helper waits for each mock's `GET /actuator/health` (served at the mock's root, not under `/v2`).
+     - The demo C rerun then stopped at the expected gate 6.
+   - **Round 2:** the next full green run failed at gate 4 again. Specmatic gave up on `change-request-service` after its **default 6 s request timeout**, while the service was still waiting, correctly, for a slow mock (one mock response took about 55 s under full pipeline load; about 1–2 s in isolation).
+     - Fix: **an outer timeout must be larger than the inner one.** Specmatic now runs with `--timeout-in-ms=90000` for tests with mocked dependencies, which is more than the service's 30 s.
+     - Fix: the warm-up now also sends **one real example request per mock** (e.g. `GET /v2/forecasts/F-5001`), not just the health check.
+   - **Round 3 (found while verifying):** rerunning a ContractTests project locally into the same results folder failed before Specmatic even started. The folder holds Specmatic's git clone of the contracts (`.specmatic/repos/`), git marks its pack files **read-only** on Windows, and `Directory.Delete` throws on read-only files.
+     - Fix: the helper clears the read-only flag before deleting.
+
+   **Verified:** the two ContractTests with mocked dependencies passed **6 out of 6** runs, including reruns into the same folder ([results/pipeline/stability/](results/pipeline/stability/)), and then the final green run passed (above). Lesson for the real pipeline: give tests against mocks a **timeout budget** (outer > inner), a readiness check and a warm-up, because **a gate that fails at random will be ignored**.
+
+**Pin Node and .NET versions in every pipeline**
+- `global.json` pins the .NET SDK (10.0.101, `rollForward: latestPatch`), and `.nvmrc` pins Node (22.19.0). The sample YAML uses the same values (`UseDotNet@2`, `NodeTool@0`), and gate 1 of `run-all.ps1` fails on a mismatch.
+- **Angular 22 needs Node ≥ 22.22.3** (Phase 6). An agent with an older Node fails the build, and a developer machine on a different Node can get different results. Upgrade Node on developer machines **and** agents together, and only then move Angular.
+- Pin the **Specmatic image tag** (never `latest`), the Playwright version (its browser build is tied to it), and every npm package (exact versions + `package-lock.json`, `npm ci`).
+
+**Deprecating an endpoint**
+- Without Insights, **every** breaking change fails the compatibility gate (T1), including removing an endpoint or a field that nobody uses any more. Removal therefore cannot happen in a MINOR (`v1.x`) release.
+- Recommended process:
+  1. **Announce**: set `deprecated: true` on the operation (non-breaking, A2) in a MINOR version, and record in `consumers.yaml` who still uses it.
+  2. **Migrate**: each consumer moves off the endpoint and deletes its `<consumer>__*` examples for it, so `consumers.yaml` shows no users left.
+  3. **Remove it in a MAJOR version (`v2`), with written agreement from every consumer owner** (PR approval). Either publish v2 **side by side** (a new spec file or base path, e.g. `/v3`, so the v1 file is unchanged and the gate passes), or have a release manager explicitly override the compatibility gate for that one PR. A rule like "skip the gate when a label is set, mandatory reviewers required" belongs in the branch policy.
+
+**JAR route (agents without Docker)**
+Every Specmatic step is the same CLI with `java -jar specmatic.jar <same arguments>` instead of `docker run … specmatic/specmatic:<tag> <same arguments>`:
+
+| Step | Docker (used here) | JAR |
+|---|---|---|
+| Provider test | `docker run --rm … specmatic/specmatic:2.55.0 test <spec> --testBaseURL=http://host.docker.internal:5101/v2` | `java -jar specmatic.jar test <spec> --testBaseURL=http://localhost:5101/v2` |
+| Stub | `docker run -d -p 9101:9000 … mock --strict --config=…` | `java -jar specmatic.jar mock --strict --port=9101 --config=…` (background) |
+| Examples / compatibility | `… examples validate …`, `… backward-compatibility-check …` | `java -jar specmatic.jar examples validate …`, `… backward-compatibility-check …` |
+
+- **Requirements:** Java 17+ (this laptop has 21), plus a **pinned, approved source** for the standalone JAR.
+  - Maven Central only has a thin JAR (Phase 0).
+  - The `specmatic` **npm package bundles the full `specmatic.jar` (83 MB)**, but npm has **2.55.1 and 2.55.2, not 2.55.0**, so pin one version for both routes.
+  - Cache the JAR (pipeline caching or an internal artifact feed); don't download it on every run.
+- **Differences:**
+  - `localhost` replaces `host.docker.internal` (no container networking);
+  - our v3 configs use container paths (`/work/...`, `file:///work/contracts`), so the JAR route needs a variant with repo-relative paths;
+  - there is no `--add-host` DNS fix to worry about.
+- **Not executed here**, because no JAR was downloaded (downloads need approval).
+
+**Linux agents (networking note, not verified here):** on Docker Desktop (Windows/Mac) a service bound to `localhost` is reachable from a container through `host.docker.internal`. On a Linux agent it is not. Either bind the services to `0.0.0.0` in the pipeline (e.g. `ASPNETCORE_URLS=http://0.0.0.0:5101`) or run Specmatic with `--network host` and `http://localhost:<port>`. The sample YAML carries this as a comment.
+
 ## 6. Break-experiment results
 
 ### Case 1: well-registry-service (Phase 3)
@@ -732,6 +842,8 @@ _Phase 8_ (will include the Angular MFE findings from Phase 6). Pre-recorded lim
 | **Docker Desktop DNS latency.** Resolving `host.docker.internal` took up to 3.7 s; one slow request hit the 6 s default timeout and the uncapped resiliency run collapsed. | Phase 3 | Spurious "errors" | `--add-host host.docker.internal:host-gateway`, `--timeout-in-ms` | Typically not an issue: on a Linux agent the service and Specmatic run on the same Docker network or host |
 | **PowerShell 5.1 + native stderr.** A failing `dotnet test` under `ErrorActionPreference=Stop` aborts the script. | Phase 3 | Script stops early | Use `Continue` and check `$LASTEXITCODE` | Pipelines use YAML tasks; not applicable |
 | **CRLF line endings** (`core.autocrlf=true`) change spec files on checkout. | Phase 5 | Scripted spec edits miss | `-c core.autocrlf=false` for automation, or `.gitattributes` with `* text=auto eol=lf` in the contract repo | Linux checkouts use LF |
+| **Slow first response from a fresh Specmatic mock under load** (up to about 55 s inside a full pipeline run on Docker Desktop, about 1–2 s in isolation) made provider ContractTests with mocked dependencies flaky. | Phase 7 | Random gate-4 failures (502 from the service, or a Specmatic socket timeout) | Timeout budget (Specmatic `--timeout-in-ms` > the service's downstream timeout), health check and one real example request per mock before testing | Expected to be smaller (no Docker Desktop VM), but keep the timeout budget: agents are shared and can be slow too |
+| **Read-only git files block clean-up.** Specmatic's clone of the contracts (`.specmatic/repos/`) has read-only pack files on Windows, so `Directory.Delete` fails on a rerun. | Phase 7 | Local rerun fails before testing | Clear the read-only flag before deleting (done in the helper), or use `Remove-Item -Recurse -Force` | Not an issue: Linux deletes read-only files in a writable folder |
 | **Test result files contain personal data.** TRX files include `DOMAIN\user` and local paths; Specmatic HTML/console output contains host paths. | Phases 3–4 | A leak risk for public repos or shared artefacts | Sanitise before publishing (done here); in a pipeline, artefacts stay inside the organisation | Paths are agent paths, still worth reviewing |
 
 ## 11. How to rerun everything from scratch
@@ -807,4 +919,15 @@ _Phase 8_ (will include the Angular MFE findings from Phase 6). Pre-recorded lim
    .\scripts\mfe-e2e.ps1 -Out case4-mfe\e2e     # strict stub + Playwright (4 tests)
    .\scripts\mfe-compile-break.ps1              # contract break -> TS2551 compile error, then a clean build
    ```
-10. _Further steps added as phases complete (`scripts/run-all.ps1` in Phase 7)._
+10. Phase 7 (pipelines), from the prototype root:
+    ```powershell
+    # one provider's contract tests, the way a pipeline runs them (Docker must be running)
+    dotnet test app-a-production\well-registry-service.ContractTests
+    # SERVICE pipeline: BuildService (7 gates) + DeployDev; add -NpmCi for a clean MFE install
+    .\scripts\run-all.ps1 -RunName green
+    # CONTRACTS PR pipeline on a branch of a SHORT-path clone of the contracts repo
+    .\scripts\contracts-pr-check.ps1 -RepoDir <clone> -BaseBranch main -RunName my-pr
+    # all deliberate failures (A1-A5 contracts PR, B provider, C MFE), about 25 min
+    .\scripts\pipeline-failure-demos.ps1           # or -Only A -Pick A5, or -Only B,C
+    ```
+11. _Phase 8 (evaluation) adds no new commands._

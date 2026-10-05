@@ -1,0 +1,296 @@
+Specmatic Version: v2.55.0(299682d5)
+
+Loading config file /work/specmatic/production-forecast.specmatic.yaml
+Looking for a contract repo checkout at: /work/results/pipeline/fail-provider/contract-tests/production-forecast-service/.specmatic/repos/contracts
+Contract repo dir does not exist.
+Cloning file:///work/contracts into .specmatic/repos
+Resetting /work/results/pipeline/fail-provider/contract-tests/production-forecast-service/.specmatic/repos/contracts
+No branch specified, using default branch
+API Specification Summary: .specmatic/repos/contracts/specs/app-a-production/production-forecast-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 2
+  Schema components: 6, Security Schemes: [http]
+
+
+Test directory /work/results/pipeline/fail-provider/contract-tests/production-forecast-service/.specmatic/repos/contracts/specs/app-a-production/production-forecast-service_examples found
+
+Loading externalised examples from /work/results/pipeline/fail-provider/contract-tests/production-forecast-service/.specmatic/repos/contracts/specs/app-a-production/production-forecast-service_examples: 
+  2 examples(s) found in /work/results/pipeline/fail-provider/contract-tests/production-forecast-service/.specmatic/repos/contracts/specs/app-a-production/production-forecast-service_examples
+
+Loading test file /work/results/pipeline/fail-provider/contract-tests/production-forecast-service/.specmatic/repos/contracts/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-5001.json
+Loading test file /work/results/pipeline/fail-provider/contract-tests/production-forecast-service/.specmatic/repos/contracts/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-9999_not_found.json
+
+No application API source was exposed by the application, so cannot calculate actual coverage
+
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+--------------------
+  Request to http://host.docker.internal:5102/v2 at 2026-10-4 9:13:56.355
+    POST /v2/forecasts
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 201
+    Host: host.docker.internal:5102
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "wellId": "W-001",
+        "horizonMonths": 3,
+        "declineRatePct": 5
+    }
+
+  Response at 2026-10-4 9:14:0.122
+    201 Created
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 21:13:05 GMT
+    Server: Kestrel
+    Location: /v2/forecasts/F-5002
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "F-5002",
+        "wellId": "W-001",
+        "wellName": "Eagle-1",
+        "horizonMonths": 3,
+        "declineRatePct": 5,
+        "baseDailyCapacityBbl": 1200,
+        "effectiveDailyCapacityBbl": 1350,
+        "appliedChangeRequestIds": [
+            "CR-1001"
+        ],
+        "monthlyVolumesBbl": [
+            40500,
+            38475,
+            36551.3
+        ],
+        "totalVolumeBbl": 115526.3,
+        "createdAt": "2026-10-04T21:13:06.0603285+00:00"
+    }
+
+Scenario: POST /forecasts -> 201 with the request from the example 'CREATE_W001' has SUCCEEDED
+
+
+--------------------
+  Skipping Scenario: POST /forecasts -> 400 (requestContentType application/json, responseContentType application/problem+json)
+  - T00004: Generative Disabled
+  Documentation: https://docs.specmatic.io/rules#t00004
+  Summary: This operation was skipped because it requires schema resiliency to be enabled
+  
+  - T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Skipping Scenario: POST /forecasts -> 401 (requestContentType application/json, responseContentType application/problem+json)
+  T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Skipping Scenario: POST /forecasts -> 502 (requestContentType application/json, responseContentType application/problem+json)
+  T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Request to http://host.docker.internal:5102/v2 at 2026-10-4 9:14:0.196
+    GET /v2/forecasts/F-5001
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5102
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 9:14:0.230
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 21:13:05 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "F-5001",
+        "wellId": "W-001",
+        "wellName": "Eagle-1",
+        "horizonMonths": 3,
+        "declineRatePct": 5,
+        "baseDailyCapacityBbl": 1200,
+        "effectiveDailyCapacityBbl": 1350,
+        "appliedChangeRequestIds": [
+            "CR-1001"
+        ],
+        "monthlyVolumesBbl": [
+            40500,
+            38475,
+            36551.3
+        ],
+        "totalVolumeBbl": 115526.3,
+        "createdAt": "2026-09-02T09:00:00+00:00"
+    }
+
+Scenario: GET /forecasts/(forecastId:ForecastId) -> 200 with the request from the example 'GET_F5001' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5102/v2 at 2026-10-4 9:14:0.246
+    GET /v2/forecasts/F-5001
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5102
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 9:14:0.267
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Sun, 04 Oct 2026 21:13:05 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "F-5001",
+        "wellId": "W-001",
+        "wellName": "Eagle-1",
+        "horizonMonths": 3,
+        "declineRatePct": 5,
+        "baseDailyCapacityBbl": 1200,
+        "effectiveDailyCapacityBbl": 1350,
+        "appliedChangeRequestIds": [
+            "CR-1001"
+        ],
+        "monthlyVolumesBbl": [
+            40500,
+            38475,
+            36551.3
+        ],
+        "totalVolumeBbl": 115526.3,
+        "createdAt": "2026-09-02T09:00:00+00:00"
+    }
+
+Scenario: GET /forecasts/(forecastId:ForecastId) -> 200 with the request from the example 'change-request__get_forecast_F-5001' has SUCCEEDED
+
+
+--------------------
+  Skipping Scenario: GET /forecasts/(forecastId:ForecastId) -> 400 (responseContentType application/problem+json)
+  - T00004: Generative Disabled
+  Documentation: https://docs.specmatic.io/rules#t00004
+  Summary: This operation was skipped because it requires schema resiliency to be enabled
+  
+  - T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Skipping Scenario: GET /forecasts/(forecastId:ForecastId) -> 401 (responseContentType application/problem+json)
+  T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Request to http://host.docker.internal:5102/v2 at 2026-10-4 9:14:0.280
+    GET /v2/forecasts/F-9999
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 404
+    Host: host.docker.internal:5102
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 9:14:0.298
+    404 Not Found
+    Content-Type: application/problem+json
+    Date: Sun, 04 Oct 2026 21:13:05 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+        "title": "Not Found",
+        "status": 404,
+        "detail": "Forecast F-9999 does not exist.",
+        "traceId": "00-f18a3f90a342b2a79b50dfe05d74f158-b900ff73423f7b4c-00"
+    }
+
+Scenario: GET /forecasts/(forecastId:ForecastId) -> 404 with the request from the example 'UNKNOWN_FORECAST' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5102/v2 at 2026-10-4 9:14:0.313
+    GET /v2/forecasts/F-9999
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 404
+    Host: host.docker.internal:5102
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-4 9:14:0.338
+    404 Not Found
+    Content-Type: application/problem+json
+    Date: Sun, 04 Oct 2026 21:13:05 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+        "title": "Not Found",
+        "status": 404,
+        "detail": "Forecast F-9999 does not exist.",
+        "traceId": "00-53b8bb929f3cb91f70a963f107014609-0a77ae17bcd82dcb-00"
+    }
+
+Scenario: GET /forecasts/(forecastId:ForecastId) -> 404 with the request from the example 'change-request__get_forecast_F-9999_not_found' has SUCCEEDED
+
+Could not load report configuration, coverage will be calculated but no coverage threshold will be enforced
+
+|------------------------------------------------------------------------------------------------------------------------------|
+| SPECMATIC API COVERAGE SUMMARY                                                                                               |
+|------------------------------------------------------------------------------------------------------------------------------|
+| coverage | path                    | method | requestContentType | response | responseContentType      | remarks    | result |
+|----------|-------------------------|--------|--------------------|----------|--------------------------|------------|--------|
+| 25%      | /forecasts              | POST   | application/json   | 201      | application/json         | covered    | 1p     |
+|          |                         |        |                    | 400      | application/problem+json | not tested |        |
+|          |                         |        |                    | 401      | application/problem+json | not tested |        |
+|          |                         |        |                    | 502      | application/problem+json | not tested |        |
+| 50%      | /forecasts/{forecastId} | GET    | NA                 | 200      | application/json         | covered    | 2p     |
+|          |                         |        |                    | 400      | application/problem+json | not tested |        |
+|          |                         |        |                    | 401      | application/problem+json | not tested |        |
+|          |                         |        |                    | 404      | application/problem+json | covered    | 2p     |
+|------------------------------------------------------------------------------------------------------------------------------|
+| * = Operation not eligible for coverage                                                                                      |
+| ! = Operation excluded from the run due to a filter                                                                          |
+| p = passed tests                                                                                                             |
+| f = failed tests                                                                                                             |
+| w = wip tests                                                                                                                |
+|                                                                                                                              |
+| 38% API Coverage reported from 8 operations eligible for coverage                                                            |
+| 38% Absolute Coverage (includes excluded operations that were not tested)                                                    |
+|------------------------------------------------------------------------------------------------------------------------------|
+
+
+
+Generating CTRF report using coverage report specifications...
+Generating report for 5 tests and 8 coverage operations...
+Using report generation method that accepts coverage report specifications.
+Generating HTML report in build/reports/specmatic/test/html/index.html
+
+
+Tests run: 5, Successes: 5, Failures: 0, WIP: 0, Errors: 0
+
+Executed at 2026-10-04T21:14:02.240677292

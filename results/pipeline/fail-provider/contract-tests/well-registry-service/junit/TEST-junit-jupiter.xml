@@ -1,0 +1,400 @@
+<testsuite errors="0" failures="7" hostname="ba66b12db5b6" name="Contract Tests" skipped="0" tests="17" time="9.4" timestamp="2026-10-04T21:14:29">
+<properties>
+<property name="file.encoding" value="ANSI_X3.4-1968"/>
+<property name="file.separator" value="/"/>
+<property name="java.class.path" value="/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar"/>
+<property name="java.class.version" value="61.0"/>
+<property name="java.home" value="/usr/lib/jvm/java-17-openjdk"/>
+<property name="java.io.tmpdir" value="/tmp"/>
+<property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+<property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+<property name="java.runtime.version" value="17.0.20.1+0-wolfi-r4"/>
+<property name="java.specification.maintenance.version" value="1"/>
+<property name="java.specification.name" value="Java Platform API Specification"/>
+<property name="java.specification.vendor" value="Oracle Corporation"/>
+<property name="java.specification.version" value="17"/>
+<property name="java.vendor" value="wolfi"/>
+<property name="java.vendor.url" value="https://wolfi.dev"/>
+<property name="java.vendor.url.bug" value="https://github.com/wolfi-dev/os/issues"/>
+<property name="java.vendor.version" value="openjdk-17-17.0.20.1-r4"/>
+<property name="java.version" value="17.0.20.1"/>
+<property name="java.version.date" value="2026-08-18"/>
+<property name="java.vm.compressedOopsMode" value="Zero based"/>
+<property name="java.vm.info" value="mixed mode, sharing"/>
+<property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+<property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+<property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+<property name="java.vm.specification.version" value="17"/>
+<property name="java.vm.vendor" value="wolfi"/>
+<property name="java.vm.version" value="17.0.20.1+0-wolfi-r4"/>
+<property name="jdk.debug" value="release"/>
+<property name="line.separator" value="&#10;"/>
+<property name="native.encoding" value="ANSI_X3.4-1968"/>
+<property name="os.arch" value="amd64"/>
+<property name="os.name" value="Linux"/>
+<property name="os.version" value="6.6.87.2-microsoft-standard-WSL2"/>
+<property name="path.separator" value=":"/>
+<property name="picocli.usage.width" value="auto"/>
+<property name="sun.arch.data.model" value="64"/>
+<property name="sun.boot.library.path" value="/usr/lib/jvm/java-17-openjdk/lib"/>
+<property name="sun.cpu.endian" value="little"/>
+<property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+<property name="sun.java.command" value="/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar test /work/contracts/specs/app-a-production/well-registry-service.yaml --testBaseURL=http://host.docker.internal:5101/v2 --junitReportDir=/work/results/pipeline/fail-provider/contract-tests/well-registry-service/junit"/>
+<property name="sun.java.launcher" value="SUN_STANDARD"/>
+<property name="sun.jnu.encoding" value="ANSI_X3.4-1968"/>
+<property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+<property name="user.country" value="US"/>
+<property name="user.dir" value="/work/results/pipeline/fail-provider/contract-tests/well-registry-service"/>
+<property name="user.home" value="/root"/>
+<property name="user.language" value="en"/>
+<property name="user.name" value="root"/>
+<property name="user.timezone" value="GMT"/>
+</properties>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /wells -&gt; 200 with the request from the example 'LIST_SHUT_IN' where REQUEST.PARAMETERS.QUERY contains the param 'status'" time="0.031">
+<failure message="Testing scenario &quot;List wells, optionally filtered by status.. Response: Wells matching the filter (may be empty).&quot;&#10;API: GET /wells -&gt; 200&#10;&#10;  &gt;&gt; RESPONSE.BODY[0].dailyCapacityBbl&#10;  &#10;      R2001: Missing required property&#10;      Documentation: https://docs.specmatic.io/rules#r2001&#10;      Summary: A required property defined in the specification is missing&#10;  &#10;      Specification expected mandatory property &quot;dailyCapacityBbl&quot; to be present but was missing from the response&#10;  &#10;  &gt;&gt; RESPONSE.BODY[0].dailyCapacity&#10;  &#10;      R2003: Unknown property&#10;      Documentation: https://docs.specmatic.io/rules#r2003&#10;      Summary: A property was found that is not defined in the specification&#10;  &#10;      Property &quot;dailyCapacity&quot; in the response was not in the specification" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: Testing scenario "List wells, optionally filtered by status.. Response: Wells matching the filter (may be empty)."
+API: GET /wells -> 200
+
+  >> RESPONSE.BODY[0].dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY[0].dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+	at io.specmatic.test.SpecmaticJUnitSupport.dynamicTestStream$lambda$0$1(SpecmaticJUnitSupport.kt:431)
+	at java.base/java.util.Optional.ifPresent(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+]]></failure>
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#5]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /wells -> 200 with the request from the example 'LIST_SHUT_IN' where REQUEST.PARAMETERS.QUERY contains the param 'status'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /wells -&gt; 200 with the request from the example 'well-mfe__list_abandoned_empty' where REQUEST.PARAMETERS.QUERY contains the param 'status'" time="0.032">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#6]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /wells -> 200 with the request from the example 'well-mfe__list_abandoned_empty' where REQUEST.PARAMETERS.QUERY contains the param 'status'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /wells -&gt; 200 with the request from the example 'well-mfe__list_all_wells'" time="0.034">
+<failure message="Testing scenario &quot;List wells, optionally filtered by status.. Response: Wells matching the filter (may be empty).&quot;&#10;API: GET /wells -&gt; 200&#10;&#10;  &gt;&gt; RESPONSE.BODY[0].dailyCapacityBbl&#10;  &#10;      R2001: Missing required property&#10;      Documentation: https://docs.specmatic.io/rules#r2001&#10;      Summary: A required property defined in the specification is missing&#10;  &#10;      Specification expected mandatory property &quot;dailyCapacityBbl&quot; to be present but was missing from the response&#10;  &#10;  &gt;&gt; RESPONSE.BODY[0].dailyCapacity&#10;  &#10;      R2003: Unknown property&#10;      Documentation: https://docs.specmatic.io/rules#r2003&#10;      Summary: A property was found that is not defined in the specification&#10;  &#10;      Property &quot;dailyCapacity&quot; in the response was not in the specification&#10;  &#10;  &gt;&gt; RESPONSE.BODY[1].dailyCapacityBbl&#10;  &#10;      R2001: Missing required property&#10;      Documentation: https://docs.specmatic.io/rules#r2001&#10;      Summary: A required property defined in the specification is missing&#10;  &#10;      Specification expected mandatory property &quot;dailyCapacityBbl&quot; to be present but was missing from the response&#10;  &#10;  &gt;&gt; RESPONSE.BODY[1].dailyCapacity&#10;  &#10;      R2003: Unknown property&#10;      Documentation: https://docs.specmatic.io/rules#r2003&#10;      Summary: A property was found that is not defined in the specification&#10;  &#10;      Property &quot;dailyCapacity&quot; in the response was not in the specification&#10;  &#10;  &gt;&gt; RESPONSE.BODY[2].dailyCapacityBbl&#10;  &#10;      R2001: Missing required property&#10;      Documentation: https://docs.specmatic.io/rules#r2001&#10;      Summary: A required property defined in the specification is missing&#10;  &#10;      Specification expected mandatory property &quot;dailyCapacityBbl&quot; to be present but was missing from the response&#10;  &#10;  &gt;&gt; RESPONSE.BODY[2].dailyCapacity&#10;  &#10;      R2003: Unknown property&#10;      Documentation: https://docs.specmatic.io/rules#r2003&#10;      Summary: A property was found that is not defined in the specification&#10;  &#10;      Property &quot;dailyCapacity&quot; in the response was not in the specification&#10;  &#10;  &gt;&gt; RESPONSE.BODY[3].dailyCapacityBbl&#10;  &#10;      R2001: Missing required property&#10;      Documentation: https://docs.specmatic.io/rules#r2001&#10;      Summary: A required property defined in the specification is missing&#10;  &#10;      Specification expected mandatory property &quot;dailyCapacityBbl&quot; to be present but was missing from the response&#10;  &#10;  &gt;&gt; RESPONSE.BODY[3].dailyCapacity&#10;  &#10;      R2003: Unknown property&#10;      Documentation: https://docs.specmatic.io/rules#r2003&#10;      Summary: A property was found that is not defined in the specification&#10;  &#10;      Property &quot;dailyCapacity&quot; in the response was not in the specification" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: Testing scenario "List wells, optionally filtered by status.. Response: Wells matching the filter (may be empty)."
+API: GET /wells -> 200
+
+  >> RESPONSE.BODY[0].dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY[0].dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+  
+  >> RESPONSE.BODY[1].dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY[1].dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+  
+  >> RESPONSE.BODY[2].dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY[2].dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+  
+  >> RESPONSE.BODY[3].dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY[3].dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+	at io.specmatic.test.SpecmaticJUnitSupport.dynamicTestStream$lambda$0$1(SpecmaticJUnitSupport.kt:431)
+	at java.base/java.util.Optional.ifPresent(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+]]></failure>
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#7]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /wells -> 200 with the request from the example 'well-mfe__list_all_wells'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /wells -&gt; 400 with the request from the example 'provider__list_wells_bad_status_400'" time="0.027">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#8]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /wells -> 400 with the request from the example 'provider__list_wells_bad_status_400'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: POST /wells -&gt; 201 with the request from the example 'CREATE_EAGLE_9'" time="0.54">
+<failure message="Testing scenario &quot;Register a new well.. Response: Created.&quot;&#10;API: POST /wells -&gt; 201&#10;&#10;  &gt;&gt; RESPONSE.BODY.dailyCapacityBbl&#10;  &#10;      R2001: Missing required property&#10;      Documentation: https://docs.specmatic.io/rules#r2001&#10;      Summary: A required property defined in the specification is missing&#10;  &#10;      Specification expected mandatory property &quot;dailyCapacityBbl&quot; to be present but was missing from the response&#10;  &#10;  &gt;&gt; RESPONSE.BODY.dailyCapacity&#10;  &#10;      R2003: Unknown property&#10;      Documentation: https://docs.specmatic.io/rules#r2003&#10;      Summary: A property was found that is not defined in the specification&#10;  &#10;      Property &quot;dailyCapacity&quot; in the response was not in the specification" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: Testing scenario "Register a new well.. Response: Created."
+API: POST /wells -> 201
+
+  >> RESPONSE.BODY.dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+	at io.specmatic.test.SpecmaticJUnitSupport.dynamicTestStream$lambda$0$1(SpecmaticJUnitSupport.kt:431)
+	at java.base/java.util.Optional.ifPresent(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+]]></failure>
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#1]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: POST /wells -> 201 with the request from the example 'CREATE_EAGLE_9'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: POST /wells -&gt; 400 with the request from the example 'provider__create_well_missing_name_400'" time="0.041">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#2]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: POST /wells -> 400 with the request from the example 'provider__create_well_missing_name_400'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: POST /wells -&gt; 401 with the request from the example 'provider__create_well_invalid_token_401'" time="0.028">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#3]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: POST /wells -> 401 with the request from the example 'provider__create_well_invalid_token_401'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /wells -&gt; 200 with the request from the example 'LIST_ACTIVE' where REQUEST.PARAMETERS.QUERY contains the param 'status'" time="0.067">
+<failure message="Testing scenario &quot;List wells, optionally filtered by status.. Response: Wells matching the filter (may be empty).&quot;&#10;API: GET /wells -&gt; 200&#10;&#10;  &gt;&gt; RESPONSE.BODY[0].dailyCapacityBbl&#10;  &#10;      R2001: Missing required property&#10;      Documentation: https://docs.specmatic.io/rules#r2001&#10;      Summary: A required property defined in the specification is missing&#10;  &#10;      Specification expected mandatory property &quot;dailyCapacityBbl&quot; to be present but was missing from the response&#10;  &#10;  &gt;&gt; RESPONSE.BODY[0].dailyCapacity&#10;  &#10;      R2003: Unknown property&#10;      Documentation: https://docs.specmatic.io/rules#r2003&#10;      Summary: A property was found that is not defined in the specification&#10;  &#10;      Property &quot;dailyCapacity&quot; in the response was not in the specification&#10;  &#10;  &gt;&gt; RESPONSE.BODY[1].dailyCapacityBbl&#10;  &#10;      R2001: Missing required property&#10;      Documentation: https://docs.specmatic.io/rules#r2001&#10;      Summary: A required property defined in the specification is missing&#10;  &#10;      Specification expected mandatory property &quot;dailyCapacityBbl&quot; to be present but was missing from the response&#10;  &#10;  &gt;&gt; RESPONSE.BODY[1].dailyCapacity&#10;  &#10;      R2003: Unknown property&#10;      Documentation: https://docs.specmatic.io/rules#r2003&#10;      Summary: A property was found that is not defined in the specification&#10;  &#10;      Property &quot;dailyCapacity&quot; in the response was not in the specification&#10;  &#10;  &gt;&gt; RESPONSE.BODY[2].dailyCapacityBbl&#10;  &#10;      R2001: Missing required property&#10;      Documentation: https://docs.specmatic.io/rules#r2001&#10;      Summary: A required property defined in the specification is missing&#10;  &#10;      Specification expected mandatory property &quot;dailyCapacityBbl&quot; to be present but was missing from the response&#10;  &#10;  &gt;&gt; RESPONSE.BODY[2].dailyCapacity&#10;  &#10;      R2003: Unknown property&#10;      Documentation: https://docs.specmatic.io/rules#r2003&#10;      Summary: A property was found that is not defined in the specification&#10;  &#10;      Property &quot;dailyCapacity&quot; in the response was not in the specification" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: Testing scenario "List wells, optionally filtered by status.. Response: Wells matching the filter (may be empty)."
+API: GET /wells -> 200
+
+  >> RESPONSE.BODY[0].dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY[0].dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+  
+  >> RESPONSE.BODY[1].dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY[1].dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+  
+  >> RESPONSE.BODY[2].dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY[2].dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+	at io.specmatic.test.SpecmaticJUnitSupport.dynamicTestStream$lambda$0$1(SpecmaticJUnitSupport.kt:431)
+	at java.base/java.util.Optional.ifPresent(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+]]></failure>
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#4]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /wells -> 200 with the request from the example 'LIST_ACTIVE' where REQUEST.PARAMETERS.QUERY contains the param 'status'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /wells -&gt; 401 with the request from the example 'provider__list_wells_invalid_token_401'" time="0.03">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#9]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /wells -> 401 with the request from the example 'provider__list_wells_invalid_token_401'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /wells/(wellId:WellId) -&gt; 200 with the request from the example 'production-forecast__get_well_W-001_active'" time="0.058">
+<failure message="Testing scenario &quot;Get one well by id.. Response: The well.&quot;&#10;API: GET /wells/(wellId:WellId) -&gt; 200&#10;&#10;  &gt;&gt; RESPONSE.BODY.dailyCapacityBbl&#10;  &#10;      R2001: Missing required property&#10;      Documentation: https://docs.specmatic.io/rules#r2001&#10;      Summary: A required property defined in the specification is missing&#10;  &#10;      Specification expected mandatory property &quot;dailyCapacityBbl&quot; to be present but was missing from the response&#10;  &#10;  &gt;&gt; RESPONSE.BODY.dailyCapacity&#10;  &#10;      R2003: Unknown property&#10;      Documentation: https://docs.specmatic.io/rules#r2003&#10;      Summary: A property was found that is not defined in the specification&#10;  &#10;      Property &quot;dailyCapacity&quot; in the response was not in the specification" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: Testing scenario "Get one well by id.. Response: The well."
+API: GET /wells/(wellId:WellId) -> 200
+
+  >> RESPONSE.BODY.dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+	at io.specmatic.test.SpecmaticJUnitSupport.dynamicTestStream$lambda$0$1(SpecmaticJUnitSupport.kt:431)
+	at java.base/java.util.Optional.ifPresent(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+]]></failure>
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#11]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /wells/(wellId:WellId) -> 200 with the request from the example 'production-forecast__get_well_W-001_active'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /wells/(wellId:WellId) -&gt; 200 with the request from the example 'GET_W001'" time="0.039">
+<failure message="Testing scenario &quot;Get one well by id.. Response: The well.&quot;&#10;API: GET /wells/(wellId:WellId) -&gt; 200&#10;&#10;  &gt;&gt; RESPONSE.BODY.dailyCapacityBbl&#10;  &#10;      R2001: Missing required property&#10;      Documentation: https://docs.specmatic.io/rules#r2001&#10;      Summary: A required property defined in the specification is missing&#10;  &#10;      Specification expected mandatory property &quot;dailyCapacityBbl&quot; to be present but was missing from the response&#10;  &#10;  &gt;&gt; RESPONSE.BODY.dailyCapacity&#10;  &#10;      R2003: Unknown property&#10;      Documentation: https://docs.specmatic.io/rules#r2003&#10;      Summary: A property was found that is not defined in the specification&#10;  &#10;      Property &quot;dailyCapacity&quot; in the response was not in the specification" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: Testing scenario "Get one well by id.. Response: The well."
+API: GET /wells/(wellId:WellId) -> 200
+
+  >> RESPONSE.BODY.dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+	at io.specmatic.test.SpecmaticJUnitSupport.dynamicTestStream$lambda$0$1(SpecmaticJUnitSupport.kt:431)
+	at java.base/java.util.Optional.ifPresent(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+]]></failure>
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#10]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /wells/(wellId:WellId) -> 200 with the request from the example 'GET_W001'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /wells/(wellId:WellId) -&gt; 400 with the request from the example 'provider__get_well_bad_id_400'" time="0.042">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#13]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /wells/(wellId:WellId) -> 400 with the request from the example 'provider__get_well_bad_id_400'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /wells/(wellId:WellId) -&gt; 200 with the request from the example 'production-forecast__get_well_W-003_shut_in'" time="0.046">
+<failure message="Testing scenario &quot;Get one well by id.. Response: The well.&quot;&#10;API: GET /wells/(wellId:WellId) -&gt; 200&#10;&#10;  &gt;&gt; RESPONSE.BODY.dailyCapacityBbl&#10;  &#10;      R2001: Missing required property&#10;      Documentation: https://docs.specmatic.io/rules#r2001&#10;      Summary: A required property defined in the specification is missing&#10;  &#10;      Specification expected mandatory property &quot;dailyCapacityBbl&quot; to be present but was missing from the response&#10;  &#10;  &gt;&gt; RESPONSE.BODY.dailyCapacity&#10;  &#10;      R2003: Unknown property&#10;      Documentation: https://docs.specmatic.io/rules#r2003&#10;      Summary: A property was found that is not defined in the specification&#10;  &#10;      Property &quot;dailyCapacity&quot; in the response was not in the specification" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: Testing scenario "Get one well by id.. Response: The well."
+API: GET /wells/(wellId:WellId) -> 200
+
+  >> RESPONSE.BODY.dailyCapacityBbl
+  
+      R2001: Missing required property
+      Documentation: https://docs.specmatic.io/rules#r2001
+      Summary: A required property defined in the specification is missing
+  
+      Specification expected mandatory property "dailyCapacityBbl" to be present but was missing from the response
+  
+  >> RESPONSE.BODY.dailyCapacity
+  
+      R2003: Unknown property
+      Documentation: https://docs.specmatic.io/rules#r2003
+      Summary: A property was found that is not defined in the specification
+  
+      Property "dailyCapacity" in the response was not in the specification
+	at io.specmatic.test.SpecmaticJUnitSupport.dynamicTestStream$lambda$0$1(SpecmaticJUnitSupport.kt:431)
+	at java.base/java.util.Optional.ifPresent(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(Unknown Source)
+]]></failure>
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#12]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /wells/(wellId:WellId) -> 200 with the request from the example 'production-forecast__get_well_W-003_shut_in'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /wells/(wellId:WellId) -&gt; 401 with the request from the example 'provider__get_well_invalid_token_401'" time="0.026">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#15]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /wells/(wellId:WellId) -> 401 with the request from the example 'provider__get_well_invalid_token_401'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /wells/(wellId:WellId) -&gt; 401 with the request from the example 'provider__get_well_empty_token_401'" time="0.031">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#14]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /wells/(wellId:WellId) -> 401 with the request from the example 'provider__get_well_empty_token_401'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /wells/(wellId:WellId) -&gt; 404 with the request from the example 'production-forecast__get_well_W-999_not_found'" time="0.025">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#17]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /wells/(wellId:WellId) -> 404 with the request from the example 'production-forecast__get_well_W-999_not_found'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /wells/(wellId:WellId) -&gt; 404 with the request from the example 'UNKNOWN_WELL'" time="0.024">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#16]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /wells/(wellId:WellId) -> 404 with the request from the example 'UNKNOWN_WELL'
+]]></system-out>
+</testcase>
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]
+display-name: Contract Tests
+]]></system-out>
+</testsuite>

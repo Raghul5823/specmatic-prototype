@@ -1,0 +1,176 @@
+Specmatic Version: v2.55.0(299682d5)
+
+Loading config file /work/specmatic/well-registry.mock.yaml
+
+Loading the following spec files:
+  - /work/contracts/specs/app-a-production/well-registry-service.yaml
+
+API Specification Summary: /work/contracts/specs/app-a-production/well-registry-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 3
+  Schema components: 5, Security Schemes: [http]
+
+
+  12 examples(s) found in ./contracts/specs/app-a-production/well-registry-service_examples
+
+
+Mock server is running on the following URLs:
+- http://0.0.0.0:9000/v2 serving endpoints from specs:
+	1. /work/contracts/specs/app-a-production/well-registry-service.yaml
+
+Press Ctrl + C to stop.
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+--------------------
+  Contract matched: /work/contracts/specs/app-a-production/well-registry-service.yaml
+  External Example matched: /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-999_not_found.json
+
+  Request to port '9000' at 2026-10-4 9:26:1.69
+    GET /v2/wells/W-999
+    Host: localhost:9101
+    Authorization: Bearer test-token-123
+    
+    
+
+  Response at 2026-10-4 9:26:1.331
+    404 Not Found
+    Content-Type: application/problem+json
+    X-Specmatic-Result: success
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+        "title": "Not Found",
+        "status": 404,
+        "detail": "Well W-999 does not exist."
+    }
+
+
+--------------------
+  Contract matched: /work/contracts/specs/app-a-production/well-registry-service.yaml
+  External Example matched: /work/contracts/specs/app-a-production/well-registry-service_examples/provider__get_well_bad_id_400.json
+
+  Request to port '9000' at 2026-10-4 9:26:1.575
+    GET /v2/wells/WELL-1
+    Host: localhost:9101
+    Authorization: Bearer test-token-123
+    
+    
+
+  Response at 2026-10-4 9:26:1.848
+    400 Bad Request
+    Content-Type: application/problem+json
+    X-Specmatic-Result: success
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+            "wellId": [
+                "wellId must match W-000."
+            ]
+        }
+    }
+
+
+--------------------
+  Contract matched: /work/contracts/specs/app-a-production/well-registry-service.yaml
+  External Example matched: /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-001_active.json
+
+  Request to port '9000' at 2026-10-4 9:26:1.948
+    GET /v2/wells/W-001
+    Host: localhost:9101
+    Authorization: Bearer test-token-123
+    
+    
+
+  Response at 2026-10-4 9:26:2.155
+    200 OK
+    Content-Type: application/json
+    X-Specmatic-Result: success
+    
+    {
+        "id": "W-001",
+        "name": "Eagle-1",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.5,
+        "longitude": -98.3,
+        "spudDate": "2019-04-12",
+        "dailyCapacityBbl": 1200
+    }
+
+
+--------------------
+  Request to port '9000' at 2026-10-4 9:26:2.261
+    GET /v2/wells/W-555
+    Host: localhost:9101
+    Authorization: Bearer test-token-123
+    
+    
+
+  Response at 2026-10-4 9:26:2.376
+    400 Bad Request
+    Content-Type: text/plain
+    X-Specmatic-Result: failure
+    
+    STRICT MODE ON
+    
+    No matching REST stub (strict mode) found for method GET and path /wells/W-555
+
+
+--------------------
+  Contract matched: /work/contracts/specs/app-a-production/well-registry-service.yaml
+  External Example matched: /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-003_shut_in.json
+
+  Request to port '9000' at 2026-10-4 9:26:2.461
+    GET /v2/wells/W-003
+    Host: localhost:9101
+    Authorization: Bearer test-token-123
+    
+    
+
+  Response at 2026-10-4 9:26:2.573
+    200 OK
+    Content-Type: application/json
+    X-Specmatic-Result: success
+    
+    {
+        "id": "W-003",
+        "name": "Permian-7",
+        "field": "Permian Basin",
+        "status": "SHUT_IN",
+        "latitude": 31.9,
+        "longitude": -102.1,
+        "spudDate": "2015-02-20",
+        "dailyCapacityBbl": 0
+    }
+
+
+--------------------
+  Contract matched: /work/contracts/specs/app-a-production/well-registry-service.yaml
+  External Example matched: /work/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-001_active.json
+
+  Request to port '9000' at 2026-10-4 9:26:2.645
+    GET /v2/wells/W-001
+    Host: localhost:9101
+    Authorization: Bearer test-token-123
+    
+    
+
+  Response at 2026-10-4 9:26:2.829
+    200 OK
+    Content-Type: application/json
+    X-Specmatic-Result: success
+    
+    {
+        "id": "W-001",
+        "name": "Eagle-1",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.5,
+        "longitude": -98.3,
+        "spudDate": "2019-04-12",
+        "dailyCapacityBbl": 1200
+    }
+

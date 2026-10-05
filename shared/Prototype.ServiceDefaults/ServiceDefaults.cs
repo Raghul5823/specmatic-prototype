@@ -53,7 +53,8 @@ public static class ServiceDefaultsExtensions
         {
             client.BaseAddress = new Uri(baseUrl.EndsWith('/') ? baseUrl : baseUrl + "/");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            client.Timeout = TimeSpan.FromSeconds(5);
+            // Default 5 s; contract tests against cold Specmatic mocks raise it (Phase 7 flake finding).
+            client.Timeout = TimeSpan.FromSeconds(builder.Configuration.GetValue("Downstream:TimeoutSeconds", 5));
         });
     }
 }

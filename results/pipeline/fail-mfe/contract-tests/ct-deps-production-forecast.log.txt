@@ -1,0 +1,130 @@
+Specmatic Version: v2.55.0(299682d5)
+
+Loading config file /work/specmatic/production-forecast.specmatic.yaml
+Looking for a contract repo checkout at: /work/results/specmatic-work/.specmatic/repos/contracts
+Contract repo exists, is clean, and is up to date with remote.
+
+Loading the following spec files:
+  - .specmatic/repos/contracts/specs/app-a-production/well-registry-service.yaml
+  - .specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service.yaml
+
+API Specification Summary: .specmatic/repos/contracts/specs/app-a-production/well-registry-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 3
+  Schema components: 5, Security Schemes: [http]
+
+
+API Specification Summary: .specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 3
+  Schema components: 9, Security Schemes: [http]
+
+
+  12 examples(s) found in ./.specmatic/repos/contracts/specs/app-a-production/well-registry-service_examples
+
+  2 examples(s) found in ./.specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service_examples
+
+
+Mock server is running on the following URLs:
+- http://0.0.0.0:9101/v2 serving endpoints from specs:
+	1. .specmatic/repos/contracts/specs/app-a-production/well-registry-service.yaml
+
+- http://0.0.0.0:9201/v2 serving endpoints from specs:
+	1. .specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service.yaml
+
+Press Ctrl + C to stop.
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+--------------------
+  Request to port '9101' at 2026-10-4 9:22:22.98
+    GET /v2/actuator/health
+    Host: localhost:9101
+    
+    
+
+  Response at 2026-10-4 9:22:22.513
+    400 Bad Request
+    Content-Type: text/plain
+    X-Specmatic-Result: failure
+    X-Specmatic-Empty: true
+    
+    No matching REST stub or contract found for method GET and path /actuator/health
+
+
+--------------------
+  Request to port '9201' at 2026-10-4 9:22:22.772
+    GET /v2/actuator/health
+    Host: localhost:9201
+    
+    
+
+  Response at 2026-10-4 9:22:23.59
+    400 Bad Request
+    Content-Type: text/plain
+    X-Specmatic-Result: failure
+    X-Specmatic-Empty: true
+    
+    No matching REST stub or contract found for method GET and path /actuator/health
+
+
+--------------------
+  Contract matched: .specmatic/repos/contracts/specs/app-a-production/well-registry-service.yaml
+  External Example matched: /work/results/specmatic-work/.specmatic/repos/contracts/specs/app-a-production/well-registry-service_examples/production-forecast__get_well_W-001_active.json
+
+  Request to port '9101' at 2026-10-4 9:22:45.212
+    GET /v2/wells/W-001
+    Host: localhost:9101
+    Authorization: Bearer test-token-123
+    traceparent: 00-197bbf67fad89d4b8ea6e2cd435947ec-efcda3fae517bb3e-00
+    
+    
+
+  Response at 2026-10-4 9:22:45.879
+    200 OK
+    Content-Type: application/json
+    X-Specmatic-Result: success
+    
+    {
+        "id": "W-001",
+        "name": "Eagle-1",
+        "field": "Eagle Ford",
+        "status": "ACTIVE",
+        "latitude": 28.5,
+        "longitude": -98.3,
+        "spudDate": "2019-04-12",
+        "dailyCapacityBbl": 1200
+    }
+
+
+--------------------
+  Contract matched: .specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service.yaml
+  External Example matched: /work/results/specmatic-work/.specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service_examples/production-forecast__list_approved_W-001.json
+
+  Request to port '9201' at 2026-10-4 9:22:46.314
+    GET /v2/change-requests?wellId=W-001&status=APPROVED
+    Host: localhost:9201
+    Authorization: Bearer test-token-123
+    traceparent: 00-197bbf67fad89d4b8ea6e2cd435947ec-31990ded4c95e6a4-00
+    
+    
+
+  Response at 2026-10-4 9:22:47.333
+    200 OK
+    Content-Type: application/json
+    X-Specmatic-Result: success
+    
+    [
+        {
+            "id": "CR-1001",
+            "title": "Open choke on Eagle-1",
+            "wellId": "W-001",
+            "type": "CHOKE_CHANGE",
+            "capacityDeltaBbl": 150,
+            "requestedBy": "j.doe",
+            "status": "APPROVED",
+            "approvalId": "A-7001",
+            "decisionReason": "Within delegated authority (<= 500 bbl/d).",
+            "createdAt": "2026-09-01T08:00:00Z"
+        }
+    ]
+

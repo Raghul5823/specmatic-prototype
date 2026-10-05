@@ -1,0 +1,16 @@
+    - Specs that have changed:
+    1. /repo/specs/app-a-production/well-registry-service.yaml
+    2. /repo/specs/app-a-production/production-forecast-service.yaml
+    1. /repo/consumers.yaml
+    [Compatibility Check] Verdict: PASS
+    [Compatibility Check] Verdict: PASS
+    [Compatibility Check] Verdict: PASS
+    [Compatibility Check] Verdict: PASS
+    [Compatibility Check] Verdict: PASS
+    Verdict for spec /repo/specs/app-a-production/well-registry-service.yaml:
+    (COMPATIBLE) The spec is backward compatible with the corresponding spec from main
+    Verdict for spec /repo/specs/app-a-production/production-forecast-service.yaml:
+    (COMPATIBLE) The spec is backward compatible with the corresponding spec from main
+    Verdict for spec /repo/consumers.yaml:
+    (COMPATIBLE) The spec is backward compatible with the corresponding spec from main
+    Files checked: 3 (Passed: 3, Failed: 0)

@@ -1,0 +1,26 @@
+{
+  "pipeline": "contracts-pr",
+  "run": "A4-breaking-rename-response-field",
+  "branch": "pr/A4-breaking-rename-response-field",
+  "base": "main",
+  "change": "Rename required response field Forecast.wellId -> wellID",
+  "gates": [
+    {
+      "gate": "Validate specs + examples",
+      "status": "FAILED",
+      "seconds": 47.0
+    },
+    {
+      "gate": "Bundle check",
+      "status": "SKIPPED",
+      "seconds": 0
+    },
+    {
+      "gate": "Backward compatibility vs main",
+      "status": "SKIPPED",
+      "seconds": 0
+    }
+  ],
+  "stoppedAt": "Validate specs + examples",
+  "merge": "BLOCKED by gate 'Validate specs + examples'"
+}

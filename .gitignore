@@ -18,5 +18,11 @@ results/case1/04-resiliency/junit/
 # Specmatic's clone of the contract repo when a config uses a git source
 .specmatic/
 
+# Default output of a local `dotnet test` of the ContractTests (pipeline runs write to results/pipeline/<run>/)
+results/pipeline/contract-tests/
+
+# Test-run files with machine/user details (TRX contains DOMAIN\user and local paths)
+results/pipeline/**/*.trx
+
 # Playwright HTML report embeds compressed run data (may contain local paths): keep it local only
 results/**/playwright-report/

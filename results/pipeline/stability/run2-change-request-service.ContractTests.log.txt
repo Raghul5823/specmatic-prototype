@@ -1,0 +1,16 @@
+Test run for .\app-b-change-mgmt\change-request-service.ContractTests\bin\Debug\net10.0\ChangeRequestService.ContractTests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.1)
+[xUnit.net 00:00:00.27]   Discovering: ChangeRequestService.ContractTests
+[xUnit.net 00:00:00.39]   Discovered:  ChangeRequestService.ContractTests
+[xUnit.net 00:00:00.46]   Starting:    ChangeRequestService.ContractTests
+[xUnit.net 00:00:42.56]   Finished:    ChangeRequestService.ContractTests
+  Passed ChangeRequestService.ContractTests.ChangeRequestContractTests.Provider_satisfies_its_contract [41 s]
+
+Test Run Successful.
+Total tests: 1
+     Passed: 1
+ Total time: 44.1238 Seconds

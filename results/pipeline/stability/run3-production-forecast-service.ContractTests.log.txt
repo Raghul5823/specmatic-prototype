@@ -1,0 +1,16 @@
+Test run for .\app-a-production\production-forecast-service.ContractTests\bin\Debug\net10.0\ProductionForecastService.ContractTests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.1)
+[xUnit.net 00:00:00.10]   Discovering: ProductionForecastService.ContractTests
+[xUnit.net 00:00:00.16]   Discovered:  ProductionForecastService.ContractTests
+[xUnit.net 00:00:00.21]   Starting:    ProductionForecastService.ContractTests
+[xUnit.net 00:00:40.69]   Finished:    ProductionForecastService.ContractTests
+  Passed ProductionForecastService.ContractTests.ProductionForecastContractTests.Provider_satisfies_its_contract [40 s]
+
+Test Run Successful.
+Total tests: 1
+     Passed: 1
+ Total time: 41.6579 Seconds

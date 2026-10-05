@@ -1,0 +1,100 @@
+<testsuite errors="0" failures="0" hostname="15429182389b" name="Contract Tests" skipped="0" tests="7" time="6.97" timestamp="2026-10-05T06:12:59">
+<properties>
+<property name="CONFIG_FILE_PATH" value="/work/specmatic/change-request.specmatic.yaml"/>
+<property name="file.encoding" value="ANSI_X3.4-1968"/>
+<property name="file.separator" value="/"/>
+<property name="java.class.path" value="/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar"/>
+<property name="java.class.version" value="61.0"/>
+<property name="java.home" value="/usr/lib/jvm/java-17-openjdk"/>
+<property name="java.io.tmpdir" value="/tmp"/>
+<property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+<property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+<property name="java.runtime.version" value="17.0.20.1+0-wolfi-r4"/>
+<property name="java.specification.maintenance.version" value="1"/>
+<property name="java.specification.name" value="Java Platform API Specification"/>
+<property name="java.specification.vendor" value="Oracle Corporation"/>
+<property name="java.specification.version" value="17"/>
+<property name="java.vendor" value="wolfi"/>
+<property name="java.vendor.url" value="https://wolfi.dev"/>
+<property name="java.vendor.url.bug" value="https://github.com/wolfi-dev/os/issues"/>
+<property name="java.vendor.version" value="openjdk-17-17.0.20.1-r4"/>
+<property name="java.version" value="17.0.20.1"/>
+<property name="java.version.date" value="2026-08-18"/>
+<property name="java.vm.compressedOopsMode" value="Zero based"/>
+<property name="java.vm.info" value="mixed mode, sharing"/>
+<property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+<property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+<property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+<property name="java.vm.specification.version" value="17"/>
+<property name="java.vm.vendor" value="wolfi"/>
+<property name="java.vm.version" value="17.0.20.1+0-wolfi-r4"/>
+<property name="jdk.debug" value="release"/>
+<property name="line.separator" value="&#10;"/>
+<property name="native.encoding" value="ANSI_X3.4-1968"/>
+<property name="os.arch" value="amd64"/>
+<property name="os.name" value="Linux"/>
+<property name="os.version" value="6.6.87.2-microsoft-standard-WSL2"/>
+<property name="path.separator" value=":"/>
+<property name="picocli.usage.width" value="auto"/>
+<property name="sun.arch.data.model" value="64"/>
+<property name="sun.boot.library.path" value="/usr/lib/jvm/java-17-openjdk/lib"/>
+<property name="sun.cpu.endian" value="little"/>
+<property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+<property name="sun.java.command" value="/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar test --config=/work/specmatic/change-request.specmatic.yaml --junitReportDir=/work/results/pipeline/stability/contract-tests/change-request-service/junit --timeout-in-ms=90000"/>
+<property name="sun.java.launcher" value="SUN_STANDARD"/>
+<property name="sun.jnu.encoding" value="ANSI_X3.4-1968"/>
+<property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+<property name="user.country" value="US"/>
+<property name="user.dir" value="/work/results/pipeline/stability/contract-tests/change-request-service"/>
+<property name="user.home" value="/root"/>
+<property name="user.language" value="en"/>
+<property name="user.name" value="root"/>
+<property name="user.timezone" value="GMT"/>
+</properties>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /change-requests -&gt; 200 with the request from the example 'production-forecast__list_approved_W-002_empty' where REQUEST.PARAMETERS.QUERY contains the params 'wellId', 'status'" time="0.015">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#5]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /change-requests -> 200 with the request from the example 'production-forecast__list_approved_W-002_empty' where REQUEST.PARAMETERS.QUERY contains the params 'wellId', 'status'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /change-requests/(changeRequestId:ChangeRequestId) -&gt; 200 with the request from the example 'GET_CR1002'" time="0.02">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#6]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /change-requests/(changeRequestId:ChangeRequestId) -> 200 with the request from the example 'GET_CR1002'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /change-requests/(changeRequestId:ChangeRequestId) -&gt; 404 with the request from the example 'UNKNOWN_CHANGE_REQUEST'" time="0.012">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#7]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /change-requests/(changeRequestId:ChangeRequestId) -> 404 with the request from the example 'UNKNOWN_CHANGE_REQUEST'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: POST /change-requests -&gt; 201 with the request from the example 'CREATE_SMALL_CHOKE_CHANGE'" time="1.09">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#1]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: POST /change-requests -> 201 with the request from the example 'CREATE_SMALL_CHOKE_CHANGE'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /change-requests -&gt; 200 with the request from the example 'APPROVED_FOR_W001' where REQUEST.PARAMETERS.QUERY contains the params 'wellId', 'status'" time="0.031">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#2]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /change-requests -> 200 with the request from the example 'APPROVED_FOR_W001' where REQUEST.PARAMETERS.QUERY contains the params 'wellId', 'status'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /change-requests -&gt; 200 with the request from the example 'NONE_FOR_W002' where REQUEST.PARAMETERS.QUERY contains the params 'wellId', 'status'" time="0.021">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#3]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /change-requests -> 200 with the request from the example 'NONE_FOR_W002' where REQUEST.PARAMETERS.QUERY contains the params 'wellId', 'status'
+]]></system-out>
+</testcase>
+<testcase classname="io.specmatic.test.SpecmaticJUnitSupport" name="Contract Tests &gt; SpecmaticJUnitSupport &gt; contractTest() &gt; Scenario: GET /change-requests -&gt; 200 with the request from the example 'production-forecast__list_approved_W-001' where REQUEST.PARAMETERS.QUERY contains the params 'wellId', 'status'" time="0.02">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:io.specmatic.test.SpecmaticJUnitSupport]/[test-factory:contractTest()]/[dynamic-test:#4]
+display-name: Contract Tests > SpecmaticJUnitSupport > contractTest() > Scenario: GET /change-requests -> 200 with the request from the example 'production-forecast__list_approved_W-001' where REQUEST.PARAMETERS.QUERY contains the params 'wellId', 'status'
+]]></system-out>
+</testcase>
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]
+display-name: Contract Tests
+]]></system-out>
+</testsuite>

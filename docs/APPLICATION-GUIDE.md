@@ -115,6 +115,10 @@ Specmatic Prototype/                      ← prototype git repo (public)
 │   ├─ change-request-service.Tests/      consumer contract tests vs the approval STUB
 │   └─ approval-service/                  provider (C2)
 ├─ mfe/well-mfe/                          Angular 21 micro-frontend (consumer C5): generated client, Playwright tests
+├─ app-*/<service>.ContractTests/         one per provider: starts the service, runs Specmatic; plain `dotnet test`
+├─ shared/Prototype.ContractTesting/      helpers for the ContractTests (start service, start mocks, run Specmatic)
+├─ pipelines/                             SAMPLE Azure DevOps YAML: service pipeline + contracts PR pipeline
+├─ global.json                            pins the .NET SDK (10.0.101)
 ├─ specmatic/                             Specmatic config files (v3) owned by the services
 ├─ scripts/                               PowerShell automation (start/stop, tests, stubs, experiments)
 ├─ results/                               evidence of every run (reports, logs, summaries)
@@ -234,6 +238,10 @@ Tags are annotated and never moved. `v1` is the first contract set, and `v1.1` a
 | `break-experiment.ps1` | applies one deliberate code change, builds, runs xUnit and Specmatic (or the consumer tests against a stub), records whether each caught it, then restores the exact original bytes |
 | `case1-break-experiments.ps1`, `case2-break-experiments.ps1` | the full experiment lists for Phases 3 and 4, plus summary tables |
 | `deps.ps1` | starts or stops a provider's **dependency mocks** from its config (`specmatic mock --config`) |
+| `run-all.ps1` | the **service pipeline** simulation: one BuildService stage of 7 gates (toolchain, build, unit, provider ContractTests, consumer tests vs stubs, MFE build, MFE Playwright), then DeployDev only if all passed |
+| `contracts-pr-check.ps1` | the **contracts PR pipeline** simulation: validate specs + examples, bundle check, compatibility vs `main`; blocks the merge on any failure |
+| `pipeline-failure-demos.ps1` | one deliberate failure per gate type, recording which gate stopped the run |
+| `mfe-e2e.ps1`, `mfe-compile-break.ps1` | MFE Playwright tests against a strict stub; contract break as a compile error |
 | `compat-check.ps1` | Specmatic **backward-compatibility check** on a git checkout of the contract repo; records the exit code (0 = compatible, 1 = breaking) |
 | `case3-drift.ps1` | the drift scenarios: provider code ahead of the contract, and contract ahead of the provider code |
 
@@ -264,7 +272,7 @@ Tags are annotated and never moved. `v1` is the first contract set, and `v1.1` a
 | 4 Case 2 | ✅ | provider tests for C1 and C2 pass; stubs under `/v2` (T4 solved); 11 consumer tests vs strict stubs pass; 6/6 breaks caught on both sides; Pact comparison |
 | 5 Case 3 | ✅ | cross-app C3/C4 provider tests with mocked dependencies and consumer tests, specs from the git contract repo; compatibility gate fails a breaking change (exit 1); drift shown both ways |
 | 6 Angular MFE | ✅ | Angular 21 page listing wells via a client **generated from the contract** (a contract break becomes a compile error); Playwright 4/4 against a strict stub through the dev-server proxy; MFE examples verified by the provider (contracts `v1.2`) |
-| **7 Pipeline** | **next** | `run-all.ps1`, xUnit ContractTests projects, sample `azure-pipelines.yml` (incl. the Angular steps) |
-| 8 Evaluation | planned | coverage, control points, scorecard, recommendation |
+| 7 Pipeline | ✅ | two pipelines: contracts PR (3 gates, blocks the merge) and service (BuildService with 7 gates, DeployDev depends on it); ContractTests projects; a deliberate failure per gate type, each stopped at the right gate |
+| **8 Evaluation** | **next** | coverage, control points, scorecard, recommendation |
 
 The README section "0. Master checklist" is the up-to-date, item-by-item status, with links to the evidence for every ticked item.

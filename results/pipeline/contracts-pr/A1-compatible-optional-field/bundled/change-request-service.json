@@ -1,0 +1,482 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Change Request API",
+    "version": "1.0.0",
+    "description": "App B (Change Management). Raises change requests against wells; each request is decided synchronously by approval-service. Provider: change-request-service. Consumers: production-forecast-service (C4, cross-app). POST /change-requests itself calls approval (C2) and, when forecastId is given, production-forecast (C3); the GET endpoints make no downstream calls, so the two cross-app directions cannot loop.\n"
+  },
+  "servers": [
+    {
+      "url": "/v2",
+      "description": "Base path (ignored by Specmatic; tests pass it via --testBaseURL)."
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "change-requests"
+    }
+  ],
+  "paths": {
+    "/change-requests": {
+      "get": {
+        "tags": [
+          "change-requests"
+        ],
+        "operationId": "listChangeRequests",
+        "summary": "List change requests, optionally filtered by well and status.",
+        "parameters": [
+          {
+            "name": "wellId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/WellId"
+            },
+            "examples": {
+              "APPROVED_FOR_W001": {
+                "value": "W-001"
+              },
+              "NONE_FOR_W002": {
+                "value": "W-002"
+              }
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/ChangeStatus"
+            },
+            "examples": {
+              "APPROVED_FOR_W001": {
+                "value": "APPROVED"
+              },
+              "NONE_FOR_W002": {
+                "value": "APPROVED"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Matching change requests (may be empty).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChangeRequest"
+                  }
+                },
+                "examples": {
+                  "APPROVED_FOR_W001": {
+                    "value": [
+                      {
+                        "id": "CR-1001",
+                        "title": "Open choke on Eagle-1",
+                        "wellId": "W-001",
+                        "type": "CHOKE_CHANGE",
+                        "capacityDeltaBbl": 150,
+                        "requestedBy": "j.doe",
+                        "status": "APPROVED",
+                        "approvalId": "A-7001",
+                        "decisionReason": "Within delegated authority (<= 500 bbl/d).",
+                        "createdAt": "2026-09-01T08:00:00Z"
+                      }
+                    ]
+                  },
+                  "NONE_FOR_W002": {
+                    "value": []
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "change-requests"
+        ],
+        "operationId": "createChangeRequest",
+        "summary": "Raise a change request (decided immediately by approval-service).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateChangeRequest"
+              },
+              "examples": {
+                "CREATE_SMALL_CHOKE_CHANGE": {
+                  "value": {
+                    "title": "Choke tweak",
+                    "wellId": "W-001",
+                    "forecastId": "F-5001",
+                    "type": "CHOKE_CHANGE",
+                    "capacityDeltaBbl": 50,
+                    "requestedBy": "qa.user"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created and decided.",
+            "headers": {
+              "Location": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {
+                  "CREATE_SMALL_CHOKE_CHANGE": {
+                    "value": "/v2/change-requests/CR-1003"
+                  }
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeRequest"
+                },
+                "examples": {
+                  "CREATE_SMALL_CHOKE_CHANGE": {
+                    "value": {
+                      "id": "CR-1003",
+                      "title": "Choke tweak",
+                      "wellId": "W-001",
+                      "forecastId": "F-5001",
+                      "type": "CHOKE_CHANGE",
+                      "capacityDeltaBbl": 50,
+                      "requestedBy": "qa.user",
+                      "status": "APPROVED",
+                      "approvalId": "A-7003",
+                      "decisionReason": "Within delegated authority (<= 500 bbl/d).",
+                      "createdAt": "2026-09-28T09:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "502": {
+            "$ref": "#/components/responses/BadGateway"
+          }
+        }
+      }
+    },
+    "/change-requests/{changeRequestId}": {
+      "get": {
+        "tags": [
+          "change-requests"
+        ],
+        "operationId": "getChangeRequest",
+        "summary": "Get one change request by id.",
+        "parameters": [
+          {
+            "name": "changeRequestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ChangeRequestId"
+            },
+            "examples": {
+              "GET_CR1002": {
+                "value": "CR-1002"
+              },
+              "UNKNOWN_CHANGE_REQUEST": {
+                "value": "CR-9999"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The change request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeRequest"
+                },
+                "examples": {
+                  "GET_CR1002": {
+                    "value": {
+                      "id": "CR-1002",
+                      "title": "Workover Eagle-1",
+                      "wellId": "W-001",
+                      "forecastId": "F-5001",
+                      "type": "WORKOVER",
+                      "capacityDeltaBbl": 900,
+                      "requestedBy": "a.khan",
+                      "status": "REJECTED",
+                      "approvalId": "A-7002",
+                      "decisionReason": "Exceeds delegated authority (> 500 bbl/d); needs manual review.",
+                      "createdAt": "2026-09-03T10:30:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "description": "The change request does not exist.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "UNKNOWN_CHANGE_REQUEST": {
+                    "value": {
+                      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+                      "title": "Not Found",
+                      "status": 404,
+                      "detail": "Change request CR-9999 does not exist."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "OAuth2 access token in production; a fixed test token in this prototype."
+      }
+    },
+    "schemas": {
+      "ChangeRequestId": {
+        "type": "string",
+        "pattern": "^CR-\\d{4}$",
+        "example": "CR-1001"
+      },
+      "WellId": {
+        "type": "string",
+        "pattern": "^W-\\d{3}$"
+      },
+      "ForecastId": {
+        "type": "string",
+        "pattern": "^F-\\d{4}$"
+      },
+      "ApprovalId": {
+        "type": "string",
+        "pattern": "^A-\\d{4}$"
+      },
+      "ChangeType": {
+        "type": "string",
+        "enum": [
+          "CHOKE_CHANGE",
+          "WORKOVER",
+          "SHUT_IN"
+        ]
+      },
+      "ChangeStatus": {
+        "type": "string",
+        "description": "Approval is synchronous, so a stored change request is always decided.",
+        "enum": [
+          "APPROVED",
+          "REJECTED"
+        ]
+      },
+      "CreateChangeRequest": {
+        "type": "object",
+        "required": [
+          "title",
+          "wellId",
+          "type",
+          "capacityDeltaBbl",
+          "requestedBy"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "wellId": {
+            "$ref": "#/components/schemas/WellId"
+          },
+          "forecastId": {
+            "$ref": "#/components/schemas/ForecastId"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ChangeType"
+          },
+          "capacityDeltaBbl": {
+            "type": "number",
+            "description": "Change in daily capacity (bbl/d); negative for a reduction."
+          },
+          "requestedBy": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "ChangeRequest": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "wellId",
+          "type",
+          "capacityDeltaBbl",
+          "requestedBy",
+          "status",
+          "approvalId",
+          "decisionReason",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ChangeRequestId"
+          },
+          "title": {
+            "type": "string"
+          },
+          "wellId": {
+            "$ref": "#/components/schemas/WellId"
+          },
+          "forecastId": {
+            "$ref": "#/components/schemas/ForecastId"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ChangeType"
+          },
+          "capacityDeltaBbl": {
+            "type": "number"
+          },
+          "requestedBy": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ChangeStatus"
+          },
+          "approvalId": {
+            "$ref": "#/components/schemas/ApprovalId"
+          },
+          "decisionReason": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "description": "RFC 9457 problem details. `errors` is only present for field validation failures; a malformed body (e.g. a string where a number is expected) returns a ProblemDetails without `errors`.\n",
+        "required": [
+          "type",
+          "title",
+          "status"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "minimum": 400,
+            "maximum": 599
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string"
+          },
+          "traceId": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "object",
+            "description": "Field name -> list of messages.",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Validation failed or the request was malformed.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Missing or invalid bearer token.",
+        "headers": {
+          "WWW-Authenticate": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      },
+      "BadGateway": {
+        "description": "A downstream provider was unavailable or returned an unexpected response.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      }
+    }
+  }
+}

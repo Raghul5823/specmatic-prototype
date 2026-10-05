@@ -1,0 +1,343 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Approval API",
+    "version": "1.0.0",
+    "description": "App B (Change Management). Decides change requests automatically: abs(capacityDeltaBbl) <= 500 -> APPROVED, otherwise REJECTED. Provider: approval-service. Consumers: change-request-service (C2).\n"
+  },
+  "servers": [
+    {
+      "url": "/v2",
+      "description": "Base path (ignored by Specmatic; tests pass it via --testBaseURL)."
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "approvals"
+    }
+  ],
+  "paths": {
+    "/approvals": {
+      "post": {
+        "tags": [
+          "approvals"
+        ],
+        "operationId": "createApproval",
+        "summary": "Request a decision for a change request.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApprovalRequest"
+              },
+              "examples": {
+                "APPROVE_SMALL_CHANGE": {
+                  "value": {
+                    "changeRequestId": "CR-1003",
+                    "type": "CHOKE_CHANGE",
+                    "capacityDeltaBbl": 50
+                  }
+                },
+                "REJECT_LARGE_CHANGE": {
+                  "value": {
+                    "changeRequestId": "CR-1004",
+                    "type": "WORKOVER",
+                    "capacityDeltaBbl": 900
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Decision recorded.",
+            "headers": {
+              "Location": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {
+                  "APPROVE_SMALL_CHANGE": {
+                    "value": "/v2/approvals/A-7003"
+                  },
+                  "REJECT_LARGE_CHANGE": {
+                    "value": "/v2/approvals/A-7004"
+                  }
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Approval"
+                },
+                "examples": {
+                  "APPROVE_SMALL_CHANGE": {
+                    "value": {
+                      "id": "A-7003",
+                      "changeRequestId": "CR-1003",
+                      "decision": "APPROVED",
+                      "reason": "Within delegated authority (<= 500 bbl/d).",
+                      "decidedAt": "2026-09-28T09:00:00Z"
+                    }
+                  },
+                  "REJECT_LARGE_CHANGE": {
+                    "value": {
+                      "id": "A-7004",
+                      "changeRequestId": "CR-1004",
+                      "decision": "REJECTED",
+                      "reason": "Exceeds delegated authority (> 500 bbl/d); needs manual review.",
+                      "decidedAt": "2026-09-28T09:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/approvals/{approvalId}": {
+      "get": {
+        "tags": [
+          "approvals"
+        ],
+        "operationId": "getApproval",
+        "summary": "Get one decision by id.",
+        "parameters": [
+          {
+            "name": "approvalId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ApprovalId"
+            },
+            "examples": {
+              "GET_A7001": {
+                "value": "A-7001"
+              },
+              "UNKNOWN_APPROVAL": {
+                "value": "A-9999"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The decision.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Approval"
+                },
+                "examples": {
+                  "GET_A7001": {
+                    "value": {
+                      "id": "A-7001",
+                      "changeRequestId": "CR-1001",
+                      "decision": "APPROVED",
+                      "reason": "Within delegated authority (<= 500 bbl/d).",
+                      "decidedAt": "2026-09-01T08:00:01Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "description": "The decision does not exist.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "UNKNOWN_APPROVAL": {
+                    "value": {
+                      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+                      "title": "Not Found",
+                      "status": 404,
+                      "detail": "Approval A-9999 does not exist."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "OAuth2 access token in production; a fixed test token in this prototype."
+      }
+    },
+    "schemas": {
+      "ApprovalId": {
+        "type": "string",
+        "pattern": "^A-\\d{4}$",
+        "example": "A-7001"
+      },
+      "ChangeRequestId": {
+        "type": "string",
+        "pattern": "^CR-\\d{4}$"
+      },
+      "ChangeType": {
+        "type": "string",
+        "enum": [
+          "CHOKE_CHANGE",
+          "WORKOVER",
+          "SHUT_IN"
+        ]
+      },
+      "Decision": {
+        "type": "string",
+        "enum": [
+          "APPROVED",
+          "REJECTED"
+        ]
+      },
+      "CreateApprovalRequest": {
+        "type": "object",
+        "required": [
+          "changeRequestId",
+          "type",
+          "capacityDeltaBbl"
+        ],
+        "properties": {
+          "changeRequestId": {
+            "$ref": "#/components/schemas/ChangeRequestId"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ChangeType"
+          },
+          "capacityDeltaBbl": {
+            "type": "number"
+          }
+        }
+      },
+      "Approval": {
+        "type": "object",
+        "required": [
+          "id",
+          "changeRequestId",
+          "decision",
+          "reason",
+          "decidedAt"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ApprovalId"
+          },
+          "changeRequestId": {
+            "$ref": "#/components/schemas/ChangeRequestId"
+          },
+          "decision": {
+            "$ref": "#/components/schemas/Decision"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "decidedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "description": "RFC 9457 problem details. `errors` is only present for field validation failures; a malformed body (e.g. a string where a number is expected) returns a ProblemDetails without `errors`.\n",
+        "required": [
+          "type",
+          "title",
+          "status"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "minimum": 400,
+            "maximum": 599
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string"
+          },
+          "traceId": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "object",
+            "description": "Field name -> list of messages.",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Validation failed or the request was malformed.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Missing or invalid bearer token.",
+        "headers": {
+          "WWW-Authenticate": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      }
+    }
+  }
+}

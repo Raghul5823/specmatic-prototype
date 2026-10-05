@@ -1,0 +1,44 @@
+{
+  "pipeline": "service",
+  "run": "fail-provider",
+  "buildService": [
+    {
+      "gate": "Toolchain pinned",
+      "status": "PASSED",
+      "seconds": 1.0
+    },
+    {
+      "gate": "Build (.NET)",
+      "status": "PASSED",
+      "seconds": 33.0
+    },
+    {
+      "gate": "Unit tests",
+      "status": "PASSED",
+      "seconds": 6.0
+    },
+    {
+      "gate": "Provider contract tests",
+      "status": "FAILED",
+      "seconds": 187.0
+    },
+    {
+      "gate": "Consumer contract tests vs stubs",
+      "status": "SKIPPED",
+      "seconds": 0
+    },
+    {
+      "gate": "MFE: client + build",
+      "status": "SKIPPED",
+      "seconds": 0
+    },
+    {
+      "gate": "MFE: Playwright vs stub",
+      "status": "SKIPPED",
+      "seconds": 0
+    }
+  ],
+  "stoppedAt": "Provider contract tests",
+  "deployDev": "BLOCKED: BuildService failed at gate 'Provider contract tests'",
+  "minutes": 3.8
+}

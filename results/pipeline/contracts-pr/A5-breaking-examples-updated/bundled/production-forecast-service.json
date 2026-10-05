@@ -1,0 +1,397 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Production Forecast API",
+    "version": "1.0.0",
+    "description": "App A (Production). Creates production forecasts for a well. Provider: production-forecast-service. Consumers: change-request-service (C3, cross-app). POST /forecasts itself calls well-registry (C1) and change-request (C4); GET /forecasts/{id} makes no downstream calls, so the two cross-app directions cannot loop.\n"
+  },
+  "servers": [
+    {
+      "url": "/v2",
+      "description": "Base path (ignored by Specmatic; tests pass it via --testBaseURL)."
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "forecasts"
+    }
+  ],
+  "paths": {
+    "/forecasts": {
+      "post": {
+        "tags": [
+          "forecasts"
+        ],
+        "operationId": "createForecast",
+        "summary": "Create a forecast (exponential decline on effective capacity).",
+        "description": "effectiveDailyCapacityBbl = well.dailyCapacityBbl + sum(capacityDeltaBbl of APPROVED change requests for the well). Month m volume = effective * 30 * (1 - declineRatePct/100)^m.\n",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateForecastRequest"
+              },
+              "examples": {
+                "CREATE_W001": {
+                  "value": {
+                    "wellId": "W-001",
+                    "horizonMonths": 3,
+                    "declineRatePct": 5
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created.",
+            "headers": {
+              "Location": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {
+                  "CREATE_W001": {
+                    "value": "/v2/forecasts/F-5002"
+                  }
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forecast"
+                },
+                "examples": {
+                  "CREATE_W001": {
+                    "value": {
+                      "id": "F-5002",
+                      "wellId": "W-001",
+                      "wellName": "Eagle-1",
+                      "horizonMonths": 3,
+                      "declineRatePct": 5,
+                      "baseDailyCapacityBbl": 1200,
+                      "effectiveDailyCapacityBbl": 1350,
+                      "appliedChangeRequestIds": [
+                        "CR-1001"
+                      ],
+                      "monthlyVolumesBbl": [
+                        40500,
+                        38475,
+                        36551.3
+                      ],
+                      "totalVolumeBbl": 115526.3,
+                      "createdAt": "2026-09-28T09:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "502": {
+            "$ref": "#/components/responses/BadGateway"
+          }
+        }
+      }
+    },
+    "/forecasts/{forecastId}": {
+      "get": {
+        "tags": [
+          "forecasts"
+        ],
+        "operationId": "getForecast",
+        "summary": "Get one forecast by id.",
+        "parameters": [
+          {
+            "name": "forecastId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ForecastId"
+            },
+            "examples": {
+              "GET_F5001": {
+                "value": "F-5001"
+              },
+              "UNKNOWN_FORECAST": {
+                "value": "F-9999"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The forecast.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forecast"
+                },
+                "examples": {
+                  "GET_F5001": {
+                    "value": {
+                      "id": "F-5001",
+                      "wellId": "W-001",
+                      "wellName": "Eagle-1",
+                      "horizonMonths": 3,
+                      "declineRatePct": 5,
+                      "baseDailyCapacityBbl": 1200,
+                      "effectiveDailyCapacityBbl": 1350,
+                      "appliedChangeRequestIds": [
+                        "CR-1001"
+                      ],
+                      "monthlyVolumesBbl": [
+                        40500,
+                        38475,
+                        36551.3
+                      ],
+                      "totalVolumeBbl": 115526.3,
+                      "createdAt": "2026-09-02T09:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "description": "The forecast does not exist.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "UNKNOWN_FORECAST": {
+                    "value": {
+                      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+                      "title": "Not Found",
+                      "status": 404,
+                      "detail": "Forecast F-9999 does not exist."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "OAuth2 access token in production; a fixed test token in this prototype."
+      }
+    },
+    "schemas": {
+      "ForecastId": {
+        "type": "string",
+        "pattern": "^F-\\d{4}$",
+        "example": "F-5001"
+      },
+      "WellId": {
+        "type": "string",
+        "pattern": "^W-\\d{3}$"
+      },
+      "ChangeRequestId": {
+        "type": "string",
+        "pattern": "^CR-\\d{4}$"
+      },
+      "CreateForecastRequest": {
+        "type": "object",
+        "required": [
+          "wellId",
+          "horizonMonths",
+          "declineRatePct"
+        ],
+        "properties": {
+          "wellId": {
+            "$ref": "#/components/schemas/WellId"
+          },
+          "horizonMonths": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 24
+          },
+          "declineRatePct": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Monthly decline in percent."
+          }
+        }
+      },
+      "Forecast": {
+        "type": "object",
+        "required": [
+          "id",
+          "wellId",
+          "wellName",
+          "horizonMonths",
+          "declineRatePct",
+          "baseDailyCapacityBbl",
+          "effectiveDailyCapacityBbl",
+          "appliedChangeRequestIds",
+          "monthlyVolumesBbl",
+          "totalVolumeBbl",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ForecastId"
+          },
+          "wellId": {
+            "$ref": "#/components/schemas/WellId"
+          },
+          "wellName": {
+            "type": "string"
+          },
+          "horizonMonths": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 24
+          },
+          "declineRatePct": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "baseDailyCapacityBbl": {
+            "type": "number",
+            "minimum": 0
+          },
+          "effectiveDailyCapacityBbl": {
+            "type": "number",
+            "minimum": 0
+          },
+          "appliedChangeRequestIds": {
+            "type": "array",
+            "description": "APPROVED change requests (from App B) included in the effective capacity.",
+            "items": {
+              "$ref": "#/components/schemas/ChangeRequestId"
+            }
+          },
+          "monthlyVolumesBbl": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 24,
+            "items": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "totalVolumeBbl": {
+            "type": "number",
+            "minimum": 0
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "description": "RFC 9457 problem details. `errors` is only present for field validation failures; a malformed body (e.g. a string where a number is expected) returns a ProblemDetails without `errors`.\n",
+        "required": [
+          "type",
+          "title",
+          "status"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "minimum": 400,
+            "maximum": 599
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string"
+          },
+          "traceId": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "object",
+            "description": "Field name -> list of messages.",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Validation failed or the request was malformed.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Missing or invalid bearer token.",
+        "headers": {
+          "WWW-Authenticate": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      },
+      "BadGateway": {
+        "description": "A downstream provider was unavailable or returned an unexpected response.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      }
+    }
+  }
+}

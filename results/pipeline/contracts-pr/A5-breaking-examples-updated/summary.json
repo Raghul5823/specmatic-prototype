@@ -1,0 +1,26 @@
+{
+  "pipeline": "contracts-pr",
+  "run": "A5-breaking-examples-updated",
+  "branch": "pr/A5-breaking-examples-updated",
+  "base": "main",
+  "change": "Make CreateWellRequest.operator REQUIRED and update every example (careful but breaking PR)",
+  "gates": [
+    {
+      "gate": "Validate specs + examples",
+      "status": "PASSED",
+      "seconds": 46.0
+    },
+    {
+      "gate": "Bundle check",
+      "status": "PASSED",
+      "seconds": 1.0
+    },
+    {
+      "gate": "Backward compatibility vs main",
+      "status": "FAILED",
+      "seconds": 32.0
+    }
+  ],
+  "stoppedAt": "Backward compatibility vs main",
+  "merge": "BLOCKED by gate 'Backward compatibility vs main'"
+}

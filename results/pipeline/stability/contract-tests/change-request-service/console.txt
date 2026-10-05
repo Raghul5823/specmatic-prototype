@@ -1,0 +1,384 @@
+Specmatic Version: v2.55.0(299682d5)
+
+Loading config file /work/specmatic/change-request.specmatic.yaml
+Looking for a contract repo checkout at: /work/results/pipeline/stability/contract-tests/change-request-service/.specmatic/repos/contracts
+Contract repo dir does not exist.
+Cloning file:///work/contracts into .specmatic/repos
+Resetting /work/results/pipeline/stability/contract-tests/change-request-service/.specmatic/repos/contracts
+No branch specified, using default branch
+API Specification Summary: .specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 3
+  Schema components: 9, Security Schemes: [http]
+
+
+Test directory /work/results/pipeline/stability/contract-tests/change-request-service/.specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service_examples found
+
+Loading externalised examples from /work/results/pipeline/stability/contract-tests/change-request-service/.specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service_examples: 
+  2 examples(s) found in /work/results/pipeline/stability/contract-tests/change-request-service/.specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service_examples
+
+Loading test file /work/results/pipeline/stability/contract-tests/change-request-service/.specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service_examples/production-forecast__list_approved_W-001.json
+Loading test file /work/results/pipeline/stability/contract-tests/change-request-service/.specmatic/repos/contracts/specs/app-b-change-mgmt/change-request-service_examples/production-forecast__list_approved_W-002_empty.json
+
+No application API source was exposed by the application, so cannot calculate actual coverage
+
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+--------------------
+  Request to http://host.docker.internal:5201/v2 at 2026-10-5 6:12:57.477
+    POST /v2/change-requests
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 201
+    Host: host.docker.internal:5201
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: application/json
+    
+    {
+        "title": "Choke tweak",
+        "wellId": "W-001",
+        "forecastId": "F-5001",
+        "type": "CHOKE_CHANGE",
+        "capacityDeltaBbl": 50,
+        "requestedBy": "qa.user"
+    }
+
+  Response at 2026-10-5 6:12:58.342
+    201 Created
+    Content-Type: application/json; charset=utf-8
+    Date: Mon, 05 Oct 2026 06:11:54 GMT
+    Server: Kestrel
+    Location: /v2/change-requests/CR-1003
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "CR-1003",
+        "title": "Choke tweak",
+        "wellId": "W-001",
+        "forecastId": "F-5001",
+        "type": "CHOKE_CHANGE",
+        "capacityDeltaBbl": 50,
+        "requestedBy": "qa.user",
+        "status": "APPROVED",
+        "approvalId": "A-7003",
+        "decisionReason": "Within delegated authority (<= 500 bbl/d).",
+        "createdAt": "2026-10-05T06:11:54.6618566+00:00"
+    }
+
+Scenario: POST /change-requests -> 201 with the request from the example 'CREATE_SMALL_CHOKE_CHANGE' has SUCCEEDED
+
+
+--------------------
+  Skipping Scenario: POST /change-requests -> 400 (requestContentType application/json, responseContentType application/problem+json)
+  - T00004: Generative Disabled
+  Documentation: https://docs.specmatic.io/rules#t00004
+  Summary: This operation was skipped because it requires schema resiliency to be enabled
+  
+  - T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Skipping Scenario: POST /change-requests -> 401 (requestContentType application/json, responseContentType application/problem+json)
+  T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Skipping Scenario: POST /change-requests -> 502 (requestContentType application/json, responseContentType application/problem+json)
+  T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Request to http://host.docker.internal:5201/v2 at 2026-10-5 6:12:58.382
+    GET /v2/change-requests?wellId=W-001&status=APPROVED
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5201
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-5 6:12:58.407
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Mon, 05 Oct 2026 06:11:54 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    [
+        {
+            "id": "CR-1001",
+            "title": "Open choke on Eagle-1",
+            "wellId": "W-001",
+            "type": "CHOKE_CHANGE",
+            "capacityDeltaBbl": 150,
+            "requestedBy": "j.doe",
+            "status": "APPROVED",
+            "approvalId": "A-7001",
+            "decisionReason": "Within delegated authority (<= 500 bbl/d).",
+            "createdAt": "2026-09-01T08:00:00+00:00"
+        },
+        {
+            "id": "CR-1003",
+            "title": "Choke tweak",
+            "wellId": "W-001",
+            "forecastId": "F-5001",
+            "type": "CHOKE_CHANGE",
+            "capacityDeltaBbl": 50,
+            "requestedBy": "qa.user",
+            "status": "APPROVED",
+            "approvalId": "A-7003",
+            "decisionReason": "Within delegated authority (<= 500 bbl/d).",
+            "createdAt": "2026-10-05T06:11:54.6618566+00:00"
+        }
+    ]
+
+Scenario: GET /change-requests -> 200 with the request from the example 'APPROVED_FOR_W001' where REQUEST.PARAMETERS.QUERY contains the params 'wellId', 'status' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5201/v2 at 2026-10-5 6:12:58.416
+    GET /v2/change-requests?wellId=W-002&status=APPROVED
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5201
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-5 6:12:58.432
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Mon, 05 Oct 2026 06:11:54 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    []
+
+Scenario: GET /change-requests -> 200 with the request from the example 'NONE_FOR_W002' where REQUEST.PARAMETERS.QUERY contains the params 'wellId', 'status' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5201/v2 at 2026-10-5 6:12:58.439
+    GET /v2/change-requests?wellId=W-001&status=APPROVED
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5201
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-5 6:12:58.455
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Mon, 05 Oct 2026 06:11:54 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    [
+        {
+            "id": "CR-1001",
+            "title": "Open choke on Eagle-1",
+            "wellId": "W-001",
+            "type": "CHOKE_CHANGE",
+            "capacityDeltaBbl": 150,
+            "requestedBy": "j.doe",
+            "status": "APPROVED",
+            "approvalId": "A-7001",
+            "decisionReason": "Within delegated authority (<= 500 bbl/d).",
+            "createdAt": "2026-09-01T08:00:00+00:00"
+        },
+        {
+            "id": "CR-1003",
+            "title": "Choke tweak",
+            "wellId": "W-001",
+            "forecastId": "F-5001",
+            "type": "CHOKE_CHANGE",
+            "capacityDeltaBbl": 50,
+            "requestedBy": "qa.user",
+            "status": "APPROVED",
+            "approvalId": "A-7003",
+            "decisionReason": "Within delegated authority (<= 500 bbl/d).",
+            "createdAt": "2026-10-05T06:11:54.6618566+00:00"
+        }
+    ]
+
+Scenario: GET /change-requests -> 200 with the request from the example 'production-forecast__list_approved_W-001' where REQUEST.PARAMETERS.QUERY contains the params 'wellId', 'status' has SUCCEEDED
+
+
+--------------------
+  Request to http://host.docker.internal:5201/v2 at 2026-10-5 6:12:58.461
+    GET /v2/change-requests?wellId=W-002&status=APPROVED
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5201
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-5 6:12:58.473
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Mon, 05 Oct 2026 06:11:54 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    []
+
+Scenario: GET /change-requests -> 200 with the request from the example 'production-forecast__list_approved_W-002_empty' where REQUEST.PARAMETERS.QUERY contains the params 'wellId', 'status' has SUCCEEDED
+
+
+--------------------
+  Skipping Scenario: GET /change-requests -> 400 (responseContentType application/problem+json)
+  - T00004: Generative Disabled
+  Documentation: https://docs.specmatic.io/rules#t00004
+  Summary: This operation was skipped because it requires schema resiliency to be enabled
+  
+  - T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Skipping Scenario: GET /change-requests -> 401 (responseContentType application/problem+json)
+  T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Request to http://host.docker.internal:5201/v2 at 2026-10-5 6:12:58.481
+    GET /v2/change-requests/CR-1002
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 200
+    Host: host.docker.internal:5201
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-5 6:12:58.497
+    200 OK
+    Content-Type: application/json; charset=utf-8
+    Date: Mon, 05 Oct 2026 06:11:54 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "id": "CR-1002",
+        "title": "Workover Eagle-1",
+        "wellId": "W-001",
+        "forecastId": "F-5001",
+        "type": "WORKOVER",
+        "capacityDeltaBbl": 900,
+        "requestedBy": "a.khan",
+        "status": "REJECTED",
+        "approvalId": "A-7002",
+        "decisionReason": "Exceeds delegated authority (> 500 bbl/d); needs manual review.",
+        "createdAt": "2026-09-03T10:30:00+00:00"
+    }
+
+Scenario: GET /change-requests/(changeRequestId:ChangeRequestId) -> 200 with the request from the example 'GET_CR1002' has SUCCEEDED
+
+
+--------------------
+  Skipping Scenario: GET /change-requests/(changeRequestId:ChangeRequestId) -> 400 (responseContentType application/problem+json)
+  - T00004: Generative Disabled
+  Documentation: https://docs.specmatic.io/rules#t00004
+  Summary: This operation was skipped because it requires schema resiliency to be enabled
+  
+  - T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Skipping Scenario: GET /change-requests/(changeRequestId:ChangeRequestId) -> 401 (responseContentType application/problem+json)
+  T00002: Examples Required
+  Documentation: https://docs.specmatic.io/rules#t00002
+  Summary: This operation requires examples to run, but none were provided
+  
+
+--------------------
+  Request to http://host.docker.internal:5201/v2 at 2026-10-5 6:12:58.506
+    GET /v2/change-requests/CR-9999
+    Authorization: Bearer test-token-123
+    Specmatic-Response-Code: 404
+    Host: host.docker.internal:5201
+    Accept-Charset: UTF-8
+    Accept: */*
+    Content-Type: NOT SENT
+    
+    
+
+  Response at 2026-10-5 6:12:58.516
+    404 Not Found
+    Content-Type: application/problem+json
+    Date: Mon, 05 Oct 2026 06:11:54 GMT
+    Server: Kestrel
+    Transfer-Encoding: chunked
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+        "title": "Not Found",
+        "status": 404,
+        "detail": "Change request CR-9999 does not exist.",
+        "traceId": "00-bfb0198fdf564c348715bebaaf293133-2dd1370f0b331515-00"
+    }
+
+Scenario: GET /change-requests/(changeRequestId:ChangeRequestId) -> 404 with the request from the example 'UNKNOWN_CHANGE_REQUEST' has SUCCEEDED
+
+Could not load report configuration, coverage will be calculated but no coverage threshold will be enforced
+
+|-----------------------------------------------------------------------------------------------------------------------------------------|
+| SPECMATIC API COVERAGE SUMMARY                                                                                                          |
+|-----------------------------------------------------------------------------------------------------------------------------------------|
+| coverage | path                               | method | requestContentType | response | responseContentType      | remarks    | result |
+|----------|------------------------------------|--------|--------------------|----------|--------------------------|------------|--------|
+| 29%      | /change-requests                   | POST   | application/json   | 201      | application/json         | covered    | 1p     |
+|          |                                    |        |                    | 400      | application/problem+json | not tested |        |
+|          |                                    |        |                    | 401      | application/problem+json | not tested |        |
+|          |                                    |        |                    | 502      | application/problem+json | not tested |        |
+|          |                                    | GET    | NA                 | 200      | application/json         | covered    | 4p     |
+|          |                                    |        |                    | 400      | application/problem+json | not tested |        |
+|          |                                    |        |                    | 401      | application/problem+json | not tested |        |
+| 50%      | /change-requests/{changeRequestId} | GET    | NA                 | 200      | application/json         | covered    | 1p     |
+|          |                                    |        |                    | 400      | application/problem+json | not tested |        |
+|          |                                    |        |                    | 401      | application/problem+json | not tested |        |
+|          |                                    |        |                    | 404      | application/problem+json | covered    | 1p     |
+|-----------------------------------------------------------------------------------------------------------------------------------------|
+| * = Operation not eligible for coverage                                                                                                 |
+| ! = Operation excluded from the run due to a filter                                                                                     |
+| p = passed tests                                                                                                                        |
+| f = failed tests                                                                                                                        |
+| w = wip tests                                                                                                                           |
+|                                                                                                                                         |
+| 36% API Coverage reported from 11 operations eligible for coverage                                                                      |
+| 36% Absolute Coverage (includes excluded operations that were not tested)                                                               |
+|-----------------------------------------------------------------------------------------------------------------------------------------|
+
+
+
+Generating CTRF report using coverage report specifications...
+Generating report for 7 tests and 11 coverage operations...
+Using report generation method that accepts coverage report specifications.
+Generating HTML report in build/reports/specmatic/test/html/index.html
+
+
+Tests run: 7, Successes: 7, Failures: 0, WIP: 0, Errors: 0
+
+Executed at 2026-10-05T06:12:59.547806716

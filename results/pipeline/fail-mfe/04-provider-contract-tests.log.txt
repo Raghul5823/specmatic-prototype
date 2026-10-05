@@ -1,0 +1,36 @@
+--- ProductionForecastService.ContractTests
+Test run for .\app-a-production\production-forecast-service.ContractTests\bin\Debug\net10.0\ProductionForecastService.ContractTests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+Results File: .\results\pipeline\fail-mfe\test-results\ProductionForecastService.ContractTests.trx
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 53 s - ProductionForecastService.ContractTests.dll (net10.0)
+--- WellRegistryService.ContractTests
+Test run for .\app-a-production\well-registry-service.ContractTests\bin\Debug\net10.0\WellRegistryService.ContractTests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+Results File: .\results\pipeline\fail-mfe\test-results\WellRegistryService.ContractTests.trx
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 18 s - WellRegistryService.ContractTests.dll (net10.0)
+--- ApprovalService.ContractTests
+Test run for .\app-b-change-mgmt\approval-service.ContractTests\bin\Debug\net10.0\ApprovalService.ContractTests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+Results File: .\results\pipeline\fail-mfe\test-results\ApprovalService.ContractTests.trx
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 18 s - ApprovalService.ContractTests.dll (net10.0)
+--- ChangeRequestService.ContractTests
+Test run for .\app-b-change-mgmt\change-request-service.ContractTests\bin\Debug\net10.0\ChangeRequestService.ContractTests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+Results File: .\results\pipeline\fail-mfe\test-results\ChangeRequestService.ContractTests.trx
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 58 s - ChangeRequestService.ContractTests.dll (net10.0)

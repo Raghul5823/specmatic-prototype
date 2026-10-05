@@ -1,0 +1,27 @@
+
+> well-mfe@0.0.0 test:e2e
+> playwright test
+
+[WebServer] (node:9820) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:42000) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:37304) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:39956) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:5788) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:5788) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:42692) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [chromium] › e2e\wells.spec.ts:8:7 › well-mfe against the Specmatic stub › lists the wells from the consumer example and sends the bearer token (2.0s)
+  ok 2 [chromium] › e2e\wells.spec.ts:25:7 › well-mfe against the Specmatic stub › shows the example-driven empty list (550ms)
+  ok 3 [chromium] › e2e\wells.spec.ts:31:7 › well-mfe against the Specmatic stub › a documented error response is served from the provider example (400 ProblemDetails) (606ms)
+  ok 4 [chromium] › e2e\wells.spec.ts:44:7 › well-mfe against the Specmatic stub › a request that breaks the contract is rejected by the stub (639ms)
+
+  4 passed (17.3s)

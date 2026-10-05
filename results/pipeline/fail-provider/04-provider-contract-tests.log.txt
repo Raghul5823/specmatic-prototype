@@ -1,0 +1,37 @@
+--- ProductionForecastService.ContractTests
+Test run for .\app-a-production\production-forecast-service.ContractTests\bin\Debug\net10.0\ProductionForecastService.ContractTests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+Results File: .\results\pipeline\fail-provider\test-results\ProductionForecastService.ContractTests.trx
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 55 s - ProductionForecastService.ContractTests.dll (net10.0)
+--- WellRegistryService.ContractTests
+Test run for .\app-a-production\well-registry-service.ContractTests\bin\Debug\net10.0\WellRegistryService.ContractTests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:21.43]     WellRegistryService.ContractTests.WellRegistryContractTests.Provider_satisfies_its_contract [FAIL]
+Results File: .\results\pipeline\fail-provider\test-results\WellRegistryService.ContractTests.trx
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 20 s - WellRegistryService.ContractTests.dll (net10.0)
+--- ApprovalService.ContractTests
+Test run for .\app-b-change-mgmt\approval-service.ContractTests\bin\Debug\net10.0\ApprovalService.ContractTests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+Results File: .\results\pipeline\fail-provider\test-results\ApprovalService.ContractTests.trx
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 24 s - ApprovalService.ContractTests.dll (net10.0)
+--- ChangeRequestService.ContractTests
+Test run for .\app-b-change-mgmt\change-request-service.ContractTests\bin\Debug\net10.0\ChangeRequestService.ContractTests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+Results File: .\results\pipeline\fail-provider\test-results\ChangeRequestService.ContractTests.trx
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 51 s - ChangeRequestService.ContractTests.dll (net10.0)

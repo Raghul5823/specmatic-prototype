@@ -1,0 +1,282 @@
+Specmatic Version: v2.55.0(299682d5)
+
+Loading config file /work/specmatic/approval.mock.yaml
+
+Loading the following spec files:
+  - /work/contracts/specs/app-b-change-mgmt/approval-service.yaml
+
+API Specification Summary: /work/contracts/specs/app-b-change-mgmt/approval-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 2
+  Schema components: 7, Security Schemes: [http]
+
+
+  2 examples(s) found in ./contracts/specs/app-b-change-mgmt/approval-service_examples
+
+
+Mock server is running on the following URLs:
+- http://0.0.0.0:9000/v2 serving endpoints from specs:
+	1. /work/contracts/specs/app-b-change-mgmt/approval-service.yaml
+
+Press Ctrl + C to stop.
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+--------------------
+  Request to port '9000' at 2026-10-5 6:16:34.40
+    POST /v2/approvals
+    Host: localhost:9202
+    Authorization: Bearer test-token-123
+    Transfer-Encoding: chunked
+    Content-Type: application/json; charset=utf-8
+    
+    {
+        "changeRequestId": "CR-1999",
+        "type": "SHUT_IN",
+        "capacityDeltaBbl": 10
+    }
+
+  Response at 2026-10-5 6:16:34.130
+    400 Bad Request
+    Content-Type: text/plain
+    X-Specmatic-Result: failure
+    
+    STRICT MODE ON
+    
+    >> REQUEST.BODY.changeRequestId
+    
+        Example expected "CR-1003" but request contained "CR-1999"
+    
+    >> REQUEST.BODY.type
+    
+        Example expected "CHOKE_CHANGE" but request contained "SHUT_IN"
+    
+    >> REQUEST.BODY.capacityDeltaBbl
+    
+        Example expected 50 but request contained 10
+    
+    >> REQUEST.BODY.changeRequestId
+    
+        Example expected "CR-1004" but request contained "CR-1999"
+    
+    >> REQUEST.BODY.type
+    
+        Example expected "WORKOVER" but request contained "SHUT_IN"
+    
+    >> REQUEST.BODY.capacityDeltaBbl
+    
+        Example expected 900 but request contained 10
+    
+    >> REQUEST.BODY.changeRequestId
+    
+        Example "APPROVE_SMALL_CHANGE" expected "CR-1003" but request contained "CR-1999"
+    
+    >> REQUEST.BODY.type
+    
+        Example "APPROVE_SMALL_CHANGE" expected "CHOKE_CHANGE" but request contained "SHUT_IN"
+    
+    >> REQUEST.BODY.capacityDeltaBbl
+    
+        Example "APPROVE_SMALL_CHANGE" expected 50 but request contained 10
+    
+    >> REQUEST.BODY.changeRequestId
+    
+        Example "REJECT_LARGE_CHANGE" expected "CR-1004" but request contained "CR-1999"
+    
+    >> REQUEST.BODY.type
+    
+        Example "REJECT_LARGE_CHANGE" expected "WORKOVER" but request contained "SHUT_IN"
+    
+    >> REQUEST.BODY.capacityDeltaBbl
+    
+        Example "REJECT_LARGE_CHANGE" expected 900 but request contained 10
+    
+    >> REQUEST.BODY.changeRequestId
+    
+        Example "APPROVE_SMALL_CHANGE" expected "CR-1003" but request contained "CR-1999"
+    
+    >> REQUEST.BODY.type
+    
+        Example "APPROVE_SMALL_CHANGE" expected "CHOKE_CHANGE" but request contained "SHUT_IN"
+    
+    >> REQUEST.BODY.capacityDeltaBbl
+    
+        Example "APPROVE_SMALL_CHANGE" expected 50 but request contained 10
+    
+    >> REQUEST.BODY.changeRequestId
+    
+        Example "REJECT_LARGE_CHANGE" expected "CR-1004" but request contained "CR-1999"
+    
+    >> REQUEST.BODY.type
+    
+        Example "REJECT_LARGE_CHANGE" expected "WORKOVER" but request contained "SHUT_IN"
+    
+    >> REQUEST.BODY.capacityDeltaBbl
+    
+        Example "REJECT_LARGE_CHANGE" expected 900 but request contained 10
+
+
+--------------------
+  Contract matched: /work/contracts/specs/app-b-change-mgmt/approval-service.yaml
+  External Example matched: /work/contracts/specs/app-b-change-mgmt/approval-service_examples/change-request__approve_small_change.json
+
+  Request to port '9000' at 2026-10-5 6:16:34.232
+    POST /v2/approvals
+    Host: localhost:9202
+    Authorization: Bearer test-token-123
+    Transfer-Encoding: chunked
+    Content-Type: application/json; charset=utf-8
+    
+    {
+        "changeRequestId": "CR-1003",
+        "type": "CHOKE_CHANGE",
+        "capacityDeltaBbl": 50
+    }
+
+  Response at 2026-10-5 6:16:34.396
+    201 Created
+    Content-Type: application/json
+    Location: /v2/approvals/A-7003
+    X-Specmatic-Result: success
+    
+    {
+        "id": "A-7003",
+        "changeRequestId": "CR-1003",
+        "decision": "APPROVED",
+        "reason": "Within delegated authority (<= 500 bbl/d).",
+        "decidedAt": "2026-09-28T09:00:00Z"
+    }
+
+
+--------------------
+  Contract matched: /work/contracts/specs/app-b-change-mgmt/approval-service.yaml
+  External Example matched: /work/contracts/specs/app-b-change-mgmt/approval-service_examples/change-request__reject_large_change.json
+
+  Request to port '9000' at 2026-10-5 6:16:34.450
+    POST /v2/approvals
+    Host: localhost:9202
+    Authorization: Bearer test-token-123
+    Transfer-Encoding: chunked
+    Content-Type: application/json; charset=utf-8
+    
+    {
+        "changeRequestId": "CR-1004",
+        "type": "WORKOVER",
+        "capacityDeltaBbl": 900
+    }
+
+  Response at 2026-10-5 6:16:34.561
+    201 Created
+    Content-Type: application/json
+    Location: /v2/approvals/A-7004
+    X-Specmatic-Result: success
+    
+    {
+        "id": "A-7004",
+        "changeRequestId": "CR-1004",
+        "decision": "REJECTED",
+        "reason": "Exceeds delegated authority (> 500 bbl/d); needs manual review.",
+        "decidedAt": "2026-09-28T09:00:00Z"
+    }
+
+
+--------------------
+  Request to port '9000' at 2026-10-5 6:16:34.620
+    POST /v2/approvals
+    Host: localhost:9202
+    Authorization: Bearer test-token-123
+    Transfer-Encoding: chunked
+    Content-Type: application/json; charset=utf-8
+    
+    {
+        "changeRequestId": "CR-1003",
+        "type": "BOGUS",
+        "capacityDeltaBbl": 50
+    }
+
+  Response at 2026-10-5 6:16:34.692
+    400 Bad Request
+    Content-Type: text/plain
+    X-Specmatic-Result: failure
+    
+    STRICT MODE ON
+    
+    >> REQUEST.BODY.type
+    
+        Example expected "CHOKE_CHANGE" but request contained "BOGUS"
+    
+    >> REQUEST.BODY.changeRequestId
+    
+        Example expected "CR-1004" but request contained "CR-1003"
+    
+    >> REQUEST.BODY.type
+    
+        Example expected "WORKOVER" but request contained "BOGUS"
+    
+    >> REQUEST.BODY.capacityDeltaBbl
+    
+        Example expected 900 but request contained 50
+    
+    >> REQUEST.BODY.type
+    
+        Example "APPROVE_SMALL_CHANGE" expected "CHOKE_CHANGE" but request contained "BOGUS"
+    
+    >> REQUEST.BODY.changeRequestId
+    
+        Example "REJECT_LARGE_CHANGE" expected "CR-1004" but request contained "CR-1003"
+    
+    >> REQUEST.BODY.type
+    
+        Example "REJECT_LARGE_CHANGE" expected "WORKOVER" but request contained "BOGUS"
+    
+    >> REQUEST.BODY.capacityDeltaBbl
+    
+        Example "REJECT_LARGE_CHANGE" expected 900 but request contained 50
+    
+    >> REQUEST.BODY.type
+    
+        Example "APPROVE_SMALL_CHANGE" expected "CHOKE_CHANGE" but request contained "BOGUS"
+    
+    >> REQUEST.BODY.changeRequestId
+    
+        Example "REJECT_LARGE_CHANGE" expected "CR-1004" but request contained "CR-1003"
+    
+    >> REQUEST.BODY.type
+    
+        Example "REJECT_LARGE_CHANGE" expected "WORKOVER" but request contained "BOGUS"
+    
+    >> REQUEST.BODY.capacityDeltaBbl
+    
+        Example "REJECT_LARGE_CHANGE" expected 900 but request contained 50
+
+
+--------------------
+  Contract matched: /work/contracts/specs/app-b-change-mgmt/approval-service.yaml
+  External Example matched: /work/contracts/specs/app-b-change-mgmt/approval-service_examples/change-request__approve_small_change.json
+
+  Request to port '9000' at 2026-10-5 6:16:34.731
+    POST /v2/approvals
+    Host: localhost:9202
+    Authorization: Bearer test-token-123
+    Transfer-Encoding: chunked
+    Content-Type: application/json; charset=utf-8
+    
+    {
+        "changeRequestId": "CR-1003",
+        "type": "CHOKE_CHANGE",
+        "capacityDeltaBbl": 50
+    }
+
+  Response at 2026-10-5 6:16:34.841
+    201 Created
+    Content-Type: application/json
+    Location: /v2/approvals/A-7003
+    X-Specmatic-Result: success
+    
+    {
+        "id": "A-7003",
+        "changeRequestId": "CR-1003",
+        "decision": "APPROVED",
+        "reason": "Within delegated authority (<= 500 bbl/d).",
+        "decidedAt": "2026-09-28T09:00:00Z"
+    }
+

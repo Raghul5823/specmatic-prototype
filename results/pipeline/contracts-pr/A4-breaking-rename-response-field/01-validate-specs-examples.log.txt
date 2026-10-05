@@ -1,0 +1,40 @@
+--- specs/app-a-production/production-forecast-service.yaml  (exit 1)
+    =============== Inline Example Validation Results ===============
+    Error(s) found in the Inline example - 'CREATE_W001':
+    R2001: Missing required property
+    Documentation: https://docs.specmatic.io/rules#r2001
+    Specification expected mandatory property "wellID" to be present but was missing from the example
+    R2003: Unknown property
+    Documentation: https://docs.specmatic.io/rules#r2003
+    Error(s) found in the Inline example - 'GET_F5001':
+    R2001: Missing required property
+    Documentation: https://docs.specmatic.io/rules#r2001
+    Specification expected mandatory property "wellID" to be present but was missing from the example
+    R2003: Unknown property
+    Documentation: https://docs.specmatic.io/rules#r2003
+    =============== Inline Example Validation Summary ===============
+    1 example(s) are valid. 2 example(s) are invalid.
+    =============== Example File Validation Results ===============
+    Error(s) found in the Example file - '/repo/specs/app-a-production/production-forecast-service_examples/change-request__get_forecast_F-5001.json':
+    R2001: Missing required property
+    Documentation: https://docs.specmatic.io/rules#r2001
+    Specification expected mandatory property "wellID" to be present but was missing from the example
+    R2003: Unknown property
+    Documentation: https://docs.specmatic.io/rules#r2003
+    =============== Example File Validation Summary ===============
+    1 example(s) are valid. 1 example(s) are invalid.
+--- specs/app-a-production/well-registry-service.yaml  (exit 0)
+    =============== Inline Example Validation Summary ===============
+    All 5 example(s) are valid.
+    =============== Example File Validation Summary ===============
+    All 12 example(s) are valid.
+--- specs/app-b-change-mgmt/approval-service.yaml  (exit 0)
+    =============== Inline Example Validation Summary ===============
+    All 4 example(s) are valid.
+    =============== Example File Validation Summary ===============
+    All 2 example(s) are valid.
+--- specs/app-b-change-mgmt/change-request-service.yaml  (exit 0)
+    =============== Inline Example Validation Summary ===============
+    All 5 example(s) are valid.
+    =============== Example File Validation Summary ===============
+    All 2 example(s) are valid.

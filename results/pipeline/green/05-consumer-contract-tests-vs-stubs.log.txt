@@ -1,0 +1,18 @@
+--- app-a-production\production-forecast-service.Tests
+Test run for .\app-a-production\production-forecast-service.Tests\bin\Debug\net10.0\ProductionForecastService.Tests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+Results File: .\results\pipeline\green\test-results\production-forecast-service.Tests.trx
+
+Passed!  - Failed:     0, Passed:    10, Skipped:     0, Total:    10, Duration: 2 s - ProductionForecastService.Tests.dll (net10.0)
+--- app-b-change-mgmt\change-request-service.Tests
+Test run for .\app-b-change-mgmt\change-request-service.Tests\bin\Debug\net10.0\ChangeRequestService.Tests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+Results File: .\results\pipeline\green\test-results\change-request-service.Tests.trx
+
+Passed!  - Failed:     0, Passed:     9, Skipped:     0, Total:     9, Duration: 1 s - ChangeRequestService.Tests.dll (net10.0)

@@ -1,0 +1,26 @@
+{
+  "pipeline": "contracts-pr",
+  "run": "A1-compatible-optional-field",
+  "branch": "pr/A1-compatible-optional-field",
+  "base": "main",
+  "change": "Add optional response field Forecast.notes",
+  "gates": [
+    {
+      "gate": "Validate specs + examples",
+      "status": "PASSED",
+      "seconds": 80.0
+    },
+    {
+      "gate": "Bundle check",
+      "status": "PASSED",
+      "seconds": 3.0
+    },
+    {
+      "gate": "Backward compatibility vs main",
+      "status": "PASSED",
+      "seconds": 40.0
+    }
+  ],
+  "stoppedAt": null,
+  "merge": "ALLOWED"
+}

@@ -1,0 +1,219 @@
+Specmatic Version: v2.55.0(299682d5)
+
+Loading config file /work/specmatic/well-registry.mock.yaml
+
+Loading the following spec files:
+  - /work/contracts/specs/app-a-production/well-registry-service.yaml
+
+API Specification Summary: /work/contracts/specs/app-a-production/well-registry-service.yaml
+  OpenAPI Version: 3.0.3
+  API Paths: 2, API Operations: 3
+  Schema components: 5, Security Schemes: [http]
+
+
+  12 examples(s) found in ./contracts/specs/app-a-production/well-registry-service_examples
+
+
+Mock server is running on the following URLs:
+- http://0.0.0.0:9000/v2 serving endpoints from specs:
+	1. /work/contracts/specs/app-a-production/well-registry-service.yaml
+
+Press Ctrl + C to stop.
+Using Specmatic Open Source license initialized from jar:file:/usr/local/share/specmatic-snapshots/specmatic-snapshots.jar!/default-oss-license.txt
+
+--------------------
+  Contract matched: /work/contracts/specs/app-a-production/well-registry-service.yaml
+  External Example matched: /work/contracts/specs/app-a-production/well-registry-service_examples/well-mfe__list_all_wells.json
+
+  Request to port '9000' at 2026-10-5 6:17:33.326
+    GET /v2/wells
+    host: localhost:9101
+    connection: close
+    sec-ch-ua-platform: "Windows"
+    authorization: Bearer test-token-123
+    user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36
+    accept: application/json
+    sec-ch-ua: "Not=A?Brand";v="99", "HeadlessChrome";v="151", "Chromium";v="151"
+    accept-language: en-US
+    sec-ch-ua-mobile: ?0
+    sec-fetch-site: same-origin
+    sec-fetch-mode: cors
+    sec-fetch-dest: empty
+    referer: http://localhost:4200/
+    accept-encoding: gzip, deflate, br, zstd
+    
+    
+
+  Response at 2026-10-5 6:17:33.433
+    200 OK
+    Content-Type: application/json
+    X-Specmatic-Result: success
+    
+    [
+        {
+            "id": "W-001",
+            "name": "Eagle-1",
+            "field": "Eagle Ford",
+            "status": "ACTIVE",
+            "latitude": 28.5,
+            "longitude": -98.3,
+            "spudDate": "2019-04-12",
+            "dailyCapacityBbl": 1200
+        },
+        {
+            "id": "W-002",
+            "name": "Eagle-2",
+            "field": "Eagle Ford",
+            "status": "ACTIVE",
+            "latitude": 28.6,
+            "longitude": -98.2,
+            "spudDate": "2020-08-01",
+            "dailyCapacityBbl": 800
+        },
+        {
+            "id": "W-003",
+            "name": "Permian-7",
+            "field": "Permian Basin",
+            "status": "SHUT_IN",
+            "latitude": 31.9,
+            "longitude": -102.1,
+            "spudDate": "2015-02-20",
+            "dailyCapacityBbl": 0
+        }
+    ]
+
+
+--------------------
+  Contract matched: /work/contracts/specs/app-a-production/well-registry-service.yaml
+  External Example matched: /work/contracts/specs/app-a-production/well-registry-service_examples/well-mfe__list_abandoned_empty.json
+
+  Request to port '9000' at 2026-10-5 6:17:33.952
+    GET /v2/wells?status=ABANDONED
+    host: localhost:9101
+    connection: close
+    sec-ch-ua-platform: "Windows"
+    authorization: Bearer test-token-123
+    user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36
+    accept: application/json
+    sec-ch-ua: "Not=A?Brand";v="99", "HeadlessChrome";v="151", "Chromium";v="151"
+    accept-language: en-US
+    sec-ch-ua-mobile: ?0
+    sec-fetch-site: same-origin
+    sec-fetch-mode: cors
+    sec-fetch-dest: empty
+    referer: http://localhost:4200/?status=ABANDONED
+    accept-encoding: gzip, deflate, br, zstd
+    
+    
+
+  Response at 2026-10-5 6:17:34.47
+    200 OK
+    Content-Type: application/json
+    X-Specmatic-Result: success
+    
+    []
+
+
+--------------------
+  Contract matched: /work/contracts/specs/app-a-production/well-registry-service.yaml
+  External Example matched: /work/contracts/specs/app-a-production/well-registry-service_examples/provider__list_wells_bad_status_400.json
+
+  Request to port '9000' at 2026-10-5 6:17:34.512
+    GET /v2/wells?status=PUMPING
+    host: localhost:9101
+    connection: close
+    sec-ch-ua-platform: "Windows"
+    authorization: Bearer test-token-123
+    user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36
+    accept: application/json
+    sec-ch-ua: "Not=A?Brand";v="99", "HeadlessChrome";v="151", "Chromium";v="151"
+    accept-language: en-US
+    sec-ch-ua-mobile: ?0
+    sec-fetch-site: same-origin
+    sec-fetch-mode: cors
+    sec-fetch-dest: empty
+    referer: http://localhost:4200/?status=PUMPING
+    accept-encoding: gzip, deflate, br, zstd
+    
+    
+
+  Response at 2026-10-5 6:17:34.610
+    400 Bad Request
+    Content-Type: application/problem+json
+    X-Specmatic-Result: success
+    
+    {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+            "status": [
+                "status must be one of ACTIVE, SHUT_IN, ABANDONED."
+            ]
+        }
+    }
+
+
+--------------------
+  Request to port '9000' at 2026-10-5 6:17:35.140
+    GET /v2/wells?status=DRILLING
+    host: localhost:9101
+    connection: close
+    sec-ch-ua-platform: "Windows"
+    authorization: Bearer test-token-123
+    user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36
+    accept: application/json
+    sec-ch-ua: "Not=A?Brand";v="99", "HeadlessChrome";v="151", "Chromium";v="151"
+    accept-language: en-US
+    sec-ch-ua-mobile: ?0
+    sec-fetch-site: same-origin
+    sec-fetch-mode: cors
+    sec-fetch-dest: empty
+    referer: http://localhost:4200/?status=DRILLING
+    accept-encoding: gzip, deflate, br, zstd
+    
+    
+
+  Response at 2026-10-5 6:17:35.241
+    400 Bad Request
+    Content-Type: text/plain
+    X-Specmatic-Result: failure
+    
+    STRICT MODE ON
+    
+    >> REQUEST.PARAMETERS.QUERY.status
+    
+        Example expected "PUMPING" but request contained "DRILLING"
+    
+    >> REQUEST.PARAMETERS.QUERY.status
+    
+        Query param "status" in the request was not in the example
+    
+    >> REQUEST.PARAMETERS.HEADER.authorization
+    
+        Example expected "Bearer wrong-token" but request contained "Bearer test-token-123"
+    
+    >> REQUEST.PARAMETERS.QUERY.status
+    
+        Example expected "ABANDONED" but request contained "DRILLING"
+    
+    >> REQUEST.PARAMETERS.QUERY.status
+    
+        Query param "status" in the request was not in the example
+    
+    >> REQUEST.PARAMETERS.QUERY.status
+    
+        Example "LIST_ACTIVE" expected "ACTIVE" but request contained "DRILLING"
+    
+    >> REQUEST.PARAMETERS.QUERY.status
+    
+        Example "LIST_SHUT_IN" expected "SHUT_IN" but request contained "DRILLING"
+    
+    >> REQUEST.PARAMETERS.QUERY.status
+    
+        Example "LIST_ACTIVE" expected "ACTIVE" but request contained "DRILLING"
+    
+    >> REQUEST.PARAMETERS.QUERY.status
+    
+        Example "LIST_SHUT_IN" expected "SHUT_IN" but request contained "DRILLING"
+

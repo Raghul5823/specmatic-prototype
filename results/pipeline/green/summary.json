@@ -1,0 +1,44 @@
+{
+  "pipeline": "service",
+  "run": "green",
+  "buildService": [
+    {
+      "gate": "Toolchain pinned",
+      "status": "PASSED",
+      "seconds": 1.0
+    },
+    {
+      "gate": "Build (.NET)",
+      "status": "PASSED",
+      "seconds": 7.0
+    },
+    {
+      "gate": "Unit tests",
+      "status": "PASSED",
+      "seconds": 2.0
+    },
+    {
+      "gate": "Provider contract tests",
+      "status": "PASSED",
+      "seconds": 129.0
+    },
+    {
+      "gate": "Consumer contract tests vs stubs",
+      "status": "PASSED",
+      "seconds": 63.0
+    },
+    {
+      "gate": "MFE: client + build",
+      "status": "PASSED",
+      "seconds": 24.0
+    },
+    {
+      "gate": "MFE: Playwright vs stub",
+      "status": "PASSED",
+      "seconds": 33.0
+    }
+  ],
+  "stoppedAt": null,
+  "deployDev": "DEPLOYED (simulated): dependsOn BuildService, condition succeeded()",
+  "minutes": 4.3
+}

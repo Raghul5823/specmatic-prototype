@@ -1,0 +1,182 @@
+# =====================================================================================
+# SAMPLE service pipeline (NOT executed in this prototype; simulated by scripts/run-all.ps1)
+#
+# One "BuildService" stage holds every quality gate; "DeployDev" depends on it explicitly
+# and runs only if all gates passed. Mirrors our real pipeline template's shape.
+# Replace every <placeholder>. Nothing here names a real pool, registry or repository.
+# =====================================================================================
+
+trigger:
+  branches:
+    include: [main]
+pr:
+  branches:
+    include: [main]
+
+resources:
+  repositories:
+    # The central contract repo, pinned to a RELEASE TAG (never a moving branch).
+    - repository: contracts
+      type: git
+      name: <your project>/<your contracts repo>
+      ref: refs/tags/v1.2
+
+variables:
+  # Pin every toolchain version. Must match global.json and mfe/well-mfe/.nvmrc.
+  dotnetSdkVersion: '10.0.101'
+  nodeVersion: '22.19.0'            # Angular 21.2 needs >= 22.12; Angular 22 would need >= 22.22.3
+  specmaticImage: 'specmatic/specmatic:2.55.0'
+  buildConfiguration: 'Debug'
+  # Folder layout identical to a local checkout: <root>/ and <root>/contracts/
+  root: '$(Pipeline.Workspace)/s/prototype'
+
+stages:
+  # -----------------------------------------------------------------------------------
+  - stage: BuildService
+    displayName: 'BuildService: build, unit, contract and MFE gates'
+    jobs:
+      - job: build_and_test
+        pool:
+          name: '<your agent pool>'      # Linux agent with Docker; see NOTE (networking) below
+        timeoutInMinutes: 60
+        steps:
+          - checkout: self
+            path: s/prototype
+          - checkout: contracts
+            path: s/prototype/contracts    # ignored by the service repo's .gitignore
+
+          # Gate 1: pinned toolchain
+          - task: UseDotNet@2
+            displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+            inputs: { packageType: sdk, version: '$(dotnetSdkVersion)' }
+          - task: NodeTool@0
+            displayName: 'Use Node $(nodeVersion)'
+            inputs: { versionSpec: '$(nodeVersion)' }
+          - script: docker pull $(specmaticImage)
+            displayName: 'Pull pinned Specmatic image'
+
+          # Gate 2: build
+          - script: dotnet build SpecmaticPrototype.sln -c $(buildConfiguration)
+            displayName: 'Build (.NET)'
+            workingDirectory: $(root)
+
+          # Gate 3: unit tests (internal layers)
+          - task: DotNetCoreCLI@2
+            displayName: 'Unit tests'
+            inputs:
+              command: test
+              projects: '$(root)/**/well-registry-service.Tests.csproj'
+              arguments: '--no-build -c $(buildConfiguration)'
+              publishTestResults: true
+
+          # Gate 4: provider contract tests. Each *.ContractTests project starts its service
+          # (and its dependency mocks via `specmatic mock --config`) and runs `specmatic test`.
+          - task: DotNetCoreCLI@2
+            displayName: 'Provider contract tests (Specmatic)'
+            env:
+              CONTRACT_TEST_RESULTS: 'pipeline/contract-tests'
+              SPECMATIC_IMAGE: '$(specmaticImage)'
+            inputs:
+              command: test
+              projects: '$(root)/**/*.ContractTests.csproj'
+              arguments: '--no-build -c $(buildConfiguration)'
+              publishTestResults: true
+
+          # Gate 5: consumer contract tests against STRICT Specmatic stubs (served under /v2)
+          - bash: |
+              set -euo pipefail
+              start_stub() {  # name port config
+                docker run -d --name "stub-$1" -p "$2:9000" -v "$(root):/work" -v "$(root)/contracts:/work/contracts:ro" \
+                  -w /work $(specmaticImage) mock --strict --config="/work/specmatic/$3"
+              }
+              start_stub well-registry-service       9101 well-registry.mock.yaml
+              start_stub approval-service            9202 approval.mock.yaml
+              start_stub change-request-service      9201 change-request.mock.yaml
+              start_stub production-forecast-service 9102 production-forecast.mock.yaml
+              for s in well-registry-service approval-service change-request-service production-forecast-service; do
+                timeout 90 bash -c "until docker logs stub-$s 2>&1 | grep -q 'Press Ctrl'; do sleep 1; done"
+              done
+            displayName: 'Start strict stubs'
+          - task: DotNetCoreCLI@2
+            displayName: 'Consumer contract tests vs stubs'
+            inputs:
+              command: test
+              projects: |
+                $(root)/**/production-forecast-service.Tests.csproj
+                $(root)/**/change-request-service.Tests.csproj
+              arguments: '--no-build -c $(buildConfiguration) --filter Category=ConsumerContract'
+              publishTestResults: true
+          - bash: docker rm -f stub-well-registry-service stub-approval-service stub-change-request-service stub-production-forecast-service || true
+            displayName: 'Stop stubs'
+            condition: always()
+
+          # Gates 6-7: Angular MFE (client generated from the contract, compile check, Playwright vs stub)
+          - script: npm ci
+            displayName: 'MFE: npm ci (exact versions from package-lock.json)'
+            workingDirectory: $(root)/mfe/well-mfe
+          - script: npm run build
+            displayName: 'MFE: bundle spec + generate client + build (contract break = compile error)'
+            workingDirectory: $(root)/mfe/well-mfe
+          - script: npx playwright install --with-deps --only-shell chromium
+            displayName: 'MFE: Chromium for the pinned Playwright version'
+            workingDirectory: $(root)/mfe/well-mfe
+          - bash: |
+              set -euo pipefail
+              docker run -d --name stub-mfe -p 9101:9000 -v "$(root):/work" -v "$(root)/contracts:/work/contracts:ro" \
+                -w /work $(specmaticImage) mock --strict --config=/work/specmatic/well-registry.mock.yaml
+              timeout 90 bash -c "until docker logs stub-mfe 2>&1 | grep -q 'Press Ctrl'; do sleep 1; done"
+              npx playwright test
+            displayName: 'MFE: Playwright vs strict stub (via dev-server proxy)'
+            workingDirectory: $(root)/mfe/well-mfe
+          - bash: docker rm -f stub-mfe || true
+            displayName: 'Stop MFE stub'
+            condition: always()
+
+          # Reports (also on failure)
+          - task: PublishTestResults@2
+            displayName: 'Publish Specmatic + Playwright JUnit results'
+            condition: succeededOrFailed()
+            inputs:
+              testResultsFormat: JUnit
+              testResultsFiles: |
+                $(root)/results/**/junit/*.xml
+                $(root)/mfe/well-mfe/test-results/junit.xml
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish Specmatic HTML reports'
+            condition: succeededOrFailed()
+            inputs:
+              targetPath: '$(root)/results'
+              artifact: 'contract-reports'
+
+          # NOTE (networking): on Docker Desktop (Windows/Mac) a service bound to localhost is reachable
+          # from a container via host.docker.internal (used in this prototype with --add-host ...:host-gateway).
+          # On a LINUX agent it is not: bind the services to 0.0.0.0 (e.g. ASPNETCORE_URLS=http://0.0.0.0:5101)
+          # or run Specmatic with --network host and http://localhost:<port>. Not verified in this prototype.
+
+          # ---------------------------------------------------------------------------------
+          # JAR ROUTE (agents without Docker), same steps with `java -jar` instead of `docker run`:
+          # - task: JavaToolInstaller@0            # Java 17+
+          #   inputs: { versionSpec: '21', jdkArchitectureOption: 'x64', jdkSourceOption: 'PreInstalled' }
+          # - script: <fetch specmatic.jar of the SAME pinned version from an approved, cached source>
+          #     # e.g. the jar bundled in the npm package "specmatic@<version>" (npm has 2.55.1/2.55.2, not 2.55.0:
+          #     # pin one version for BOTH routes) or an internal artifact feed
+          # - script: java -jar specmatic.jar test contracts/specs/app-a-production/well-registry-service.yaml --testBaseURL=http://localhost:5101/v2 --junitReportDir=results/junit
+          # - script: java -jar specmatic.jar mock --strict --port=9101 --config=specmatic/well-registry.mock.yaml &   # background
+          # Config files use container paths (/work/...); for the JAR route keep a variant with repo-relative paths.
+          # ---------------------------------------------------------------------------------
+
+  # -----------------------------------------------------------------------------------
+  - stage: DeployDev
+    displayName: 'Deploy to DEV'
+    dependsOn: BuildService               # explicit: no deploy without every BuildService gate
+    condition: succeeded('BuildService')
+    jobs:
+      - deployment: deploy_dev
+        environment: '<your DEV environment>'
+        pool:
+          name: '<your agent pool>'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - script: echo "Deploy to DEV: replace with <your deployment template>"
