@@ -1,6 +1,6 @@
 # Specmatic Prototype — Contract Testing Evaluation
 
-> Status: **Phase 8a complete** (one-command evidence run with a unified HTML report; contracts `v1.2`). Next: Phase 8, the evaluation (sections 7–10 are placeholders until then).
+> Status: **All phases complete (0–8).** Recommendation: **Conditional Go** (§10), with conditions such as the Docker licence confirmed by IT, an image security scan, and a pilot with 10 green runs on the real agent. Evidence: the [sample report](evidence/sample/index.html) from one command (Phase 8a); contracts `v1.2`.
 > New readers: start with [docs/APPLICATION-GUIDE.md](docs/APPLICATION-GUIDE.md), a plain-language guide to the design, folders, services and contracts.
 > Moving to a real project: [docs/real-project-guide.md](docs/real-project-guide.md) covers the system patterns used here and the recommended practices (ownership, versioning, test data, auth, monorepo frontends, pipeline stages, exit criteria).
 > See everything at once: run `.\scripts\run-evidence.ps1 -Open`, or open the committed [sample report](evidence/sample/index.html) (instructions below).
@@ -56,7 +56,7 @@ Ticked items link to their evidence. Updated at the end of every phase.
 - [x] 4 services, fixed ports, call map C1–C4, no loops, `/v2` paths, health endpoints ([§3](#3-architecture-diagram-ports-and-call-map))
 - [x] Smoke test 17/17: [results/phase2/smoke-test.txt](results/phase2/smoke-test.txt)
 - [x] 4 OpenAPI specs, common ProblemDetails, 17 inline + 9 consumer examples, `consumers.yaml`, examples validate passes, contracts tag `v1` pushed: [results/phase2/examples-validate.txt](results/phase2/examples-validate.txt)
-- [ ] OPEN: Docker Desktop licence confirmed with IT (plan shows Personal); otherwise switch to the JAR route before Phase 7
+- [ ] OPEN: Docker Desktop licence confirmed with IT (plan shows Personal); otherwise switch to the JAR route. Still open at the end of Phase 8: it is **condition 1** of the recommendation (§10) and scorecard row 18
 
 **Phase 3: Case 1 (well-registry)**
 - [x] First examples-only run: 8 passed, 6 skipped, 40% API coverage: [results/demo/specmatic-test-console.txt](results/demo/specmatic-test-console.txt)
@@ -97,7 +97,7 @@ Ticked items link to their evidence. Updated at the end of every phase.
 | # | Item | Status | Evidence |
 |---|---|---|---|
 | T1 | Compatibility check fails or only warns without Insights? | ✅ **Resolved: fails (exit 1)**, also for endpoints without consumer examples; oasdiff not needed | [results/case3/compat/](results/case3/compat/) |
-| T2 | Bundled OSS licence expires 14 Dec 2027 | ⏳ open risk, goes in the Phase 8 scorecard | [results/phase0/show-license.txt](results/phase0/show-license.txt) |
+| T2 | Bundled OSS licence expires 14 Dec 2027 | ✅ **Recorded** in the scorecard (§9 row 17) and as condition 6 of the recommendation; it remains a lifecycle risk to plan for | [results/phase0/show-license.txt](results/phase0/show-license.txt) |
 | T3 | Never commit to the parent home-folder repo | ✅ held in every phase (both repos are their own git roots) | §2 Repositories |
 | T4 | Stubs under `/v2` like the real services | ✅ **Resolved**: v3 mock config `baseUrl: http://0.0.0.0:9000/v2` (CLI alone serves at the root) | `specmatic/*.mock.yaml`, §5 Phase 4 finding 1 |
 | T5 | Prove the consumer sends the correct token | ✅ **Resolved with a documented workaround**: the stub only checks the `Bearer` format (and skips the check for example matches), so the exact token is asserted by a recording handler in each consumer's tests | [case2 experiment 03](results/case2/break/03-consumer-wrong-auth-scheme/consumer-tests.txt), §5 Phase 4 finding 2 |
@@ -130,15 +130,16 @@ Ticked items link to their evidence. Updated at the end of every phase.
   - run 2 with demos: FAIL, 26/27, a PowerShell 5.1 quoting defect in a script, found and fixed;
   - run 3 with demos: PASS, 27/27, 25.4 min.
 - [x] Shell guidance (pin `bash:`/`pwsh:`, JSON through files, same shell locally) in the real-project guide §3.8 and the limitations table; sample YAMLs use `bash:` everywhere, and an invalid-YAML bug in the Phase 7 sample is fixed
-- [ ] Commit "Phase 8a: unified evidence report" and push (after scan + approval)
+- [x] Commit "Phase 8a: unified evidence report" and push (after scan + approval): root `f23824b`
 
 **Phase 8: Evaluation**
-- [ ] Coverage section (API coverage is not code coverage)
-- [ ] Control points, each with a team owner (QA / developers / DevOps)
-- [ ] Scorecard, including: Angular MFE support, OSS licence expiry (T2), Docker licence, cost (zero paid licences), security scan of the image (only with IT approval)
-- [ ] Limitations: SignalR/SSE, in-process calls, weak stub auth, `/v2` handling, closed schemas, commercial-only features
-- [ ] Recommendation: Go / Conditional Go / No-Go, with reasons
-- [ ] "Rerun from scratch" section complete; final commit and push
+- [x] Coverage section, which says API coverage is not code coverage: well-registry 100 %, the other providers 36–43 %, with the cause and the fix (§7)
+- [x] Control points, each with a team owner (QA / developers / DevOps): 19 control points, each linked to its evidence (§8)
+- [x] Scorecard, every row linked to a section of the [evidence report](evidence/sample/index.html) (§9). It covers Angular MFE support, OSS licence expiry (T2), Docker licence (open), cost (zero paid licences), and the security scan of the image (open, needs IT approval)
+- [x] Limitations: SignalR/SSE, in-process calls, weak stub auth, `/v2` handling, closed schemas, commercial-only features, plus the Windows findings (§10)
+- [x] Recommendation: **Conditional Go**, with 7 conditions and the No-Go triggers (§10)
+- [x] "Rerun from scratch" section complete (§11, including the one-command evidence run)
+- [x] Final commit and push (after scan + approval)
 
 **Always**
 - [ ] T3: never commit to the parent home-folder repo (checked at every commit)
@@ -161,8 +162,9 @@ Out of scope: production-grade code, a real OAuth2 identity provider, and a full
 | 4 | Case 2: service-to-service within an app, both directions (provider tests + consumer tests against stubs) | ✅ done |
 | 5 | Case 3: cross-application, both directions, specs from the central `contracts/` repo; backward-compatibility check against `v1`; drift | ✅ done |
 | 6 | **Minimal Angular MFE consumer**: generated TypeScript client from the spec, contract break as a compile error, Playwright against a Specmatic stub via the dev-server proxy | ✅ done |
-| 7 | Pipeline simulation: `run-all.ps1` + sample `azure-pipelines.yml` (**BuildService** stage with unit tests, xUnit `ContractTests` projects and the Angular steps; the deploy stage depends on it) | |
-| 8 | Evaluation: coverage, control points, scorecard (incl. "Angular MFE consumer support"), limitations, recommendation | |
+| 7 | Pipeline simulation: `run-all.ps1` + sample `azure-pipelines.yml` (**BuildService** stage with unit tests, xUnit `ContractTests` projects and the Angular steps; the deploy stage depends on it), plus the contracts PR pipeline | ✅ done |
+| 8a | One-command evidence run (`run-evidence.ps1`) with a unified HTML report; break demos live in a throwaway copy | ✅ done |
+| 8 | Evaluation: coverage, control points, scorecard (incl. "Angular MFE consumer support"), limitations, recommendation | ✅ done: **Conditional Go** |
 
 ## 2. Environment and versions
 Checked on 2026-09-28 (Windows 11 Pro 10.0.26200).
@@ -376,7 +378,7 @@ flowchart LR
 | # | Item | Checked in | Status |
 |---|---|---|---|
 | T1 | Does `backward-compatibility-check` **fail** (non-zero exit code) or only **warn** on a breaking change without Insights? If it only warns, record that and test **oasdiff** (free) as an alternative compatibility gate. | Phase 5 | ✅ fails (exit 1), also without consumer examples; oasdiff not needed |
-| T2 | The bundled OSS licence expires **14 Dec 2027**. Record it as a maintenance risk. | Phase 8 scorecard | ⏳ open |
+| T2 | The bundled OSS licence expires **14 Dec 2027**. Record it as a maintenance risk. | Phase 8 scorecard | ✅ recorded (§9 row 17, condition 6 in §10) |
 | T3 | **Never commit to the git repo in the parent folder.** Only the prototype repo and `contracts/` are committed, each to its own GitHub repo, and pushes happen only after approval. | All phases | ✅ held so far |
 | T4 | Stub base path: try a mock `basePath`/`baseUrl` so stubs serve under `/v2`, like the real services. | Phase 4 | ✅ resolved (mock config `baseUrl`) |
 | T5 | Stub auth is weak: a token must be present but any value passes, and example matches skip the check. Decide how consumer tests should prove that the right token is sent. | Phase 4 | ✅ workaround: recording handler in consumer tests |
@@ -936,17 +938,98 @@ So "usages" means usage data recorded by **Specmatic Insights** (the paid produc
 **What to notice:** D1 shows why the provider's contract test is the gate that matters. Only the provider's own pipeline can see its own drift (D1a). The consumer's tests stay green (D1b), and the cost of skipping the gate is a production 502 (D1c). D2 shows that consumer-contributed examples also protect the contract repo: a contract change that contradicts what a consumer has documented fails as soon as it is loaded.
 
 ## 7. Coverage
-_Phase 8._
+
+**API coverage is not code coverage.** Specmatic counts how many of the contract's operations and documented responses (method + path + status) its tests exercised. It says nothing about which lines of service code ran. Code coverage was **not** measured in this prototype: the test projects reference `coverlet.collector`, but no coverage report was produced or gated.
+
+**Provider API coverage** (from the evidence run; see [the report's coverage table](evidence/sample/index.html#coverage)):
+
+| Provider | Operations (responses) | API coverage | What is not tested | Fix |
+|---|---|---|---|---|
+| well-registry-service | 10 | **100%** | – | Done in Phase 3 (40% → 100%) by adding provider-owned 400 and 401 examples |
+| approval-service | 7 | **43%** | 400 and 401 of both operations | Provider-owned `provider__*_400` and `*_401` examples (about 15 min each) |
+| production-forecast-service | 8 | **38%** | 400 and 401 of both operations, 502 of `POST /forecasts` | Same, plus a dependency-failure scenario for the 502 |
+| change-request-service | 11 | **36%** | 400 and 401 of all three operations, 502 of `POST /change-requests` | Same, plus a dependency-failure scenario for the 502 |
+
+- **Why the gap:** only well-registry got provider-owned error examples. The others have their happy paths and their consumers' examples (which is what the interactions need), but their documented 400/401/502 responses are never exercised.
+- **502 needs more than an example.** The service only returns 502 when a dependency fails. That needs either a mock example that answers with an error for a specific id, or a test-only fault switch. Neither was built here.
+- **Consumer coverage:** every interaction C1–C5 in `consumers.yaml` has examples that are used on **both** sides:
+  - by the provider's contract test (the report shows them per owner, e.g. production-forecast 3/3 and well-mfe 2/2 in [Case 1](evidence/sample/index.html#case1));
+  - by the consumer's tests against the strict stub (Cases 2–4).
+- **Recommendation:** report API coverage per provider on every build (the evidence report already parses it), agree a target (100% of documented 4xx is cheap), and gate on it once every provider has its error examples. Measure code coverage separately (coverlet) for the unit layer. The two numbers answer different questions.
 
 ## 8. Control points
-_Phase 8._ Pre-recorded:
-- **Auth checks have a second line of defence outside Specmatic.** If a provider's auth check is dropped and Specmatic can't send a no-token or invalid-token request in the free edition (verified in Phase 3), the break is still caught by our API automation (Playwright API tests calling without or with a wrong token) or by the xUnit layer. Owner: QA (API automation) and developers (xUnit).
+
+Each control point says what it guards, where it runs and who owns it. **QA owns the rules, not every change**, so QA is not a bottleneck (real-project guide §3.1). Report links point to the evidence for each control point.
+
+| # | Control point | Guards against | Where it runs | Owner | Evidence |
+|---|---|---|---|---|---|
+| 1 | Spec PR review with required reviewers (provider + every consumer in `consumers.yaml`) | Unreviewed contract changes | Contracts repo PR | **Developers** (provider and consumers); QA reviews `consumers.yaml` changes | `consumers.yaml`, guide §3.1 |
+| 2 | `examples validate --examples-to-validate BOTH` | Specs and examples that no longer match | Contracts PR, gate 1 | **DevOps** (pipeline), **QA** (rules) | [Contracts](evidence/sample/index.html#contracts), demos A3, A4 |
+| 3 | Bundle check | Specs that code generators can't read | Contracts PR, gate 2 | **DevOps** | [Contracts](evidence/sample/index.html#contracts) |
+| 4 | Backward-compatibility check vs `main` (fails on **any** break, T1) | Breaking changes merged by accident | Contracts PR, gate 3 | **QA** (versioning and deprecation policy), DevOps (gate) | Demo A5 in the [matrix](evidence/sample/index.html#matrix) |
+| 5 | Semantic version tags; release builds pin a tag | Builds changing under a team | Contracts repo + service pipelines | **Developers** (cut tags), **QA** (policy) | Sample YAML `ref: refs/tags/v1.2` |
+| 6 | Drift run: every provider against contracts `main` (on change or nightly) | New consumer examples or spec changes not yet implemented | Scheduled pipeline (⚠️ not built here) | **DevOps** (set up), provider **developers** (fix) | Guide §3.2 |
+| 7 | Provider ContractTests (each starts its service + dependency mocks) | Provider code drifting from its contract | Service pipeline, gate 4 | Provider **developers** | [Pipeline](evidence/sample/index.html#pipeline), demos B, P3-1…8, P5-D1a |
+| 8 | Consumer tests against **strict** stubs | Consumers relying on behaviour nobody agreed to | Service pipeline, gate 5 | Consumer **developers** | [Case 2](evidence/sample/index.html#case2), [Case 3](evidence/sample/index.html#case3), demos P4-1…4 |
+| 9 | Exact token asserted by a recording handler (T5) | Wrong auth scheme or token (the stub checks only the format) | Consumer tests | Consumer **developers** | Demo P4-3 |
+| 10 | MFE client generated from the contract + compile | Frontend code drifting from the contract | Service pipeline, gate 6 | Frontend **developers** | [MFE](evidence/sample/index.html#mfe), demos C, P6-1 |
+| 11 | MFE Playwright tests against a strict stub | UI not working with contract-shaped data | Service pipeline, gate 7 | **QA** (UI automation), frontend developers | [MFE](evidence/sample/index.html#mfe) |
+| 12 | DeployDev `dependsOn: BuildService` | Deploying an unverified build | Service pipeline | **DevOps** | [Pipeline](evidence/sample/index.html#pipeline) |
+| 13 | Auth second line of defence: API automation with no, wrong and real tokens, plus xUnit | Dropped or wrong auth checks; real tokens, RBAC and service-to-service auth (not proven by contract tests) | Post-deploy test hook | **QA** (API automation), **developers** (xUnit) | Demos P3-6, P3-7; guide §3.6 |
+| 14 | Pinned toolchain: .NET SDK, Node, Specmatic image tag, **shell** | "Works on my machine", silent upgrades, shell quoting differences | Gate 1 + YAML | **DevOps** | [Environment](evidence/sample/index.html#env); Phase 8a run 2 |
+| 15 | Timeout budget and mock warm-up for tests with mocked dependencies | Random gate failures (a gate that fails at random gets ignored) | ContractTests helper | **Developers** (helper), QA (templates) | Phase 7 item 5 |
+| 16 | Shadow mode until N (e.g. 10) consecutive green runs on the real agent; harness failures reset the count | Making a flaky gate mandatory | Rollout | **QA** lead | Guide §3.9, Phase 8a |
+| 17 | Evidence report attached before the manual production approval | Approving on trust instead of evidence | Release | **QA** | This report |
+| 18 | Sanitise test artefacts (TRX holds user, machine and paths) | Personal data in shared artefacts | Before publishing | **QA**, DevOps | Phase 8a finding 2 |
+| 19 | Licence and image governance: Docker licence, image security scan, bundled-licence expiry (T2) | Using a tool the organisation can't legally or safely run | Tool onboarding | **DevOps** with IT; QA lead tracks | [Environment](evidence/sample/index.html#env) |
 
 ## 9. Scorecard
-_Phase 8._ Rows will include **"Angular MFE consumer support"** (Phase 6). Pre-recorded risk: **T2**, the bundled OSS licence expires 14 Dec 2027.
+
+Rating:
+- ✅ **strong**: proven here and ready;
+- 🟡 **conditional**: works, with a condition or a known gap to manage;
+- 🔴 **gap**: not provided by the free edition, or not solved yet;
+- ⏳ **open**: not checked yet.
+
+| # | Criterion | Rating | Evidence (report section) | Notes |
+|---|---|---|---|---|
+| 1 | Provider conformance for .NET services | ✅ | [Case 1](evidence/sample/index.html#case1), [Case 2](evidence/sample/index.html#case2), [Case 3](evidence/sample/index.html#case3) | Real services tested against their specs, including every consumer example. 100% API coverage is achievable (well-registry); the others are at 36–43% until they get error examples (§7) |
+| 2 | Catching provider breaks | ✅ | [Break-demo matrix](evidence/sample/index.html#matrix) P3-1…6, P3-8, P4-5, P4-6, P5-D1a, P5-D2, B | Every provider-side contract break was caught |
+| 3 | Protecting consumers (strict stubs) | ✅ | [Matrix](evidence/sample/index.html#matrix) P4-1…4 | 4/4 consumer breaks caught. A consumer can't see provider drift (P5-D1b), which is why control point 7 (provider ContractTests) matters |
+| 4 | Breaking-change detection on the contracts | ✅ | [Contracts](evidence/sample/index.html#contracts), [matrix](evidence/sample/index.html#matrix) A1–A5 | Additive and deprecation changes pass; breaking changes are blocked (examples first, then compatibility). The free edition fails on **any** break, so removals need a MAJOR version |
+| 5 | Cross-app, both directions | ✅ | [Case 3](evidence/sample/index.html#case3) | Mocks come from the same contracts; needs the timeout budget (control point 15) |
+| 6 | **Angular MFE consumer support** | ✅ (with conditions) | [Case 4 MFE](evidence/sample/index.html#mfe), [matrix](evidence/sample/index.html#matrix) C, P6-1 | Generated client means contract breaks become compile errors; Playwright runs against a strict stub. Conditions: a bundling step (no external `$ref` support), Node pinned (Angular 22 needs ≥ 22.22.3), and `HttpTestingController` bypasses the stub (Phase 6) |
+| 7 | Azure DevOps pipeline integration | 🟡 | [Pipeline](evidence/sample/index.html#pipeline) | Two pipelines proven by simulation; sample YAML with placeholders. **Not run on a real agent**; Linux networking (`0.0.0.0` / `--network host`) unverified |
+| 8 | Stability (flakiness) | 🟡 | [Clean-up and integrity](evidence/sample/index.html#hygiene); Phase 7 item 5; Phase 8a | Cold mocks were flaky until the timeout budget was added; one shell-quoting harness defect (Phase 8a). No flaky checks in the three evidence runs. Needs N green runs on the real agent |
+| 9 | Auth and security verification | 🟡 | [Matrix](evidence/sample/index.html#matrix) P3-6, P4-3 | 401 examples catch a dropped auth check. The stub checks only the token *format* (T5 workaround). Real tokens, RBAC and service-to-service auth must be proven elsewhere |
+| 10 | Business-logic bugs | 🔴 by design | [Matrix](evidence/sample/index.html#matrix) P3-7 | Contract tests check shape, not meaning: unit and functional tests stay necessary |
+| 11 | Open schemas (`additionalProperties: true`) | 🟡 | [Matrix](evidence/sample/index.html#matrix) P3-9 | Known gap: keep response schemas closed |
+| 12 | Messaging and real-time (AsyncAPI, SignalR, SSE, WebSocket) | 🔴 free edition | Guide §3.10 | AsyncAPI is a commercial feature; cover these with integration tests |
+| 13 | "Can I deploy?" / deployment matrix | 🔴 free edition | Guide §3.2 | Replaced by pinned tags + compatibility gate + drift run |
+| 14 | Reporting and evidence | ✅ | [This report](evidence/sample/index.html) | JUnit and HTML are free; CTRF is commercial. One command produces all the evidence |
+| 15 | Developer effort | 🟡 | Phase 6 §6.7; [Raw reports](evidence/sample/index.html#raw) | First MFE about 1–2 days, each further MFE about ½ day; each provider needs examples and seed data. Windows pitfalls are documented (§10) |
+| 16 | Cost: paid licences | ✅ | – | Zero: MIT-licensed open source, no paid edition used |
+| 17 | Bundled OSS licence expiry (T2) | 🟡 risk | [Environment](evidence/sample/index.html#env) (Specmatic version) | Expires **14 Dec 2027**. Check the renewal and upgrade path well before then, and include it in the tool's lifecycle plan |
+| 18 | Docker licence | ⏳ **open** | [Environment](evidence/sample/index.html#env) | Docker Desktop shows a Personal plan; commercial use at a large organisation needs a paid seat. **IT must confirm.** Alternative: the JAR route, not yet validated (the npm package has only 2.55.1/2.55.2, and Maven has only a thin JAR) |
+| 19 | Security scan of the Specmatic image | ⏳ **open** | – | Not done: needs IT approval. Then mirror the image in an internal registry |
 
 ## 10. Limitations and recommendation
-_Phase 8_ (will include the Angular MFE findings from Phase 6). Pre-recorded limitations so far:
+
+**Product limitations (Specmatic open-source edition, as used here)**
+
+| Limitation | Impact | Workaround |
+|---|---|---|
+| **No messaging or real-time contracts** (SignalR, SSE, WebSocket; AsyncAPI is commercial) | Those interfaces are not contract-tested | Integration tests; shared message schemas validated in unit tests |
+| **In-process calls are invisible** (class-to-class, database, cache, logs) | Specmatic only sees HTTP | xUnit for internal layers (Case 1) |
+| **Weak stub auth** (T5): any token in the right format passes, and example matches skip the check | A consumer sending the wrong token passes stub tests | Recording handler asserts the exact token (control point 9); real auth in API automation |
+| **`/v2` handling:** the spec's `servers` URL is ignored | Tests and stubs miss the base path unless it is configured | `--testBaseURL …/v2` for tests; mock config `baseUrl` with `/v2` (T4) |
+| **Open schemas hide new fields** (`additionalProperties: true`) | A provider adding a field goes unnoticed (P3-9) | Keep response schemas closed; review schema changes |
+| **Compatibility check fails on any breaking change** (usage data is Insights-only) | Removals and renames always block | MAJOR versions and expand–contract deprecation (guide §3.1, pattern 10) |
+| **No deployment matrix** ("can I deploy?") | No automatic answer to "is consumer v5 compatible with provider v8?" | Pinned tags + compatibility gate + drift run |
+| **Commercial-only features:** Insights, CTRF reports, template values in examples, just-in-time auth tokens, AsyncAPI, interactive examples GUI | Some conveniences are missing | JUnit/HTML reports, fixed test tokens, a test auth handler in ContractTest mode (guide §3.6) |
+| **No coverage JSON** | Coverage must be parsed from the console table | Done by the evidence report (`Read-SpecmaticCoverage`) |
+| **`specmatic test --config` does not start dependency mocks** | Provider tests with dependencies need a second step | `specmatic mock --config` first (ContractTests helper does it) |
+| **Test data for database-backed services not proven** (all repositories here are in memory) | Seeding effort unknown for real services | Guide §3.5: ContractTest mode vs Testcontainers; seeding needed in both |
 
 **Windows / local-machine findings**
 
@@ -963,16 +1046,49 @@ _Phase 8_ (will include the Angular MFE findings from Phase 6). Pre-recorded lim
 | **Read-only git files block clean-up.** Specmatic's clone of the contracts (`.specmatic/repos/`) has read-only pack files on Windows, so `Directory.Delete` fails on a rerun. | Phase 7 | Local rerun fails before testing | Clear the read-only flag before deleting (done in the helper), or use `Remove-Item -Recurse -Force` | Not an issue: Linux deletes read-only files in a writable folder |
 | **Test result files contain personal data.** TRX files include `DOMAIN\user` and local paths; Specmatic HTML/console output contains host paths. | Phases 3–4 | A leak risk for public repos or shared artefacts | Sanitise before publishing (done here); in a pipeline, artefacts stay inside the organisation | Paths are agent paths, still worth reviewing |
 
+### Recommendation: **Conditional Go**
+
+**Why Go:**
+- Specmatic's open-source edition did what contract testing must do, on the stack in scope:
+  - it caught every provider-side contract break and every consumer-side break;
+  - it blocked every breaking contract change, while allowing additive and deprecation changes;
+  - it turned frontend contract breaks into compile errors.
+- It runs as plain `dotnet test`, as two pipeline gates, and as one evidence command. All of that came at **zero licence cost**.
+- The evidence is reproducible ([sample report](evidence/sample/index.html)): 27 out of 27 break demos behaved as expected in the final run.
+
+**Conditions (all must be met before the gates become mandatory):**
+1. **Docker licence confirmed by IT**, or the **JAR route** validated on the build agents with the same pinned version (scorecard 18).
+2. **Image security scan** approved and passed, with the image mirrored in an internal registry (scorecard 19).
+3. **Pilot on the real Linux agent** with one provider–consumer pair (well-registry ↔ well-mfe), running in shadow mode until **10 consecutive green runs**. Harness and shell failures reset the count, and PowerShell steps use `pwsh`.
+4. **Ownership and policy in place:** required reviewers on spec PRs, the versioning and deprecation policy, `consumers.yaml` owned and reviewed (control points 1, 4, 5).
+5. **Error examples for every provider**, so API coverage reaches 100% of documented 4xx (§7), and a test-data plan for database-backed services (guide §3.5).
+6. **A plan for the bundled-licence expiry** on 14 Dec 2027 (T2).
+7. **Messaging, real-time, real auth and RBAC** covered by integration and API automation tests, not left to contract tests.
+
+**No-Go triggers:**
+- Docker is not allowed **and** the JAR route cannot be validated.
+- The real agent cannot reach the exit criterion after the known fixes.
+- Most integration risk turns out to be in messaging or real-time channels, which the free edition does not cover.
+
 ## 11. How to rerun everything from scratch
-1. Prerequisites: .NET SDK 10.0.101, Docker Desktop (engine running), git.
+**Fastest path:** steps 1–3, then `cd mfe\well-mfe ; npm ci ; cd ..\..`, then step 11 (`.\scripts\run-evidence.ps1 -IncludeBreakDemos -Open`). One command reruns every case below and writes the report. Steps 4–10 are the individual commands, phase by phase.
+
+1. Prerequisites:
+   - .NET SDK 10.0.101 (`global.json`) and Node 22.19.0 (`mfe/well-mfe/.nvmrc`);
+   - Docker Desktop with the engine running (licence: see §9 row 18), and git;
+   - Windows PowerShell 5.1: the evidence run is verified on it. Phases 3–7 also ran on PowerShell 7.6. Use the same shell your pipeline agent uses.
 2. `docker pull specmatic/specmatic:2.55.0`
 3. Get both repos:
    ```powershell
    git clone https://github.com/Raghul5823/specmatic-prototype.git "Specmatic Prototype"
    cd "Specmatic Prototype"
    git clone https://github.com/Raghul5823/specmatic-prototype-contracts.git contracts
-   git -C contracts checkout v1
+   git -C contracts checkout v1.2    # latest tag: includes the MFE (well-mfe) examples that Case 4 needs
    ```
+   Earlier tags reproduce a phase's exact starting point:
+   - `v1`: end of Phase 2, the start of Phase 3;
+   - `v1.1`: end of Phase 3, used in Phases 4–5;
+   - `v1.2`: Phase 6 onwards.
 4. Build, run and smoke-test:
    ```powershell
    dotnet build SpecmaticPrototype.sln
