@@ -2,6 +2,7 @@
 
 > Status: **Phase 6 complete** (Angular MFE consumer, contracts `v1.2`). Later sections are placeholders until their phase runs.
 > New readers: start with [docs/APPLICATION-GUIDE.md](docs/APPLICATION-GUIDE.md), a plain-language guide to the design, folders, services and contracts.
+> Moving to a real project: [docs/real-project-guide.md](docs/real-project-guide.md) covers the system patterns used here and the recommended practices (ownership, versioning, test data, auth, monorepo frontends, pipeline stages, exit criteria).
 
 ## 0. Master checklist
 Ticked items link to their evidence. Updated at the end of every phase.
@@ -36,6 +37,7 @@ Ticked items link to their evidence. Updated at the end of every phase.
 - [x] Break experiments on both consumer and provider sides: 6/6 caught: [results/case2/break/summary.md](results/case2/break/summary.md)
 - [x] Pact comparison: what is covered, what isn't, how examples + `consumers.yaml` close the gap (§5 Phase 4)
 - [x] Application guide (design, folders, services, specs, terms, reasons): [docs/APPLICATION-GUIDE.md](docs/APPLICATION-GUIDE.md)
+- [x] Real-project guide (system patterns used, best practices for a real project): [docs/real-project-guide.md](docs/real-project-guide.md)
 - [x] Commit Phase 4 and push (after scan + approval)
 
 **Phase 5: Case 3 (cross-app, C3 and C4)**

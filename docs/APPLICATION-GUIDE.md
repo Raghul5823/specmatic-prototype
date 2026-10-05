@@ -104,6 +104,7 @@ Specmatic Prototype/                      ← prototype git repo (public)
 ├─ LICENSE, .gitignore, nuget.config      MIT licence; what git ignores; NuGet = nuget.org only
 ├─ SpecmaticPrototype.sln                 builds all 8 projects with one command
 ├─ docs/APPLICATION-GUIDE.md              this guide
+├─ docs/real-project-guide.md             patterns used here + best practices for a real project
 ├─ shared/Prototype.ServiceDefaults/      plumbing shared by every service
 ├─ app-a-production/
 │   ├─ well-registry-service/             provider (C1)
