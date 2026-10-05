@@ -179,10 +179,13 @@ Build stage ──► Deploy DEV ──► post-deploy test hook ──► highe
 
 - ✅ The contracts PR pipeline is separate. It guards merges into the contracts repo and never deploys.
 - Pin versions on the agent; on Linux agents, bind services to `0.0.0.0` or run Specmatic with `--network host` (⚠️ not verified); run each service's gates as parallel jobs (each uses its own ports); pull the Specmatic image from an internal registry.
+- ✅ **Pin the shell as well as the tool versions.** Run PowerShell steps with **PowerShell 7 explicitly** (`PowerShell@2` with `pwsh: true`, or a `pwsh:` step), or use `bash:`. Never rely on Windows PowerShell 5.1's quoting: it strips the inner double quotes from arguments passed to native programs. This prototype hit it in Phase 8a: a JSON body passed to `curl.exe` arrived as invalid JSON, so a demo got 400 instead of 502. A plain `script:` step runs **cmd.exe on Windows agents and bash on Linux agents**, so the same step can behave differently. Prefer `bash:` or `pwsh:` to make the shell explicit.
+- ✅ **Pass JSON to tools through files, not inline command-line arguments**, e.g. `curl --data-binary @body.json` or a `--config` file. No shell's quoting rules can then change the content.
+- ✅ **Run local tests in the same shell as the pipeline agent.** A different shell is a different environment. Here, Phases 3–7 ran on PowerShell 7.6, and the first full run on 5.1 found a defect that 7.6 had hidden.
 
 ### 3.9 Making the gates mandatory: the exit criterion
 1. **Start in shadow mode.** The gates run and report, but don't block yet.
-2. **Exit criterion: N consecutive green runs (for example 10) on the real build agent.** That means the same agent pool, the real network and the full pipeline load. Every failure in that window must be a real, explained contract break; **any flaky failure resets the count.**
+2. **Exit criterion: N consecutive green runs (for example 10) on the real build agent.** That means the same agent pool, the real network and the full pipeline load. Every failure in that window must be a real, explained contract break; **any flaky failure resets the count.** A failure caused by the test harness itself (a script, the shell, the environment) also resets the count. Run 2 of Phase 8a is an example: a shell-quoting defect, deterministic rather than flaky, but not a contract break.
 3. Then make the gates required: build validation on the branch policy, and `dependsOn` for deploys.
 4. Keep measuring the flaky-failure rate. Agree a fix-or-quarantine rule, because **a gate that fails at random will be ignored**.
 

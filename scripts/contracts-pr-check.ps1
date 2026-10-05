@@ -14,7 +14,9 @@
 param(
     [Parameter(Mandatory)] [string]$RepoDir,
     [string]$BaseBranch = 'main',
-    [string]$RunName = 'pr'
+    [string]$RunName = 'pr',
+    # Evidence run: run every gate even after a failure (the merge is still BLOCKED by the first one).
+    [switch]$ContinueOnFailure
 )
 $ErrorActionPreference = 'Continue'
 . "$PSScriptRoot\common.ps1"
@@ -65,7 +67,8 @@ foreach ($g in $gates) {
     $status = if ($code -eq 0) { 'PASSED' } else { 'FAILED' }
     $results += [ordered]@{ gate = $g.Name; status = $status; seconds = [math]::Round($sw.Elapsed.TotalSeconds) }
     Write-Host ("  [{0}/{1}] {2,-36} {3} ({4}s)" -f $i, $gates.Count, $g.Name, $status, [math]::Round($sw.Elapsed.TotalSeconds))
-    if ($code -ne 0) { $stoppedAt = $g.Name; break }
+    if ($code -ne 0 -and -not $stoppedAt) { $stoppedAt = $g.Name }
+    if ($code -ne 0 -and -not $ContinueOnFailure) { break }
 }
 foreach ($g in $gates | Select-Object -Skip $results.Count) { $results += [ordered]@{ gate = $g.Name; status = 'SKIPPED'; seconds = 0 } }
 $merge = if ($stoppedAt) { "BLOCKED by gate '$stoppedAt'" } else { 'ALLOWED' }

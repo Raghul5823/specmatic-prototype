@@ -1,8 +1,51 @@
 # Specmatic Prototype — Contract Testing Evaluation
 
-> Status: **Phase 6 complete** (Angular MFE consumer, contracts `v1.2`). Later sections are placeholders until their phase runs.
+> Status: **Phase 8a complete** (one-command evidence run with a unified HTML report; contracts `v1.2`). Next: Phase 8, the evaluation (sections 7–10 are placeholders until then).
 > New readers: start with [docs/APPLICATION-GUIDE.md](docs/APPLICATION-GUIDE.md), a plain-language guide to the design, folders, services and contracts.
 > Moving to a real project: [docs/real-project-guide.md](docs/real-project-guide.md) covers the system patterns used here and the recommended practices (ownership, versioning, test data, auth, monorepo frontends, pipeline stages, exit criteria).
+> See everything at once: run `.\scripts\run-evidence.ps1 -Open`, or open the committed [sample report](evidence/sample/index.html) (instructions below).
+
+## How to run the evidence report
+
+**One command runs every case of Phases 3–7 and writes one HTML report for the whole prototype.**
+
+```powershell
+.\scripts\run-evidence.ps1 -Open                       # all cases + the pipeline, about 15 min
+.\scripts\run-evidence.ps1 -IncludeBreakDemos -Open    # + 27 live break demos, about 25-45 min in total
+.\scripts\run-evidence.ps1 -Only case3,mfe             # debugging: some sections only (marked PARTIAL, exit code 1)
+```
+
+- **Prerequisites:** Docker engine running, the image `specmatic/specmatic:2.55.0` pulled, `contracts/` cloned, and `npm ci` done once in `mfe/well-mfe`. The run never installs or downloads anything. If a prerequisite is missing, it reports what is missing and skips what depends on it.
+- **What it runs**, in order, continuing after a failure:
+
+  | Section | What runs |
+  |---|---|
+  | Environment | Versions, pins, contract tag/commit, clean start (ports, leftovers), build |
+  | Contracts | `examples validate --examples-to-validate BOTH`, bundle check, compatibility vs `main`, in a fresh clone |
+  | Case 1 | well-registry provider tests (examples, then capped resiliency), xUnit unit tests |
+  | Case 2 | C1 and C2: provider tests, and consumer tests against strict stubs |
+  | Case 3 | C3 and C4: provider ContractTests with the other app mocked, and consumer tests against strict stubs |
+  | Case 4 MFE | C5 provider side, client generation, `ng build`, Playwright against a strict stub |
+  | Pipeline | `run-all.ps1`: each gate and the DeployDev decision |
+  | Break demos (`-IncludeBreakDemos`) | Phases 3–7 demos applied live **in a throwaway copy under `%TEMP%`**, each with its expected and actual result |
+  | Clean-up and integrity | Everything stopped; both repos unchanged (file list **and** content fingerprint); copy deleted; `node_modules` intact |
+- **Output:**
+  - `evidence/latest/index.html` is one self-contained file (inline CSS/JS, no external links), which opens offline by double-clicking;
+  - every run is kept in `evidence/history/<yyyy-MM-dd_HHmm>/` (report, `evidence.json`, raw reports), and the last 10 runs are kept;
+  - both folders are git-ignored. The committed **[evidence/sample/index.html](evidence/sample/index.html)** shows what the report looks like. GitHub shows `.html` files as source, so clone the repo and open it locally.
+- **Exit code** is 0 only when every check passed **and** every break demo behaved as expected (with `-IncludeBreakDemos`).
+- **Data sources:**
+  - JUnit XML from Specmatic and Playwright;
+  - TRX from `dotnet test` (built in, so no extra logger package; raw TRX files are never linked, because they contain the user and machine name);
+  - Specmatic's coverage table from the console output (the free edition has no coverage JSON).
+- **Privacy:** paths are shown relative to the repo root, and user, host and temp paths are removed.
+- The scripts it reuses write to `evidence/history/<run>/raw/` through `PROTO_RESULTS_DIR`, so the committed `results/` folder is never touched.
+- **How it is built:**
+  - [scripts/run-evidence.ps1](scripts/run-evidence.ps1) orchestrates the run;
+  - [scripts/evidence/plan.psd1](scripts/evidence/plan.psd1) is the run plan: what each section proves, and every break demo with its expected outcome;
+  - [Evidence.psm1](scripts/evidence/Evidence.psm1) holds the parsers and clean-up;
+  - [Build-Report.ps1](scripts/evidence/Build-Report.ps1) and [report-template.html](scripts/evidence/report-template.html) render the report;
+  - only PowerShell and browser built-ins are used, with no new packages.
 
 ## 0. Master checklist
 Ticked items link to their evidence. Updated at the end of every phase.
@@ -77,7 +120,17 @@ Ticked items link to their evidence. Updated at the end of every phase.
 - [x] A deliberate failure for each gate type, with the gate that stopped it: [results/pipeline/failure-demos.md](results/pipeline/failure-demos.md)
 - [x] Generic sample YAML (placeholders only); pinned .NET SDK (`global.json`) and Node (`.nvmrc`) versions
 - [x] README notes: version pinning, deprecating an endpoint, JAR route for agents without Docker (§5 Phase 7)
-- [ ] Commit Phase 7 and push (after scan + approval)
+- [x] Commit Phase 7 and push (after scan + approval): root `97e5a2e` (pipelines, demos) and `1480c69` ([docs/real-project-guide.md](docs/real-project-guide.md))
+
+**Phase 8a: One-command evidence run with a unified HTML report**
+- [x] `scripts/run-evidence.ps1 [-IncludeBreakDemos] [-Open] [-Only …]`: every case of Phases 3–7 from a clean start, continuing after failures; one self-contained HTML report ([sample](evidence/sample/index.html)); see "How to run the evidence report" at the top
+- [x] Break demos (27) run live in a throwaway copy under `%TEMP%`; both repos verified unchanged at the end
+- [x] Verification runs (§5 Phase 8a):
+  - run 1 without demos: PASS, 13.2 min;
+  - run 2 with demos: FAIL, 26/27, a PowerShell 5.1 quoting defect in a script, found and fixed;
+  - run 3 with demos: PASS, 27/27, 25.4 min.
+- [x] Shell guidance (pin `bash:`/`pwsh:`, JSON through files, same shell locally) in the real-project guide §3.8 and the limitations table; sample YAMLs use `bash:` everywhere, and an invalid-YAML bug in the Phase 7 sample is fixed
+- [ ] Commit "Phase 8a: unified evidence report" and push (after scan + approval)
 
 **Phase 8: Evaluation**
 - [ ] Coverage section (API coverage is not code coverage)
@@ -719,6 +772,7 @@ Gate 4 is the slowest: each ContractTests project starts its service, and the tw
 - `global.json` pins the .NET SDK (10.0.101, `rollForward: latestPatch`), and `.nvmrc` pins Node (22.19.0). The sample YAML uses the same values (`UseDotNet@2`, `NodeTool@0`), and gate 1 of `run-all.ps1` fails on a mismatch.
 - **Angular 22 needs Node ≥ 22.22.3** (Phase 6). An agent with an older Node fails the build, and a developer machine on a different Node can get different results. Upgrade Node on developer machines **and** agents together, and only then move Angular.
 - Pin the **Specmatic image tag** (never `latest`), the Playwright version (its browser build is tied to it), and every npm package (exact versions + `package-lock.json`, `npm ci`).
+- Pin the **shell** too (added in Phase 8a). Use `bash:` or `pwsh:` steps (PowerShell 7, e.g. `PowerShell@2` with `pwsh: true`), because `script:` runs cmd.exe on Windows agents and bash on Linux agents. Never rely on Windows PowerShell 5.1's argument quoting, pass JSON to tools through files, and run local tests in the same shell as the agent.
 
 **Deprecating an endpoint**
 - Without Insights, **every** breaking change fails the compatibility gate (T1), including removing an endpoint or a field that nobody uses any more. Removal therefore cannot happen in a MINOR (`v1.x`) release.
@@ -747,6 +801,66 @@ Every Specmatic step is the same CLI with `java -jar specmatic.jar <same argumen
 - **Not executed here**, because no JAR was downloaded (downloads need approval).
 
 **Linux agents (networking note, not verified here):** on Docker Desktop (Windows/Mac) a service bound to `localhost` is reachable from a container through `host.docker.internal`. On a Linux agent it is not. Either bind the services to `0.0.0.0` in the pipeline (e.g. `ASPNETCORE_URLS=http://0.0.0.0:5101`) or run Specmatic with `--network host` and `http://localhost:<port>`. The sample YAML carries this as a comment.
+
+### Phase 8a — One-command evidence run with a unified HTML report
+
+**What was built:**
+- `scripts/run-evidence.ps1`, which runs every case of Phases 3–7 from a clean start. Usage and output are described in "How to run the evidence report" at the top.
+- **One self-contained HTML report**, our own design: inline CSS/JS with the run's data embedded as JSON. It has:
+  - a verdict header and summary tiles;
+  - one section per case, each with what it proves, the consumer → provider pairs, test counts, API coverage per service, durations, and expandable details per check;
+  - the break-demo matrix;
+  - a coverage table;
+  - raw-report links;
+  - previous runs.
+
+  Sample: [evidence/sample/index.html](evidence/sample/index.html), rendered from run 3 below.
+- **Break demos run live in a throwaway copy** under `%TEMP%`. The copy holds the working tree (without build output) and a fresh clone of the contracts repo; its `node_modules` is a junction to the real folder. Each demo applies its change, runs only the relevant check, records expected vs actual, and restores. At the end, the run deletes the copy and checks both real repos.
+
+**Runs** (same day, same machine, all on Windows PowerShell 5.1). Three runs were needed, not two:
+
+| # | Run | Flags | Checks | Test cases | Break demos | Duration | Verdict |
+|---|---|---|---|---|---|---|---|
+| 1 | `2026-10-05_1304` | none | 36/36 passed | 117 | not run | 13.2 min | **PASS** (exit 0) |
+| 2 | `2026-10-05_1319` | `-IncludeBreakDemos` | 43/43 passed | 117 | **26/27** as expected (22 caught) | 41.3 min | **FAIL** (exit 1) |
+| 3 | `2026-10-05_1403` | `-IncludeBreakDemos` | 43/43 passed | 117 | **27/27** as expected (22 caught) | 25.4 min | **PASS** (exit 0) |
+
+(Before these runs, a partial smoke run, `2026-10-05_1258` with `-Only case1`, checked the plumbing: 13/13 PASS, verdict PARTIAL, as designed for `-Only`.)
+
+**Why a third run was needed: a script defect, found by run 2. It was not flakiness.**
+- **What happened.** In run 2, demo **P5-D1c** (drifted provider called end to end) expected a **502** but got **400 Bad Request**, with no detail. Every other check and demo behaved as expected.
+- **Cause.** `case3-drift.ps1` sent the JSON request body as a command-line argument (`curl.exe -d $body`). **Windows PowerShell 5.1 strips the inner double quotes** of arguments passed to native programs; PowerShell 7 keeps them. So on 5.1 the service received invalid JSON and rejected it before calling the drifted provider. Phase 5 had shown the 502 because my tool runs **PowerShell 7.6**. The evidence run was the first time the scripts ran on 5.1, the shell this evaluation targets.
+- **Fix.** The body is now written to a file and sent with `--data-binary @file`, which works the same on both PowerShell versions.
+  - Verified on 5.1 against the real services: the old way returns **400** every time, the new way returns **201**.
+  - A search found no other script passing JSON on the command line.
+  - Run 3 then showed **502 Bad Gateway** for P5-D1c, as expected.
+- **Classification.** **Deterministic, not flaky:** it fails every time on 5.1 and never on 7. No check was flaky in any of the three runs. Every check that passed once passed in all three runs: the 36 non-demo checks were green in runs 1, 2 and 3, and the 26 other demos gave the same result in runs 2 and 3.
+- **What it counts for (real-project guide, exit criterion 3.9).** A failure caused by the test harness itself counts like a flaky failure: it **resets the green-run count**, because a gate that fails for any reason other than a real break isn't trustworthy yet. After the fix, the count restarts at run 3. For a real rollout, this is why the N consecutive green runs must happen **on the real agent and its real shell**: a different shell or runtime is a different environment.
+
+**Duration variance (same results, different times).** Run 3 took **25.4 min** against **41.3 min** for run 2, with the same checks and results.
+- Every break batch was faster in run 3; the drift batch differed most (**625 s → 76 s**).
+- The Specmatic tests inside the drift batch took 15 s and 4 s in both runs, so the extra time went into setup steps such as starting services and mocks.
+- The batch logs have no timestamps, so the slow step can't be named.
+
+This is **not flakiness**, since the results were identical, but run times on Docker Desktop vary by up to ~2×. Timeouts and pipeline time limits must allow for that. **Follow-up:** add a timestamp to every batch-log line. It was not changed after the verification runs, so the committed code is the code that was verified.
+
+**Findings while building it:**
+1. **A rerun of the Case 2 consumer break demos would have "caught" every break for the wrong reason.** Since Phase 5, the consumer test projects also contain the cross-app tests (C3, C4), which need *other* stubs. `break-experiment.ps1` ran the whole project, so those tests failed whatever the change was. Fixed with a test filter per interaction (`-TestFilter`). Lesson: a break demo is only evidence if the unbroken run of the same check passes. The evidence run proves that, because the same checks pass in sections 3–7.
+2. **Four committed TRX files (Phases 4–5) were invalid XML.** The sanitising had put `<user>@<machine>` and `<domain>` inside XML attributes. Azure DevOps "Publish Test Results" would have rejected them. They now use `[user]`, `[machine]` and `[domain]`, and all four parse.
+3. **"Repo unchanged" has to compare content, not only `git status`.** A change inside a file that already has uncommitted edits doesn't change the `git status` line. The integrity check therefore also compares a fingerprint of `git diff HEAD` plus every untracked file. This bit while building: two of my own edits during run 1 would have been invisible to a status-only check. They were parked until the run ended.
+4. **Windows PowerShell 5.1 pitfalls found and handled:**
+   - `@()` around a generic `List` of dictionaries throws "Argument types do not match";
+   - `Measure-Object -Property` cannot read dictionary keys;
+   - `Compare-Object` rejects an empty list;
+   - `[regex]::Replace` can pick the `MatchEvaluator` overload.
+
+   **Junction safety:** `Remove-Item -Recurse` can follow a junction, so the copy is deleted with `rmdir`, junction first. A test with a dummy target proved the target survives even when the junction is not known.
+5. **The machine also has PowerShell 7.6** (Store app). Phase 0 recorded only 5.1. Phases 3–7 ran through my tool, which uses 7.6, so the evidence run was the first full run on **5.1**. It exposed the run-2 defect above. All scripts are now verified on 5.1. A real pipeline should pin the shell too: see the limitations table (§10) and the real-project guide §3.8.
+6. **Specmatic's JUnit sometimes reports a negative test time.** The report shows it as unknown.
+7. **The compatibility check mounts the repo writable** and works with git. The evidence run therefore runs it on a fresh clone, never on the real contracts repo.
+8. **Building only the changed project** instead of the whole solution took the Case 1 break demos from about 4–5 min each (Phase 3) to **29–44 s** on average (runs 3 and 2).
+9. **The Phase 7 sample `azure-pipelines.yml` was invalid YAML.** The DeployDev step `echo "Deploy to DEV: replace with …"` holds an unquoted `: `, which YAML reads as a mapping (`bad indentation of a mapping entry`). Azure DevOps would have rejected the file before running any step. It was found while switching the steps from `script:` to `bash:`. It now uses a block scalar, and both sample YAMLs are parsed by a YAML parser (`js-yaml`, already in the MFE's dependencies). Lesson: a sample pipeline that is never run still needs a syntax check. Validate YAML in the PR, as the contracts pipeline does for specs.
+10. **All `script:` steps in both samples are now `bash:`.** `script:` runs cmd.exe on Windows agents and bash on Linux agents. Two steps were shell-sensitive: the commented JAR-route mock line (`&` background and `#` comment are bash syntax) and the DeployDev `echo`. The rest were switched for consistency, so every step names its shell.
 
 ## 6. Break-experiment results
 
@@ -843,6 +957,7 @@ _Phase 8_ (will include the Angular MFE findings from Phase 6). Pre-recorded lim
 | **`specmatic test --config` does not start the `dependencies` mocks** declared in the same config; the service under test then gets 502s from its downstream calls. | Phase 5 | Provider tests with mocked dependencies fail | Start them separately with `specmatic mock --config <same file>` (`scripts/deps.ps1`), then run `specmatic test --config` | Same behaviour (not Windows-specific); in a pipeline the mock runs as a background step or service container |
 | **Docker Desktop DNS latency.** Resolving `host.docker.internal` took up to 3.7 s; one slow request hit the 6 s default timeout and the uncapped resiliency run collapsed. | Phase 3 | Spurious "errors" | `--add-host host.docker.internal:host-gateway`, `--timeout-in-ms` | Typically not an issue: on a Linux agent the service and Specmatic run on the same Docker network or host |
 | **PowerShell 5.1 + native stderr.** A failing `dotnet test` under `ErrorActionPreference=Stop` aborts the script. | Phase 3 | Script stops early | Use `Continue` and check `$LASTEXITCODE` | Pipelines use YAML tasks; not applicable |
+| **Windows PowerShell 5.1 strips inner double quotes** from arguments passed to native programs; PowerShell 7 keeps them. A JSON body passed as `curl.exe -d $body` arrived as invalid JSON. | Phase 8a | One break demo gave the wrong result (400 instead of 502), only on 5.1; Phases 3–7 had run on 7.6 and didn't show it | Pass JSON through a file (`--data-binary @file`). Run PowerShell steps with PowerShell 7 explicitly (`PowerShell@2` with `pwsh: true`, or a `pwsh:` step) or use bash. Use the same shell locally as on the agent | Make the shell explicit (`bash:` or `pwsh:`); `script:` runs cmd.exe on Windows agents and bash on Linux agents. Never rely on 5.1 quoting |
 | **CRLF line endings** (`core.autocrlf=true`) change spec files on checkout. | Phase 5 | Scripted spec edits miss | `-c core.autocrlf=false` for automation, or `.gitattributes` with `* text=auto eol=lf` in the contract repo | Linux checkouts use LF |
 | **Slow first response from a fresh Specmatic mock under load** (up to about 55 s inside a full pipeline run on Docker Desktop, about 1–2 s in isolation) made provider ContractTests with mocked dependencies flaky. | Phase 7 | Random gate-4 failures (502 from the service, or a Specmatic socket timeout) | Timeout budget (Specmatic `--timeout-in-ms` > the service's downstream timeout), health check and one real example request per mock before testing | Expected to be smaller (no Docker Desktop VM), but keep the timeout budget: agents are shared and can be slow too |
 | **Read-only git files block clean-up.** Specmatic's clone of the contracts (`.specmatic/repos/`) has read-only pack files on Windows, so `Directory.Delete` fails on a rerun. | Phase 7 | Local rerun fails before testing | Clear the read-only flag before deleting (done in the helper), or use `Remove-Item -Recurse -Force` | Not an issue: Linux deletes read-only files in a writable folder |
@@ -932,4 +1047,9 @@ _Phase 8_ (will include the Angular MFE findings from Phase 6). Pre-recorded lim
     # all deliberate failures (A1-A5 contracts PR, B provider, C MFE), about 25 min
     .\scripts\pipeline-failure-demos.ps1           # or -Only A -Pick A5, or -Only B,C
     ```
-11. _Phase 8 (evaluation) adds no new commands._
+11. Phase 8a (everything at once), from the prototype root:
+    ```powershell
+    .\scripts\run-evidence.ps1 -Open                      # every case + pipeline, one HTML report (about 15 min)
+    .\scripts\run-evidence.ps1 -IncludeBreakDemos -Open   # + 27 live break demos in a throwaway copy (about 25-45 min in total)
+    ```
+12. _Phase 8 (evaluation) adds no new commands._

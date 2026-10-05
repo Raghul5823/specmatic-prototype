@@ -29,7 +29,7 @@ if (-not $PSBoundParameters.ContainsKey('Token')) { $Token = $TestToken }
 $outDir = Join-Path $ResultsDir $Out
 if (Test-Path $outDir) { Remove-Item $outDir -Recurse -Force }
 New-Item -ItemType Directory -Force $outDir | Out-Null
-$work = '/work/results/' + ($Out -replace '\\', '/')
+$work = ConvertTo-WorkPath $outDir
 
 $dockerArgs = @('run', '--rm',
     # Resolve host.docker.internal from /etc/hosts instead of Docker Desktop's DNS, which was

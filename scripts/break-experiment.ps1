@@ -19,7 +19,10 @@ param(
     [ValidateSet('Provider', 'Consumer')] [string]$Mode = 'Provider',
     [string]$StubService,
     [int]$StubPort,
-    [string]$StubConfig
+    [string]$StubConfig,
+    # dotnet test --filter for the TestProject. Needed in consumer mode: since Phase 5 the consumer test
+    # projects also hold cross-app tests that need OTHER stubs, which would fail for the wrong reason.
+    [string]$TestFilter
 )
 # 'Continue', not 'Stop': in PowerShell 5.1 a failing `dotnet test` writes to stderr, which
 # 'Stop' turns into a terminating error and aborts the experiment (seen in Phase 3).
@@ -44,19 +47,25 @@ foreach ($c in $Changes) {
 }
 
 $result = [ordered]@{ name = $Name; expected = $Expected; compiled = $false; xunitFailed = $null; specmaticFailures = $null; specmaticExit = $null }
+$clock = [Diagnostics.Stopwatch]::StartNew()
+# Build only what this experiment runs: the test project (it references the service under test) or the
+# service itself. Phase 3 rebuilt the whole solution, about 4-5 minutes per experiment.
+$svc = Get-ProtoService $Service
+$buildTarget = if ($TestProject) { Join-Path $Root $TestProject } else { Join-Path $Root "$($svc.Dir)\$($svc.Dll).csproj" }
+$filterArgs = if ($TestFilter) { @('--filter', $TestFilter) } else { @() }
 try {
     & "$PSScriptRoot\stop-services.ps1" -Only $Service | Out-Null
 
     # 2. Build. A compile error is itself a result (the type system caught it).
     # Logs are committed to a public repo, so the local path is replaced with '.'.
-    $build = dotnet build (Join-Path $Root 'SpecmaticPrototype.sln') -nologo -v q 2>&1 | ForEach-Object { "$_".Replace($Root, '.') }
+    $build = dotnet build $buildTarget -nologo -v q 2>&1 | ForEach-Object { "$_".Replace($Root, '.') }
     $result.compiled = ($LASTEXITCODE -eq 0)
     $build | Set-Content -Encoding utf8 (Join-Path $outDir 'build.txt')
 
     if ($result.compiled -and $Mode -eq 'Consumer') {
         # 3c. Consumer side: the (broken) consumer's tests against a strict stub of the provider.
         & "$PSScriptRoot\stub.ps1" start $StubService $StubPort -Strict -Config $StubConfig | Out-Null
-        $xunit = dotnet test (Join-Path $Root $TestProject) --no-build -nologo -v q 2>&1 | ForEach-Object { "$_".Replace($Root, '.') }
+        $xunit = dotnet test (Join-Path $Root $TestProject) --no-build -nologo -v q @filterArgs 2>&1 | ForEach-Object { "$_".Replace($Root, '.') }
         $result.xunitFailed = ($LASTEXITCODE -ne 0)
         $xunit | Set-Content -Encoding utf8 (Join-Path $outDir 'consumer-tests.txt')
         & "$PSScriptRoot\stub.ps1" stop $StubService -SaveLogTo $Out | Out-Null
@@ -64,7 +73,7 @@ try {
     elseif ($result.compiled) {
         # 3. xUnit (in-process, internal layers), if the service has a unit-test project.
         if ($TestProject) {
-            $xunit = dotnet test (Join-Path $Root $TestProject) --no-build -nologo -v q 2>&1 | ForEach-Object { "$_".Replace($Root, '.') }
+            $xunit = dotnet test (Join-Path $Root $TestProject) --no-build -nologo -v q @filterArgs 2>&1 | ForEach-Object { "$_".Replace($Root, '.') }
             $result.xunitFailed = ($LASTEXITCODE -ne 0)
             $xunit | Set-Content -Encoding utf8 (Join-Path $outDir 'xunit.txt')
         }
@@ -82,10 +91,11 @@ finally {
     # 5. Always restore the original files and rebuild.
     & "$PSScriptRoot\stop-services.ps1" -Only $Service | Out-Null
     foreach ($p in $originals.Keys) { [IO.File]::WriteAllBytes($p, $originals[$p]) }
-    dotnet build (Join-Path $Root 'SpecmaticPrototype.sln') -nologo -v q | Out-Null
+    dotnet build $buildTarget -nologo -v q | Out-Null
 }
 
 $result.mode = $Mode
+$result.seconds = [math]::Round($clock.Elapsed.TotalSeconds)
 $result.specmaticCaught = ($result.specmaticExit -ne $null -and $result.specmaticExit -ne 0)
 $result.changes = $Changes | ForEach-Object { "$($_.File): '$($_.Find)' -> '$($_.Replace)'" }
 $result | ConvertTo-Json -Depth 4 | Set-Content -Encoding utf8 (Join-Path $outDir 'experiment.json')

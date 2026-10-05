@@ -18,6 +18,10 @@ results/case1/04-resiliency/junit/
 # Specmatic's clone of the contract repo when a config uses a git source
 .specmatic/
 
+# Evidence runs (scripts/run-evidence.ps1): local only. evidence/sample/ is the one committed snapshot.
+evidence/history/
+evidence/latest/
+
 # Default output of a local `dotnet test` of the ContractTests (pipeline runs write to results/pipeline/<run>/)
 results/pipeline/contract-tests/
 

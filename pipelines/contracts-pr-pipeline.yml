@@ -5,6 +5,12 @@
 # Register it as a BUILD VALIDATION branch policy on main: any failing gate blocks the merge.
 # There is no deploy stage: contracts are released by tagging (v1.2, v1.3, v2 ...).
 # Replace every <placeholder>.
+#
+# Shell: every step names its shell. "script:" runs cmd.exe on Windows agents and bash on Linux
+# agents, so the same step can behave differently (quoting, &, #, echo); prefer "bash:" or "pwsh:"
+# to make the shell explicit. Any PowerShell step must run PowerShell 7 (PowerShell@2 with
+# pwsh: true, or pwsh:), never Windows PowerShell 5.1, and JSON is passed to tools through files,
+# not inline arguments. This sample assumes a Linux agent.
 # =====================================================================================
 
 trigger: none
@@ -28,9 +34,9 @@ stages:
         steps:
           - checkout: self
             fetchDepth: 0                  # the compatibility check compares against the base branch history
-          - script: git fetch origin $(targetBranch)
+          - bash: git fetch origin $(targetBranch)
             displayName: 'Fetch base branch'
-          - script: docker pull $(specmaticImage)
+          - bash: docker pull $(specmaticImage)
             displayName: 'Pull pinned Specmatic image'
 
           # Gate 1: every spec loads and every example (inline + external) matches it

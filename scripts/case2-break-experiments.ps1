@@ -9,10 +9,13 @@
 param([int]$From = 1)
 . "$PSScriptRoot\common.ps1"
 
+# TestFilter: only this interaction's tests (the projects also hold the cross-app C3/C4 tests since Phase 5).
 $c1 = @{ Mode = 'Consumer'; StubService = 'well-registry-service'; StubPort = 9101; StubConfig = 'specmatic\well-registry.mock.yaml'
-         TestProject = 'app-a-production\production-forecast-service.Tests\ProductionForecastService.Tests.csproj' }
+         TestProject = 'app-a-production\production-forecast-service.Tests\ProductionForecastService.Tests.csproj'
+         TestFilter = 'FullyQualifiedName~WellRegistryClientStubTests' }
 $c2 = @{ Mode = 'Consumer'; StubService = 'approval-service'; StubPort = 9202; StubConfig = 'specmatic\approval.mock.yaml'
-         TestProject = 'app-b-change-mgmt\change-request-service.Tests\ChangeRequestService.Tests.csproj' }
+         TestProject = 'app-b-change-mgmt\change-request-service.Tests\ChangeRequestService.Tests.csproj'
+         TestFilter = 'FullyQualifiedName~ApprovalClientStubTests' }
 $p2 = @{ Mode = 'Provider'; Service = 'approval-service'; TestProject = '' }
 $jsonNs = 'System.Text.Json.Serialization'
 

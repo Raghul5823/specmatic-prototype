@@ -34,7 +34,7 @@ New-Item -ItemType Directory -Force $work | Out-Null
 $dockerArgs = @('run', '-d', '--name', $container)
 foreach ($p in $Ports) { $dockerArgs += @('-p', "${p}:${p}") }
 $dockerArgs += @('-v', "${Root}:/work", '-v', "$(Join-Path $Root 'contracts'):/work/contracts:ro",
-    '-w', '/work/results/specmatic-work', $SpecmaticImage, 'mock', "--config=/work/$($Config -replace '\\', '/')")
+    '-w', (ConvertTo-WorkPath $work), $SpecmaticImage, 'mock', "--config=/work/$($Config -replace '\\', '/')")
 docker @dockerArgs | Out-Null
 
 $deadline = (Get-Date).AddSeconds(90)

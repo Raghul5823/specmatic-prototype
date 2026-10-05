@@ -2,8 +2,15 @@
 # SAMPLE service pipeline (NOT executed in this prototype; simulated by scripts/run-all.ps1)
 #
 # One "BuildService" stage holds every quality gate; "DeployDev" depends on it explicitly
-# and runs only if all gates passed. Mirrors our real pipeline template's shape.
+# and runs only if all gates passed. Mirrors the shape of a typical enterprise pipeline template.
 # Replace every <placeholder>. Nothing here names a real pool, registry or repository.
+#
+# Shell: every step names its shell. "script:" runs cmd.exe on Windows agents and bash on Linux
+# agents, so the same step can behave differently (quoting, &, #, echo); prefer "bash:" or "pwsh:"
+# to make the shell explicit. Any PowerShell step must run PowerShell 7 (PowerShell@2 with
+# pwsh: true, or pwsh:), never Windows PowerShell 5.1, and JSON is passed to tools through files,
+# not inline arguments. Run local tests in the same shell as the agent. This sample assumes a
+# Linux agent.
 # =====================================================================================
 
 trigger:
@@ -52,11 +59,11 @@ stages:
           - task: NodeTool@0
             displayName: 'Use Node $(nodeVersion)'
             inputs: { versionSpec: '$(nodeVersion)' }
-          - script: docker pull $(specmaticImage)
+          - bash: docker pull $(specmaticImage)
             displayName: 'Pull pinned Specmatic image'
 
           # Gate 2: build
-          - script: dotnet build SpecmaticPrototype.sln -c $(buildConfiguration)
+          - bash: dotnet build SpecmaticPrototype.sln -c $(buildConfiguration)
             displayName: 'Build (.NET)'
             workingDirectory: $(root)
 
@@ -111,13 +118,13 @@ stages:
             condition: always()
 
           # Gates 6-7: Angular MFE (client generated from the contract, compile check, Playwright vs stub)
-          - script: npm ci
+          - bash: npm ci
             displayName: 'MFE: npm ci (exact versions from package-lock.json)'
             workingDirectory: $(root)/mfe/well-mfe
-          - script: npm run build
+          - bash: npm run build
             displayName: 'MFE: bundle spec + generate client + build (contract break = compile error)'
             workingDirectory: $(root)/mfe/well-mfe
-          - script: npx playwright install --with-deps --only-shell chromium
+          - bash: npx playwright install --with-deps --only-shell chromium
             displayName: 'MFE: Chromium for the pinned Playwright version'
             workingDirectory: $(root)/mfe/well-mfe
           - bash: |
@@ -157,11 +164,11 @@ stages:
           # JAR ROUTE (agents without Docker), same steps with `java -jar` instead of `docker run`:
           # - task: JavaToolInstaller@0            # Java 17+
           #   inputs: { versionSpec: '21', jdkArchitectureOption: 'x64', jdkSourceOption: 'PreInstalled' }
-          # - script: <fetch specmatic.jar of the SAME pinned version from an approved, cached source>
+          # - bash: <fetch specmatic.jar of the SAME pinned version from an approved, cached source>
           #     # e.g. the jar bundled in the npm package "specmatic@<version>" (npm has 2.55.1/2.55.2, not 2.55.0:
           #     # pin one version for BOTH routes) or an internal artifact feed
-          # - script: java -jar specmatic.jar test contracts/specs/app-a-production/well-registry-service.yaml --testBaseURL=http://localhost:5101/v2 --junitReportDir=results/junit
-          # - script: java -jar specmatic.jar mock --strict --port=9101 --config=specmatic/well-registry.mock.yaml &   # background
+          # - bash: java -jar specmatic.jar test contracts/specs/app-a-production/well-registry-service.yaml --testBaseURL=http://localhost:5101/v2 --junitReportDir=results/junit
+          # - bash: java -jar specmatic.jar mock --strict --port=9101 --config=specmatic/well-registry.mock.yaml &   # background
           # Config files use container paths (/work/...); for the JAR route keep a variant with repo-relative paths.
           # ---------------------------------------------------------------------------------
 
@@ -179,4 +186,6 @@ stages:
           runOnce:
             deploy:
               steps:
-                - script: echo "Deploy to DEV: replace with <your deployment template>"
+                # (block scalar: an unquoted ": " inside the command would make the YAML invalid)
+                - bash: |
+                    echo "Deploy to DEV: replace with <your deployment template>"

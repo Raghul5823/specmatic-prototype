@@ -15,9 +15,15 @@ public static class Repo
     public static string Configuration { get; } =
         AppContext.BaseDirectory.Contains($"{Path.DirectorySeparatorChar}Release{Path.DirectorySeparatorChar}") ? "Release" : "Debug";
 
-    /// <summary>Where Specmatic reports go: results/&lt;CONTRACT_TEST_RESULTS&gt;, default results/pipeline/contract-tests.</summary>
+    /// <summary>
+    /// Base folder for all output: PROTO_RESULTS_DIR (absolute, inside Root; set by the evidence run) or results/.
+    /// </summary>
+    public static string ResultsRoot =>
+        Environment.GetEnvironmentVariable("PROTO_RESULTS_DIR") is { Length: > 0 } dir ? Path.GetFullPath(dir) : Path.Combine(Root, "results");
+
+    /// <summary>Where Specmatic reports go: &lt;ResultsRoot&gt;/&lt;CONTRACT_TEST_RESULTS&gt;, default pipeline/contract-tests.</summary>
     public static string ResultsDir =>
-        Path.Combine(Root, "results", Environment.GetEnvironmentVariable("CONTRACT_TEST_RESULTS") ?? Path.Combine("pipeline", "contract-tests"));
+        Path.Combine(ResultsRoot, Environment.GetEnvironmentVariable("CONTRACT_TEST_RESULTS") ?? Path.Combine("pipeline", "contract-tests"));
 
     private static string FindRoot()
     {
@@ -184,11 +190,12 @@ public static class Specmatic
     public static IDisposable StartDependencyMocks(string name, string config, int[] ports, params string[] warmUpUrls)
     {
         var container = $"ct-deps-{name}";
-        Directory.CreateDirectory(Path.Combine(Repo.Root, "results", "specmatic-work"));
+        var workDir = Path.Combine(Repo.ResultsRoot, "specmatic-work");
+        Directory.CreateDirectory(workDir);
         Run("docker", ["container", "rm", "--force", container], TimeSpan.FromSeconds(30));
         var args = new List<string> { "run", "-d", "--name", container };
         foreach (var p in ports) args.AddRange(["-p", $"{p}:{p}"]);
-        args.AddRange(BaseArgs("/work/results/specmatic-work").Skip(2)); // skip "run --rm"
+        args.AddRange(BaseArgs("/work/" + Path.GetRelativePath(Repo.Root, workDir).Replace('\\', '/')).Skip(2)); // skip "run --rm"
         args.AddRange([Image, "mock", $"--config=/work/{config.Replace('\\', '/')}"]);
         var (exit, output) = Run("docker", args, TimeSpan.FromMinutes(2));
         if (exit != 0) throw new InvalidOperationException($"Could not start dependency mocks: {output}");

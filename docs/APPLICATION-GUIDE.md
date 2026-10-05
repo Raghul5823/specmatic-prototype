@@ -122,6 +122,9 @@ Specmatic Prototype/                      ← prototype git repo (public)
 ├─ global.json                            pins the .NET SDK (10.0.101)
 ├─ specmatic/                             Specmatic config files (v3) owned by the services
 ├─ scripts/                               PowerShell automation (start/stop, tests, stubs, experiments)
+│   ├─ run-evidence.ps1                   ONE command: runs every case, writes one HTML report
+│   └─ evidence/                          its run plan (plan.psd1), parsers, report template and renderer
+├─ evidence/sample/index.html             committed example of the unified report (latest/ and history/ stay local)
 ├─ results/                               evidence of every run (reports, logs, summaries)
 └─ contracts/                             ← SEPARATE git repo: the central contract repository
 ```
@@ -245,6 +248,7 @@ Tags are annotated and never moved. `v1` is the first contract set, and `v1.1` a
 | `mfe-e2e.ps1`, `mfe-compile-break.ps1` | MFE Playwright tests against a strict stub; contract break as a compile error |
 | `compat-check.ps1` | Specmatic **backward-compatibility check** on a git checkout of the contract repo; records the exit code (0 = compatible, 1 = breaking) |
 | `case3-drift.ps1` | the drift scenarios: provider code ahead of the contract, and contract ahead of the provider code |
+| `run-evidence.ps1` | **one command for everything** (Phase 8a): runs every case of Phases 3–7 from a clean start (optionally the 27 break demos, live, in a throwaway copy) and writes one self-contained HTML report to `evidence/latest/index.html` |
 
 **Why scripts instead of manual steps:** every result in the README can be reproduced with one command, which is also what the pipeline in Phase 7 will need.
 
@@ -274,6 +278,7 @@ Tags are annotated and never moved. `v1` is the first contract set, and `v1.1` a
 | 5 Case 3 | ✅ | cross-app C3/C4 provider tests with mocked dependencies and consumer tests, specs from the git contract repo; compatibility gate fails a breaking change (exit 1); drift shown both ways |
 | 6 Angular MFE | ✅ | Angular 21 page listing wells via a client **generated from the contract** (a contract break becomes a compile error); Playwright 4/4 against a strict stub through the dev-server proxy; MFE examples verified by the provider (contracts `v1.2`) |
 | 7 Pipeline | ✅ | two pipelines: contracts PR (3 gates, blocks the merge) and service (BuildService with 7 gates, DeployDev depends on it); ContractTests projects; a deliberate failure per gate type, each stopped at the right gate |
-| **8 Evaluation** | **next** | coverage, control points, scorecard, recommendation |
+| 8a Evidence report | ✅ | `scripts/run-evidence.ps1`: every case in one run and one HTML report (sample: `evidence/sample/index.html`), break demos live in a throwaway copy |
+| **8 Evaluation** | **next** | coverage, control points, scorecard (each row linking to a report section), recommendation |
 
 The README section "0. Master checklist" is the up-to-date, item-by-item status, with links to the evidence for every ticked item.
