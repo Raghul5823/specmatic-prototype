@@ -136,7 +136,8 @@ Ticked items link to their evidence. Updated at the end of every phase.
 - [x] Verification runs (§5 Phase 8a):
   - run 1 without demos: PASS, 13.2 min;
   - run 2 with demos: FAIL, 26/27, a PowerShell 5.1 quoting defect in a script, found and fixed;
-  - run 3 with demos: PASS, 27/27, 25.4 min.
+  - run 3 with demos: PASS, 27/27, 25.4 min;
+  - run 4 on the clean committed tree: PASS, 27/27, 36.7 min. The committed sample is rendered from this run.
 - [x] Shell guidance (pin `bash:`/`pwsh:`, JSON through files, same shell locally) in the real-project guide §3.8 and the limitations table; sample YAMLs use `bash:` everywhere, and an invalid-YAML bug in the Phase 7 sample is fixed
 - [x] Commit "Phase 8a: unified evidence report" and push (after scan + approval): root `f23824b`
 
@@ -824,16 +825,19 @@ Every Specmatic step is the same CLI with `java -jar specmatic.jar <same argumen
   - raw-report links;
   - previous runs.
 
-  Sample: [evidence/sample/index.html](evidence/sample/index.html), rendered from run 3 below.
+  Sample: [evidence/sample/index.html](evidence/sample/index.html), rendered from **run 4** below: the client-ready layout, produced on a clean committed tree.
 - **Break demos run live in a throwaway copy** under `%TEMP%`. The copy holds the working tree (without build output) and a fresh clone of the contracts repo; its `node_modules` is a junction to the real folder. Each demo applies its change, runs only the relevant check, records expected vs actual, and restores. At the end, the run deletes the copy and checks both real repos.
 
-**Runs** (same day, same machine, all on Windows PowerShell 5.1). Three runs were needed, not two:
+**Runs** (same machine, all on Windows PowerShell 5.1). Three runs were needed, not two; run 4 repeated the full suite on the clean committed tree for the client-ready sample:
 
 | # | Run | Flags | Checks | Test cases | Break demos | Duration | Verdict |
 |---|---|---|---|---|---|---|---|
 | 1 | `2026-10-05_1304` | none | 36/36 passed | 117 | not run | 13.2 min | **PASS** (exit 0) |
 | 2 | `2026-10-05_1319` | `-IncludeBreakDemos` | 43/43 passed | 117 | **26/27** as expected (22 caught) | 41.3 min | **FAIL** (exit 1) |
 | 3 | `2026-10-05_1403` | `-IncludeBreakDemos` | 43/43 passed | 117 | **27/27** as expected (22 caught) | 25.4 min | **PASS** (exit 0) |
+| 4 | `2026-10-06_1146` | `-IncludeBreakDemos` | 43/43 passed | 117 | **27/27** as expected (22 caught) | 36.7 min | **PASS** (exit 0). Clean tree: prototype `347a33b`, contracts `v1.2` |
+
+Runs 3 and 4 gave **identical outcomes for all 27 demos** and the same coverage figures. That makes 2 consecutive green runs since the fix, still short of the 10 that the real-project exit criterion asks for on the real agent. The duration again varied (25.4 vs 36.7 min) with identical results.
 
 (Before these runs, a partial smoke run, `2026-10-05_1258` with `-Only case1`, checked the plumbing: 13/13 PASS, verdict PARTIAL, as designed for `-Only`.)
 
