@@ -10,7 +10,40 @@
 #   ExpectMerge      'ALLOWED'/'BLOCKED'  contracts PR pipeline verdict
 #   ExpectGate       the contracts PR gate that must have blocked the merge
 #   Gate             $true when a failing check means a pipeline gate caught the break
+#
+# Report: the narrative at the top of the HTML report (purpose, approach, capabilities, known limits).
+# Build-Report.ps1 reads it at render time, so wording can change without rerunning anything.
 @{
+    Report = @{
+        Title    = 'Contract Testing Evidence'
+        Subtitle = 'Specmatic (open-source edition) | .NET services | Angular micro-frontend | Azure DevOps pipeline gates'
+        Purpose  = 'This report is produced by one command from the prototype. It demonstrates the contract-testing approach proposed for the real project: OpenAPI contracts in a central repository, Specmatic for provider contract tests and consumer stubs, a TypeScript client generated from the contract for the Angular micro-frontends, and pipeline gates that block merges and deployments on any contract failure.'
+        Approach = @(
+            @{ Stage = 'Central contract repository'; Items = @('OpenAPI 3 spec per service', 'Consumer-contributed examples', 'consumers.yaml: who relies on what', 'Semantic version tags') }
+            @{ Stage = 'Contracts PR gate'; Items = @('Validate specs and every example', 'Bundle check for code generators', 'Backward compatibility vs main', 'Merge blocked on any failure') }
+            @{ Stage = 'Service pipeline (BuildService)'; Items = @('Provider contract tests (Specmatic)', 'Consumer tests vs strict stubs', 'Generated TypeScript client + compile', 'UI tests vs a strict stub') }
+            @{ Stage = 'Deployment'; Items = @('DeployDev depends on every gate', 'Evidence report before production approval') }
+        )
+        Capabilities = @(
+            @{ Text = 'Contracts are valid, bundle for code generators and stay backward compatible'; Sections = @('contracts') }
+            @{ Text = 'Every provider conforms to its contract, including every consumer-contributed example'; Sections = @('case1', 'case2', 'case3') }
+            @{ Text = 'Consumers rely only on what the contract allows (strict stubs)'; Sections = @('case2', 'case3') }
+            @{ Text = 'Angular micro-frontend: contract changes become compile errors; the UI is verified against a strict stub'; Sections = @('mfe') }
+            @{ Text = 'The pipeline blocks deployment on any contract failure'; Sections = @('pipeline') }
+            @{ Text = 'Deliberate breaks are caught by the layer designed to catch them'; Sections = @('breaks') }
+            @{ Text = 'The run is reproducible and leaves the repositories unchanged'; Sections = @('env', 'hygiene') }
+        )
+        Limits = @(
+            @{ Limit = 'Business-logic errors: correct shape, wrong data'; Cover = 'Unit and functional tests (contract tests check shape, not meaning)'; Demos = @('P3-7') }
+            @{ Limit = 'New fields under an open schema (additionalProperties: true)'; Cover = 'Keep response schemas closed; review schema changes in the contracts PR'; Demos = @('P3-9') }
+            @{ Limit = 'A consumer cannot see its provider''s drift'; Cover = 'The provider''s own contract test is a mandatory gate in its pipeline'; Demos = @('P5-D1b', 'P5-D1c') }
+            @{ Limit = 'Real token validation, service-to-service auth and roles (RBAC)'; Cover = 'Integration and API automation tests with real tokens; contract tests prove the documented 401/403 responses'; Demos = @('P3-6', 'P4-3') }
+            @{ Limit = 'Every breaking change fails the compatibility check (usage data is a commercial feature)'; Cover = 'Versioning policy: additive changes in MINOR versions, removals in a MAJOR version after deprecation'; Demos = @('A2', 'A5') }
+            @{ Limit = 'No deployment matrix ("can I deploy?") in the open-source edition'; Cover = 'Pinned contract tags, the compatibility gate and a drift run against main'; Demos = @('A1', 'A5') }
+            @{ Limit = 'Messaging and real-time channels (AsyncAPI is commercial; SignalR, SSE, WebSocket)'; Cover = 'Integration tests in the post-deploy test stage'; Demos = @() }
+        )
+    }
+
     Sections = @(
         @{ Id = 'env';       Title = 'Environment and versions'
            Proves = 'Which tool, contract and code versions produced this evidence, and that the machine was in a clean state.' }

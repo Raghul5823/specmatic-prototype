@@ -29,6 +29,14 @@
   | Pipeline | `run-all.ps1`: each gate and the DeployDev decision |
   | Break demos (`-IncludeBreakDemos`) | Phases 3–7 demos applied live **in a throwaway copy under `%TEMP%`**, each with its expected and actual result |
   | Clean-up and integrity | Everything stopped; both repos unchanged (file list **and** content fingerprint); copy deleted; `node_modules` intact |
+- **Report layout (for reviewers):**
+  - an **executive summary**: verdict, key figures, and what the run demonstrates;
+  - **the approach under evaluation**: from the contract repository through the PR gate and service pipeline to deployment;
+  - **interactions under contract**: each consumer → provider pair verified on both sides, with the provider's API coverage;
+  - **known limits** and the test layer that covers each one, linked to the break demo that shows it;
+  - then the detailed evidence, with a direct **"Specmatic report ↗"** link on each Specmatic check.
+
+  **Print / Save as PDF** produces a handout. The narrative text lives in [scripts/evidence/plan.psd1](scripts/evidence/plan.psd1), so it can be edited without touching code.
 - **Output:**
   - `evidence/latest/index.html` is one self-contained file (inline CSS/JS, no external links), which opens offline by double-clicking;
   - every run is kept in `evidence/history/<yyyy-MM-dd_HHmm>/` (report, `evidence.json`, raw reports), and the last 10 runs are kept;
